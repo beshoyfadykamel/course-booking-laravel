@@ -80,8 +80,21 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 <!-- Notifications Dropdown Menu -->
 
                 <li class="nav-item">
-                    <a class="nav-link" data-widget="pushmenu" data-slide="true" href="#"><i
-                            class="fas fa-th-large"></i></a>
+                    <form id="langForm" action="{{ route('lang.set') }}" method="POST" class="form-inline ml-3">
+                        @csrf
+                        <div class="input-group input-group-sm">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"
+                                    style="background:#f8f9fa; border:none; font-size:14px;">🌐</span>
+                            </div>
+                            <select name="locale" class="form-control" style="min-width:100px;"
+                                onchange="document.getElementById('langForm').submit()">
+                                <option value="ar" @selected(app()->getLocale() == 'ar')>العربية</option>
+                                <option value="en" @selected(app()->getLocale() == 'en')>English</option>
+                            </select>
+                        </div>
+                    </form>
+
                 </li>
             </ul>
         </nav>
@@ -202,9 +215,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <!-- Ekko Lightbox -->
     <script src="{{ asset('admin/plugins/ekko-lightbox/ekko-lightbox.min.js') }}"></script>
     <!-- Page specific script -->
-    
-        @yield('scripts')
-    
+
+    @yield('scripts')
+
 </body>
 
 </html>
