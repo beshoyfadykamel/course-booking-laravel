@@ -31,13 +31,13 @@ class StoreCourseRequest extends FormRequest
         public function messages()
         {
             return [
-                'title.required' => 'The course title is required.',
-                'title.min' => 'The course title must be at least 3 characters.',
-                'title.unique' => 'The course title already exists.',
-                'description.required' => 'The course description is required.',
-                'description.min' => 'The course description must be at least 10 characters.',
-                'status.required' => 'The course status is required.',
-                'status.in' => 'The course status must be either active or inactive.',
+                'title.required' => __('validation.title.required'),
+                'title.min' => __('validation.title.min'),
+                'title.unique' => __('validation.title.unique'),
+                'description.required' => __('validation.description.required'),
+                'description.min' => __('validation.description.min'),
+                'status.required' => __('validation.status.required'),
+                'status.in' => __('validation.status.in'),
             ];
         }
 }

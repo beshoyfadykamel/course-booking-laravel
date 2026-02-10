@@ -15,7 +15,7 @@
                 </div><!-- /.col -->
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
-                        <li class="breadcrumb-item"><a href="#">{{ __('messages.edit') }}</a></li>
+                        <li class="breadcrumb-item"><a href="#">{{ __('messages.edit_student') }}</a></li>
                         <li class="breadcrumb-item active">{{ __('messages.dashboard') }}</li>
                     </ol>
                 </div><!-- /.col -->
@@ -30,7 +30,7 @@
         <!-- general form elements -->
         <div class="card card-success">
             <div class="card-header">
-                <h5 class="m-0">{{ __('messages.edit') }} "{{ $student->name }}"</h5>
+                <h5 class="m-0">{{ __('messages.edit_student') }} "{{ $student->name }}"</h5>
             </div>
             <!-- /.card-header -->
             <!-- form start -->

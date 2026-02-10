@@ -302,48 +302,40 @@
             }
 
             // View Student button
-            if (viewStudentBtn) {
-                viewStudentBtn.addEventListener('click', function(e) {
-                    e.preventDefault();
-
-                    if (!studentSelect || !studentSelect.value) {
+                if (viewStudentBtn) {
+                    viewStudentBtn.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        if (!studentSelect || !studentSelect.value) {
                             alert('{{ __('messages.please_select_student') }}');
-                    }
-
-                    const option = studentSelect.options[studentSelect.selectedIndex];
-                    fillStudentFromOption(option);
-
-                    // Bootstrap 4 (jQuery) modal show
-                    if (window.$ && $('#studentModal').modal) {
-                        $('#studentModal').modal('show');
-                    } else {
-                        // fallback (just in case)
-                        document.getElementById('studentModal')?.classList.add('show');
-                    }
-                });
-            }
+                            return;
+                        }
+                        const option = studentSelect.options[studentSelect.selectedIndex];
+                        fillStudentFromOption(option);
+                        if (window.$ && $('#studentModal').modal) {
+                            $('#studentModal').modal('show');
+                        } else {
+                            document.getElementById('studentModal')?.classList.add('show');
+                        }
+                    });
+                }
 
             // View Course button
-            if (viewCourseBtn) {
-                viewCourseBtn.addEventListener('click', function(e) {
-                    e.preventDefault();
-
-                    if (!courseSelect || !courseSelect.value) {
+                if (viewCourseBtn) {
+                    viewCourseBtn.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        if (!courseSelect || !courseSelect.value) {
                             alert('{{ __('messages.please_select_course') }}');
-                    }
-
-                    const option = courseSelect.options[courseSelect.selectedIndex];
-                    fillCourseFromOption(option);
-
-                    // Bootstrap 4 (jQuery) modal show
-                    if (window.$ && $('#courseModal').modal) {
-                        $('#courseModal').modal('show');
-                    } else {
-                        // fallback (just in case)
-                        document.getElementById('courseModal')?.classList.add('show');
-                    }
-                });
-            }
+                            return;
+                        }
+                        const option = courseSelect.options[courseSelect.selectedIndex];
+                        fillCourseFromOption(option);
+                        if (window.$ && $('#courseModal').modal) {
+                            $('#courseModal').modal('show');
+                        } else {
+                            document.getElementById('courseModal')?.classList.add('show');
+                        }
+                    });
+                }
 
             // If page loads with pre-selected values, fill UI once
             if (studentSelect && studentSelect.value) {

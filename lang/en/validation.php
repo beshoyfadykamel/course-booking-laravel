@@ -186,6 +186,45 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Custom Messages for Form Requests
+    |--------------------------------------------------------------------------
+    */
+
+    // Booking Validation Messages
+    'student_id.required' => 'The student field is required.',
+    'student_id.exists' => 'The selected student is invalid.',
+    'student_id.duplicate_enrollment' => 'This student is already enrolled in this course.',
+    'student_id.duplicate_enrollment_trash' => 'This student is already enrolled in this course (even in trash). Restore it instead.',
+    'course_id.required' => 'The course field is required.',
+    'course_id.exists' => 'The selected course is invalid.',
+    'status.required' => 'The status field is required.',
+    'status.in' => 'The status must be either active or inactive.',
+
+    // Course Validation Messages
+    'title.required' => 'The course title is required.',
+    'title.string' => 'The course title must be a string.',
+    'title.max' => 'The course title may not be greater than 255 characters.',
+    'title.min' => 'The course title must be at least 3 characters.',
+    'title.unique' => 'The course title already exists.',
+    'description.required' => 'The course description is required.',
+    'description.string' => 'The course description must be a string.',
+    'description.max' => 'The course description may not be greater than 1000 characters.',
+    'description.min' => 'The course description must be at least 10 characters.',
+
+    // Student Validation Messages
+    'name.required' => 'The name field is required.',
+    'email.required' => 'The email field is required.',
+    'email.email' => 'The email must be a valid email address.',
+    'email.unique' => 'The email has already been taken.',
+    'email.unique.student' => 'This email is already taken by another student.',
+    'country_id.required' => 'The country field is required.',
+    'country_id.exists' => 'The selected country is invalid.',
+    'image.image' => 'The file must be an image.',
+    'image.mimes' => 'The image must be a file of type: jpg, jpeg, png, webp, gif.',
+    'image.max' => 'The image size must not exceed 2MB.',
+
+    /*
+    |--------------------------------------------------------------------------
     | Custom Validation Attributes
     |--------------------------------------------------------------------------
     |

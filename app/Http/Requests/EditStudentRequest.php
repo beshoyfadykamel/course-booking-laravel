@@ -33,17 +33,17 @@ class EditStudentRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'name.required' => 'The student name is required.',
-            'email.required' => 'The student email is required.',
-            'email.email' => 'Please enter a valid email address.',
-            'email.unique' => 'This email is already taken by another student.',
-            'country_id.required' => 'Please select a country.',
-            'country_id.exists' => 'The selected country is invalid.',
-            'status.required' => 'Please select a status.',
-            'status.in' => 'The status must be either active or inactive.',
-            'image.image' => 'The uploaded file must be an image.',
-            'image.mimes' => 'The image must be a file of type: jpeg, png, jpg, gif.',
-            'image.max' => 'The image size must not exceed 2MB.',
+            'name.required' => __('validation.name.required'),
+            'email.required' => __('validation.email.required'),
+            'email.email' => __('validation.email.email'),
+            'email.unique' => __('validation.email.unique.student'),
+            'country_id.required' => __('validation.country_id.required'),
+            'country_id.exists' => __('validation.country_id.exists'),
+            'status.required' => __('validation.status.required'),
+            'status.in' => __('validation.status.in'),
+            'image.image' => __('validation.image.image'),
+            'image.mimes' => __('validation.image.mimes'),
+            'image.max' => __('validation.image.max'),
         ];
     }
 }

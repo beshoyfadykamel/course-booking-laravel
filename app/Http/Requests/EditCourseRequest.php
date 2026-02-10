@@ -31,17 +31,17 @@ class EditCourseRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'title.required' => 'The course title is required.',
-            'title.string' => 'The course title must be a string.',
-            'title.max' => 'The course title may not be greater than 255 characters.',
-            'title.min' => 'The course title must be at least 3 characters.',
-            'title.unique' => 'The course title has already been taken.',
-            'description.required' => 'The course description is required.',
-            'description.string' => 'The course description must be a string.',
-            'description.max' => 'The course description may not be greater than 1000 characters.',
-            'description.min' => 'The course description must be at least 10 characters.',
-            'status.required' => 'The course status is required.',
-            'status.in' => 'The selected status is invalid. Allowed values are active or inactive.',
+            'title.required' => __('validation.title.required'),
+            'title.string' => __('validation.title.string'),
+            'title.max' => __('validation.title.max'),
+            'title.min' => __('validation.title.min'),
+            'title.unique' => __('validation.title.unique'),
+            'description.required' => __('validation.description.required'),
+            'description.string' => __('validation.description.string'),
+            'description.max' => __('validation.description.max'),
+            'description.min' => __('validation.description.min'),
+            'status.required' => __('validation.status.required'),
+            'status.in' => __('validation.status.in'),
         ];
     }
 }

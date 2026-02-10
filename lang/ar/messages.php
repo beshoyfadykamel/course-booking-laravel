@@ -64,6 +64,8 @@ return [
     'image_optional' => 'صورة (اختياري)',
     'choose_file' => 'اختر ملف',
 
+        'edit_student' => 'تعديل الطالب',
+
     // Courses Module (Arabic)
     'courses_table' => 'جدول الدورات',
     'add_course' => 'إضافة دورة',
@@ -78,6 +80,8 @@ return [
     'course_name' => 'اسم الدورة',
     'course_deleted' => 'دورة محذوفة',
     'course_description' => 'وصف الدورة',
+
+        'edit_course' => 'تعديل الدورة',
 
     // Bookings Module (Arabic)
     'bookings_table' => 'جدول الحجوزات',

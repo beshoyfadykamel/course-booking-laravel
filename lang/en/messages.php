@@ -64,6 +64,8 @@ return [
     'image_optional' => 'Image (Optional)',
     'choose_file' => 'Choose file',
 
+        'edit_student' => 'Edit Student',
+
     // Courses Module
     'courses_table' => 'Courses Table',
     'add_course' => 'Add Course',
@@ -78,6 +80,8 @@ return [
     'course_name' => 'Course Name',
     'course_deleted' => 'Course Deleted',
     'course_description' => 'Course Description',
+
+    'edit_course' => 'Edit Course',
 
     // Bookings Module
     'bookings_table' => 'Bookings Table',

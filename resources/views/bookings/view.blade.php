@@ -48,8 +48,8 @@
                         <thead>
                             <tr>
                                 <th>{{ __('messages.id') }}</th>
-                                <th>{{ __('messages.course') }}</th>
-                                <th>{{ __('messages.student') }}</th>
+                                <th>{{ __('messages.course_name') }}</th>
+                                <th>{{ __('messages.student_name') }}</th>
                                 <th>{{ __('messages.status') }}</th>
                                 <th>{{ __('messages.created_at') }}</th>
                                 <th>{{ __('messages.updated_at') }}</th>
