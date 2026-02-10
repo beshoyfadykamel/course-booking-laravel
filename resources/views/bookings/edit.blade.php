@@ -1,6 +1,6 @@
 @extends('master')
 @section('title')
-    Dashboard | Bookings Manegment
+    {{ __('messages.dashboard') }} | {{ __('messages.bookings_management') }}
 @endsection
 
 
@@ -10,13 +10,13 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0 text-dark d-inline-block">Dashboard
+                    <h1 class="m-0 text-dark d-inline-block">{{ __('messages.dashboard') }}
                     </h1>
                 </div><!-- /.col -->
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
-                        <li class="breadcrumb-item"><a href="#">Edit Booking</a></li>
-                        <li class="breadcrumb-item active">Dashboard</li>
+                        <li class="breadcrumb-item"><a href="#">{{ __('messages.edit_booking') }}</a></li>
+                        <li class="breadcrumb-item active">{{ __('messages.dashboard') }}</li>
                     </ol>
                 </div><!-- /.col -->
             </div><!-- /.row -->
@@ -30,7 +30,7 @@
         <!-- general form elements -->
         <div class="card card-success">
             <div class="card-header">
-                <h3 class="card-title">Edit Booking</h3>
+                <h5 class="m-0">{{ __('messages.edit_booking') }}</h5>
             </div>
             <!-- /.card-header -->
             <!-- form start -->
@@ -40,10 +40,10 @@
                 @method('PUT')
                 <div class="card-body">
                     <div class="form-group">
-                        <label for="course_id">Select Course</label>
+                        <label for="course_id">{{ __('messages.select_course') }}</label>
                         <div class="input-group">
                             <select class="form-control" id="course_id" name="course_id">
-                                <option value="">Select Course</option>
+                                <option value="">{{ __('messages.select_course') }}</option>
                                 @foreach ($courses as $course)
                                     <option value="{{ $course->id }}" data-course-id="{{ $course->id }}"
                                         data-course-title="{{ $course->title }}"
@@ -56,7 +56,7 @@
                             </select>
                             <div class="input-group-append">
                                 <button class="btn btn-info" type="button" id="viewCourseBtn">
-                                    <i class="fas fa-eye"></i> View
+                                    <i class="fas fa-eye"></i> {{ __('messages.view') }}
                                 </button>
                             </div>
                         </div>
@@ -65,10 +65,10 @@
                         @enderror
                     </div>
                     <div class="form-group">
-                        <label for="student_id">Select Student</label>
+                        <label for="student_id">{{ __('messages.select_student') }}</label>
                         <div class="input-group">
                             <select class="form-control" id="student_id" name="student_id">
-                                <option value="">Select Student</option>
+                                <option value="">{{ __('messages.select_student') }}</option>
                                 @foreach ($students as $student)
                                     <option value="{{ $student->id }}" data-student-id="{{ $student->id }}"
                                         data-student-name="{{ $student->name }}"
@@ -83,7 +83,7 @@
                             </select>
                             <div class="input-group-append">
                                 <button class="btn btn-info" type="button" id="viewStudentBtn">
-                                    <i class="fas fa-eye"></i> View
+                                    <i class="fas fa-eye"></i> {{ __('messages.view') }}
                                 </button>
                             </div>
                         </div>
@@ -92,13 +92,13 @@
                         @enderror
                     </div>
                     <div class="form-group">
-                        <label for="status">Status</label>
+                        <label for="status">{{ __('messages.status') }}</label>
                         <select class="form-control" id="status" name="status">
-                            <option value="">Choose Status</option>
+                            <option value="">{{ __('messages.choose_status') }}</option>
                             <option value="active" {{ old('status', $booking->status) == 'active' ? 'selected' : '' }}>
-                                Active</option>
+                                {{ __('messages.active') }}</option>
                             <option value="inactive" {{ old('status', $booking->status) == 'inactive' ? 'selected' : '' }}>
-                                Inactive</option>
+                                {{ __('messages.inactive') }}</option>
                         </select>
                         @error('status')
                             <small class="text-danger">{{ $message }}</small>
@@ -108,7 +108,7 @@
                 <!-- /.card-body -->
 
                 <div class="card-footer">
-                    <button type="submit" class="btn btn-success w-100">Submit</button>
+                    <button type="submit" class="btn btn-success w-100">{{ __('messages.update') }}</button>
                 </div>
             </form>
         </div>
@@ -122,7 +122,7 @@
             <div class="modal-content">
 
                 <div class="modal-header">
-                    <h5 class="modal-title" id="studentModalLabel">Student Details</h5>
+                    <h5 class="modal-title" id="studentModalLabel">{{ __('messages.student_details') }}</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"
                         style="outline:none;border:none;background:none;box-shadow:none;">
                         <span aria-hidden="true">&times;</span>
@@ -137,30 +137,30 @@
 
                     <table class="table table-bordered" style="table-layout: fixed;">
                         <tr>
-                            <th style="word-wrap:break-word;">ID:</th>
+                            <th style="word-wrap:break-word;">{{ __('messages.id') }}:</th>
                             <td id="studentId" style="word-break:break-word;"></td>
                         </tr>
                         <tr>
-                            <th style="word-wrap:break-word;">Name:</th>
+                            <th style="word-wrap:break-word;">{{ __('messages.name') }}:</th>
                             <td id="studentName" style="word-break:break-word;"></td>
                         </tr>
                         <tr>
-                            <th style="word-wrap:break-word;">Email:</th>
+                            <th style="word-wrap:break-word;">{{ __('messages.email') }}:</th>
                             <td id="studentEmail" style="word-break:break-word;"></td>
                         </tr>
                         <tr>
-                            <th style="word-wrap:break-word;">Country:</th>
+                            <th style="word-wrap:break-word;">{{ __('messages.country') }}:</th>
                             <td id="studentCountry" style="word-break:break-word;"></td>
                         </tr>
                         <tr>
-                            <th style="word-wrap:break-word;">Status:</th>
+                            <th style="word-wrap:break-word;">{{ __('messages.status') }}:</th>
                             <td id="studentStatus" style="word-break:break-word;"></td>
                         </tr>
                     </table>
                 </div>
 
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ __('messages.close') }}</button>
                 </div>
 
             </div>
@@ -174,7 +174,7 @@
             <div class="modal-content">
 
                 <div class="modal-header">
-                    <h5 class="modal-title" id="courseModalLabel">Course Details</h5>
+                    <h5 class="modal-title" id="courseModalLabel">{{ __('messages.course_details') }}</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"
                         style="outline:none;border:none;background:none;box-shadow:none;">
                         <span aria-hidden="true">&times;</span>
@@ -184,26 +184,26 @@
                 <div class="modal-body" style="max-height:400px;overflow-y:auto;">
                     <table class="table table-bordered" style="table-layout: fixed;">
                         <tr>
-                            <th style="word-wrap:break-word;">ID:</th>
+                            <th style="word-wrap:break-word;">{{ __('messages.id') }}:</th>
                             <td id="courseId" style="word-break:break-word;"></td>
                         </tr>
                         <tr>
-                            <th style="word-wrap:break-word;">Course Title:</th>
+                            <th style="word-wrap:break-word;">{{ __('messages.course_title') }}:</th>
                             <td id="courseTitle" style="word-break:break-word;"></td>
                         </tr>
                         <tr>
-                            <th style="word-wrap:break-word;">Description:</th>
+                            <th style="word-wrap:break-word;">{{ __('messages.description') }}:</th>
                             <td id="courseDescription" style="word-break:break-word;"></td>
                         </tr>
                         <tr>
-                            <th style="word-wrap:break-word;">Status:</th>
+                            <th style="word-wrap:break-word;">{{ __('messages.status') }}:</th>
                             <td id="courseStatus" style="word-break:break-word;"></td>
                         </tr>
                     </table>
                 </div>
 
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ __('messages.close') }}</button>
                 </div>
 
             </div>
@@ -307,8 +307,7 @@
                     e.preventDefault();
 
                     if (!studentSelect || !studentSelect.value) {
-                        alert('Please select a student first');
-                        return;
+                            alert('{{ __('messages.please_select_student') }}');
                     }
 
                     const option = studentSelect.options[studentSelect.selectedIndex];
@@ -330,8 +329,7 @@
                     e.preventDefault();
 
                     if (!courseSelect || !courseSelect.value) {
-                        alert('Please select a course first');
-                        return;
+                            alert('{{ __('messages.please_select_course') }}');
                     }
 
                     const option = courseSelect.options[courseSelect.selectedIndex];

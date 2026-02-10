@@ -9,10 +9,12 @@
         </td>
         <td>
             <div class="btn-group-responsive">
+                <a href="{{ route('courses.show', $course->id) }}" class="btn btn-sm btn-primary"><i class="fas fa-eye"></i>
+                    {{ __('messages.view') }}</a>
                 <a href="{{ route('courses.restore', $course->id) }}" class="btn btn-sm btn-success"><i
-                        class="fas fa-undo"></i> Restore</a>
+                        class="fas fa-undo"></i> {{ __('messages.restore') }}</a>
                 <a href="{{ route('courses.delete-permanently', $course->id) }}" class="btn btn-sm btn-danger"><i
-                        class="fas fa-trash"></i> Permanent deletion</a>
+                        class="fas fa-trash"></i> {{ __('messages.permanent_deletion') }}</a>
             </div>
         </td>
     </tr>

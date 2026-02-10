@@ -3,28 +3,29 @@
         <td>{!! highlight($booking->id, $searchTerm) !!}</td>
         <td>
             @if ($booking->course)
-                <a href="{{ route('courses.show', $booking->course->id) }}">{!! highlight($booking->course->title, $searchTerm) !!}</a>
+                <a
+                    href="{{ route('courses.show', $booking->course->id) }}">{!! highlight($booking->course->title, $searchTerm) !!}</a>
             @else
-                <span class="text-danger">Course Deleted</span>
+                <span class="text-danger">{{ __('messages.course_deleted') }}</span>
             @endif
         </td>
         <td>
             @if ($booking->student)
-                <a href="{{ route('students.show', $booking->student->id) }}">{!! highlight($booking->student->name, $searchTerm) !!}</a>
+                <a
+                    href="{{ route('students.show', $booking->student->id) }}">{!! highlight($booking->student->name, $searchTerm) !!}</a>
             @else
-                <span class="text-danger">Student Deleted</span>
+                <span class="text-danger">{{ __('messages.student_deleted') }}</span>
             @endif
         </td>
         <td>{!! highlight($booking->status, $searchTerm) !!}</td>
         <td>
             <div class="btn-group-responsive">
                 <a href="{{ route('bookings.show', $booking->id) }}" class="btn btn-sm btn-primary"><i
-                        class="fas fa-eye"></i> View</a>
+                        class="fas fa-eye"></i> {{ __('messages.view') }}</a>
                 <a href="{{ route('bookings.restore', $booking->id) }}" class="btn btn-sm btn-success"><i
-                        class="fas fa-undo"></i> Restore</a>
+                        class="fas fa-undo"></i> {{ __('messages.restore') }}</a>
                 <a href="{{ route('bookings.delete-permanently', $booking->id) }}" class="btn btn-sm btn-danger"><i
-                        class="fas fa-trash"></i> Permanent
-                    deletion</a>
+                        class="fas fa-trash"></i> {{ __('messages.permanent_deletion') }}</a>
             </div>
         </td>
     </tr>

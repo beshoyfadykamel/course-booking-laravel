@@ -6,8 +6,7 @@
         <td>
             <div class="btn-group-responsive">
                 <a href="{{ route('courses.show', $course->id) }}" class="btn btn-sm btn-primary"><i class="fas fa-eye"></i>
-                    View
-                    Course</a>
+                    {{ __('messages.view_course') }}</a>
             </div>
         </td>
     </tr>

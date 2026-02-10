@@ -70,7 +70,7 @@ class BookingController extends Controller
             ]);
         }
 
-        return response()->json(['error' => 'Invalid request'], 400);
+        return response()->json(['error' => __('messages.invalid_request')], 400);
     }
 
     public function create()
@@ -87,7 +87,7 @@ class BookingController extends Controller
         $booking = Booking::create($request->validated());
 
         return redirect()->route('bookings.show', $booking->id)
-            ->with('success', 'Booking created successfully.');
+            ->with('success', __('messages.booking_created_successfully'));
     }
 
     public function show($id)
@@ -111,7 +111,7 @@ class BookingController extends Controller
         $booking->updated_at = now();
         $booking->save();
         return redirect()->route('bookings.show', $booking->id)
-            ->with('success', 'Booking updated successfully.');
+            ->with('success', __('messages.booking_updated_successfully'));
     }
 
     public function destroy($id)
@@ -119,7 +119,7 @@ class BookingController extends Controller
         $booking = Booking::findOrFail($id);
         $booking->delete();
         return redirect()->route('bookings.index')
-            ->with('success', 'Booking deleted successfully.');
+            ->with('success', __('messages.booking_deleted_successfully'));
     }
 
 
@@ -179,7 +179,7 @@ class BookingController extends Controller
             ]);
         }
 
-        return response()->json(['error' => 'Invalid request'], 400);
+        return response()->json(['error' => __('messages.invalid_request')], 400);
     }
 
     public function restore($id)
@@ -187,7 +187,7 @@ class BookingController extends Controller
         $booking = Booking::onlyTrashed()->findOrFail($id);
         $booking->restore();
         return redirect()->route('bookings.show', $booking->id)
-            ->with('success', 'Booking restored successfully.');
+            ->with('success', __('messages.booking_restored_successfully'));
     }
 
     public function deletePermanently($id)
@@ -195,6 +195,6 @@ class BookingController extends Controller
         $booking = Booking::onlyTrashed()->findOrFail($id);
         $booking->forceDelete();
         return redirect()->route('bookings.recycle')
-            ->with('success', 'Booking permanently deleted.');
+            ->with('success', __('messages.booking_permanently_deleted'));
     }
 }

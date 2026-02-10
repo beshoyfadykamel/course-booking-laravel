@@ -3,14 +3,14 @@
 This is a starter template page. Use this page to start your new project from
 scratch. This page gets rid of all links and provides the needed markup only.
 -->
-<html lang="en">
+<html lang="{{ app()->getLocale() }}" dir="{{ app()->getLocale() == 'ar' ? 'rtl' : 'ltr' }}">
 
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
 
-    <title>@yield('title', 'Dashboard')</title>
+    <title>@yield('title', __('messages.dashboard'))</title>
     <style>
         @media (max-width: 576px) {
             .btn-group-responsive {
@@ -31,7 +31,16 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <link rel="stylesheet" href="{{ asset('admin/dist/css/adminlte.min.css') }}">
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet" href="{{ asset('admin/fonts/SansPro/SansPro.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('admin/css/bootstrap-4.0.0-dist/css/bootstrap.min.css') }}">
+    
+    @if(app()->getLocale() == 'ar')
+        <!-- Bootstrap RTL -->
+        <link rel="stylesheet" href="{{ asset('admin/css/bootstrap_rtl-v4.2.1/bootstrap.min.css') }}">
+        <link rel="stylesheet" href="{{ asset('admin/css/bootstrap_rtl-v4.2.1/custom_rtl.css') }}">
+    @else
+        <!-- Bootstrap LTR -->
+        <link rel="stylesheet" href="{{ asset('admin/css/bootstrap-4.0.0-dist/css/bootstrap.min.css') }}">
+    @endif
+    
     <link rel="stylesheet" href="{{ asset('admin/css/mycustomstyle.css') }}">
     <style>
         /* Remove border from lightbox close button */
@@ -44,7 +53,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
 </head>
 
-<body class="hold-transition sidebar-mini layout-footer-fixed layout-navbar-fixed layout-fixed">
+<body class="hold-transition sidebar-mini layout-footer-fixed layout-navbar-fixed layout-fixed" dir="{{ app()->getLocale() == 'ar' ? 'rtl' : 'ltr' }}">
     <div class="wrapper">
 
         <!-- Navbar -->
@@ -55,26 +64,16 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     <a class="nav-link" data-widget="pushmenu" href="#"><i class="fas fa-bars"></i></a>
                 </li>
                 <li class="nav-item d-none d-sm-inline-block">
-                    <a href="{{ route('home') }}" class="nav-link">Home</a>
+                    <a href="{{ route('home') }}" class="nav-link">{{ __('messages.home') }}</a>
                 </li>
 
             </ul>
 
             <!-- SEARCH FORM -->
-            <form class="form-inline ml-3">
-                <div class="input-group input-group-sm">
-                    <input class="form-control form-control-navbar" type="search" placeholder="Search"
-                        aria-label="Search">
-                    <div class="input-group-append">
-                        <button class="btn btn-navbar" type="submit">
-                            <i class="fas fa-search"></i>
-                        </button>
-                    </div>
-                </div>
-            </form>
+            
 
             <!-- Right navbar links -->
-            <ul class="navbar-nav ml-auto">
+            <ul class="navbar-nav mx-auto">
                 <!-- Messages Dropdown Menu -->
 
                 <!-- Notifications Dropdown Menu -->
@@ -134,7 +133,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                             <a href="#" class="nav-link active">
                                 <i class="nav-icon fas fa-tachometer-alt"></i>
                                 <p>
-                                    Dashboard
+                                    {{ __('messages.dashboard') }}
                                     <i class="right fas fa-angle-left"></i>
                                 </p>
                             </a>
@@ -143,21 +142,21 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                     <a href="{{ route('courses.index') }}"
                                         class="nav-link {{ request()->routeIs('courses.*') ? 'active' : '' }}">
                                         <i class="far fa-circle nav-icon"></i>
-                                        <p>Courses Management</p>
+                                        <p>{{ __('messages.courses_management') }}</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
                                     <a href="{{ route('students.index') }}"
                                         class="nav-link {{ request()->routeIs('students.*') ? 'active' : '' }}">
                                         <i class="far fa-circle nav-icon"></i>
-                                        <p>Students Management</p>
+                                        <p>{{ __('messages.students_management') }}</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
                                     <a href="{{ route('bookings.index') }}"
                                         class="nav-link {{ request()->routeIs('bookings.*') ? 'active' : '' }}">
                                         <i class="far fa-circle nav-icon"></i>
-                                        <p>Bookings Management</p>
+                                        <p>{{ __('messages.bookings_management') }}</p>
                                     </a>
                                 </li>
                             </ul>
@@ -191,8 +190,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
         <aside class="control-sidebar control-sidebar-dark">
             <!-- Control sidebar content goes here -->
             <div class="p-3">
-                <h5>Title</h5>
-                <p>Sidebar content</p>
+                <h5>{{ __('messages.title') }}</h5>
+                <p>{{ __('messages.sidebar_content') }}</p>
             </div>
         </aside>
         <!-- /.control-sidebar -->

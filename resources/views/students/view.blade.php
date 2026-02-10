@@ -1,6 +1,6 @@
 @extends('master')
 @section('title')
-    View Student | Student Manegment
+    {{ __('messages.view_student') }} | {{ __('messages.students_management') }}
 @endsection
 
 
@@ -12,12 +12,12 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1 class="m-0 text-dark">View Student</h1>
+                        <h1 class="m-0 text-dark">{{ __('messages.view_student') }}</h1>
                     </div><!-- /.col -->
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
-                            <li class="breadcrumb-item"><a href="#">Student Manegment</a></li>
-                            <li class="breadcrumb-item active">View Student</li>
+                            <li class="breadcrumb-item"><a href="#">{{ __('messages.students_management') }}</a></li>
+                            <li class="breadcrumb-item active">{{ __('messages.view_student') }}</li>
                         </ol>
                     </div><!-- /.col -->
                 </div><!-- /.row -->
@@ -33,15 +33,12 @@
                 <div class="alert alert-success alert-dismissible fade show mt-2" role="alert"
                     style="background-color: #28a745; color: white; border-color: #28a745;">
                     {{ session('success') }}
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"
-                        style="color: white; opacity: 1; outline: none; box-shadow: none;">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+
                 </div>
             @endif
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title">Student Details</h3>
+                    <h5 class="m-0">{{ __('messages.student_details') }}</h5>
 
                 </div>
                 <!-- /.card-header -->
@@ -49,15 +46,15 @@
                     <table id="example2" class="table table-head-fixed text-nowrap table-bordered table-hover">
                         <thead>
                             <tr>
-                                <th>ID</th>
-                                <th>Image</th>
-                                <th>Name</th>
-                                <th>Email</th>
-                                <th>Country</th>
-                                <th>Status</th>
-                                <th>Create Date</th>
-                                <th>Updated Date</th>
-                                <th>Action</th>
+                                <th>{{ __('messages.id') }}</th>
+                                <th>{{ __('messages.image') }}</th>
+                                <th>{{ __('messages.name') }}</th>
+                                <th>{{ __('messages.email') }}</th>
+                                <th>{{ __('messages.country') }}</th>
+                                <th>{{ __('messages.status') }}</th>
+                                <th>{{ __('messages.created_at') }}</th>
+                                <th>{{ __('messages.updated_at') }}</th>
+                                <th>{{ __('messages.actions') }}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -67,12 +64,13 @@
                                 <td>
                                     @if ($student->image)
                                         <a href="{{ asset('storage/' . $student->image) }}" data-toggle="lightbox"
-                                            data-title="Student Image - {{ $student->id }}">
-                                            <img src="{{ asset('storage/' . $student->image) }}" alt="Student Image"
-                                                class="img-thumbnail" width="50" height="50">
+                                            data-title="{{ $student->name }} - {{ $student->id }}">
+                                            <img src="{{ asset('storage/' . $student->image) }}"
+                                                alt="{{ __('messages.student_image') }}" class="img-thumbnail"
+                                                width="50" height="50">
                                         </a>
                                     @else
-                                        <span>No Image</span>
+                                        <span>{{ __('messages.no_image') }}</span>
                                     @endif
                                 </td>
                                 <td>{{ $student->name }}</td>
@@ -82,20 +80,21 @@
                                 <td>{{ $student->created_at }}</td>
                                 <td>{{ $student->updated_at }}</td>
                                 <td>
-                                    <div class="btn-group-responsive">
                                         @if ($student->trashed())
                                             <a href="{{ route('students.restore', $student->id) }}"
-                                                class="btn btn-sm btn-success"><i class="fas fa-undo"></i> Restore</a>
+                                                class="btn btn-sm btn-success"><i class="fas fa-undo"></i>
+                                                {{ __('messages.restore') }}</a>
                                             <a href="{{ route('students.delete-permanently', $student->id) }}"
-                                                class="btn btn-sm btn-danger"><i class="fas fa-trash"></i> Permanent
-                                                deletion</a>
+                                                class="btn btn-sm btn-danger"><i class="fas fa-trash"></i>
+                                                {{ __('messages.permanent_deletion') }}</a>
                                         @else
-                                            <a href="{{ route('students.edit', $student->id) }}" class="btn btn-sm btn-warning"><i
-                                                    class="fas fa-pencil-alt"></i> Edit</a>
-                                            <a href="{{ route('students.destroy', $student->id) }}" class="btn btn-sm btn-danger"><i
-                                                    class="fas fa-trash"></i> Delete</a>
+                                            <a href="{{ route('students.edit', $student->id) }}"
+                                                class="btn btn-sm btn-warning"><i class="fas fa-pencil-alt"></i>
+                                                {{ __('messages.edit') }}</a>
+                                            <a href="{{ route('students.destroy', $student->id) }}"
+                                                class="btn btn-sm btn-danger"><i class="fas fa-trash"></i>
+                                                {{ __('messages.delete') }}</a>
                                         @endif
-                                    </div>
                                 </td>
                             </tr>
 
@@ -108,30 +107,31 @@
             <!-- /.card -->
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title"> Student "{{ $student->name }}" Enrollment Table <span class="badge badge-primary"
-                            id="courses_count">({{ $coursesCount }})</span></h3>
+                    <h5 class="m-0">{{ __('messages.student_enrollment') }} "{{ $student->name }}" <span
+                            class="badge badge-primary" id="courses_count">({{ $coursesCount }})</span></h5>
                 </div>
                 <div class="card-header">
                     <div class="row w-100">
                         <div class="col-12 col-md-6 mb-2 mb-md-0">
                             <a href="{{ route('bookings.create') }}" class="btn btn-success btn-block btn-sm"><i
-                                    class="fas fa-plus"></i> Add Booking</a>
+                                    class="fas fa-plus"></i> {{ __('messages.add_booking') }}</a>
                         </div>
                         <div class="col-6 col-md-2 mt-2 mt-md-0">
                             <div class="input-group input-group-sm">
 
                                 <select name="search_by" id="search_by" class="form-control w-25">
-                                    <option value="all">Search by all</option>
-                                    <option value="id">ID</option>
-                                    <option value="title">Title</option>
-                                    <option value="status">Enrollment Status</option>
+                                    <option value="all">{{ __('messages.search_by_all') }}</option>
+                                    <option value="id">{{ __('messages.id') }}</option>
+                                    <option value="title">{{ __('messages.course_name') }}</option>
+                                    <option value="status">{{ __('messages.enrollment_status') }}</option>
                                 </select>
 
                             </div>
                         </div>
                         <div class="col-6 col-md-4 mt-2 mt-md-0">
                             <div class="input-group input-group-sm">
-                                <input type="text" id="table_search" class="form-control" placeholder="Search" name="search">
+                                <input type="text" id="table_search" class="form-control"
+                                    placeholder="{{ __('messages.search') }}" name="search">
                             </div>
                         </div>
                     </div>
@@ -141,15 +141,18 @@
                     <table id="example1" class="table table-head-fixed text-nowrap table-bordered table-hover">
                         <thead>
                             <tr>
-                                <th>ID</th>
-                                <th>Course Name</th>
-                                <th>Enrollment Status</th>
-                                <th>Action</th>
+                                <th>{{ __('messages.id') }}</th>
+                                <th>{{ __('messages.course_name') }}</th>
+                                <th>{{ __('messages.enrollment_status') }}</th>
+                                <th>{{ __('messages.actions') }}</th>
                             </tr>
                         </thead>
                         <tbody>
                             @if (@isset($student->courses) && !@empty($student->courses))
-                                @include('students.partials.enrollment_courses_table', ['courses' => $courses, 'searchTerm' => ''])
+                                @include('students.partials.enrollment_courses_table', [
+                                    'courses' => $courses,
+                                    'searchTerm' => '',
+                                ])
                             @endif
 
                         </tbody>
@@ -165,8 +168,8 @@
 
     @section('scripts')
         <script>
-            $(function () {
-                $(document).on('click', '[data-toggle="lightbox"]', function (event) {
+            $(function() {
+                $(document).on('click', '[data-toggle="lightbox"]', function(event) {
                     event.preventDefault();
                     $(this).ekkoLightbox({
                         alwaysShowClose: true
@@ -174,7 +177,7 @@
                 });
             });
 
-            $(document).ready(function () {
+            $(document).ready(function() {
 
                 let debounceTimer;
                 let ajaxRequest;
@@ -201,7 +204,7 @@
                             student_id: student_id,
                             page: page
                         },
-                        success: function (data) {
+                        success: function(data) {
                             console.log('Search Success:', data);
                             if (data.html !== undefined) {
                                 $('#example1 tbody').html(data.html);
@@ -240,7 +243,7 @@
                                 window.history.pushState({}, '', url);
                             }
                         },
-                        error: function (xhr, status, error) {
+                        error: function(xhr, status, error) {
                             if (status !== 'abort') {
                                 console.error('Search Error:', {
                                     status: xhr.status,
@@ -253,19 +256,19 @@
                     });
                 }
 
-                $(document).on('change', '#search_by', function () {
+                $(document).on('change', '#search_by', function() {
                     $('#table_search').trigger('input');
                 });
 
-                $(document).on('input', '#table_search', function () {
+                $(document).on('input', '#table_search', function() {
                     clearTimeout(debounceTimer);
-                    debounceTimer = setTimeout(function () {
+                    debounceTimer = setTimeout(function() {
                         // Reset to page 1 for new search
                         fetchResults(1, true);
                     }, 500);
                 });
 
-                $(document).on('click', '#pagination_links .pagination a', function (e) {
+                $(document).on('click', '#pagination_links .pagination a', function(e) {
                     e.preventDefault();
                     var href = $(this).attr('href');
                     var pageMatch = href.match(/page=(\d+)/);
@@ -291,7 +294,7 @@
                 handleUrlParams();
 
                 // Handle Browser Back/Forward buttons
-                window.onpopstate = function () {
+                window.onpopstate = function() {
                     handleUrlParams();
                 };
             });
@@ -300,7 +303,7 @@
 @else
     <div class="alert alert-danger alert-dismissible fade show mt-2" role="alert"
         style="background-color: #dc3545; color: white; border-color: #dc3545;">
-        Course not found.
+        {{ __('messages.student_not_found') }}
         <button type="button" class="close" data-dismiss="alert" aria-label="Close"
             style="color: white; opacity: 1; outline: none; box-shadow: none;">
             <span aria-hidden="true">&times;</span>

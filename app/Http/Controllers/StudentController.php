@@ -53,7 +53,7 @@ class StudentController extends Controller
             ]);
         }
 
-        return response()->json(['error' => 'Invalid request'], 400);
+        return response()->json(['error' => __('messages.invalid_request')], 400);
     }
 
 
@@ -77,11 +77,13 @@ class StudentController extends Controller
             $filename = Str::uuid() . '.' . strtolower($file->getClientOriginalExtension());
 
             $saveData['image'] = $file->storeAs('uploads', $filename, 'public');
+        }else {
+            $saveData['image'] = 'uploads/default.png';
         }
         $student = Student::create($saveData);
 
         return redirect()->route('students.show', $student->id)
-            ->with('success', 'Student created successfully.');
+            ->with('success', __('messages.student_created_successfully'));
     }
 
     public function show($id)
@@ -95,7 +97,7 @@ class StudentController extends Controller
     public function enrollmentSearch(Request $request)
     {
         if (!$request->ajax()) {
-            return response()->json(['error' => 'Invalid request'], 400);
+            return response()->json(['error' => __('messages.invalid_request')], 400);
         }
 
         $searchTerm = trim($request->input('search'));
@@ -120,8 +122,8 @@ class StudentController extends Controller
                 } elseif ($searchBy === 'status') {
                     $q->where('bookings.status', 'LIKE', "%{$searchTerm}%");
                 } else { // all
-                    $q->where('students.name', 'LIKE', "%{$searchTerm}%")
-                        ->orWhere('students.id', 'LIKE', "%{$searchTerm}%")
+                    $q->where('courses.title', 'LIKE', "%{$searchTerm}%")
+                        ->orWhere('courses.id', 'LIKE', "%{$searchTerm}%")
                         ->orWhere('bookings.status', 'LIKE', "%{$searchTerm}%");
                 }
             });
@@ -174,7 +176,7 @@ class StudentController extends Controller
         $student->update($updateData);
 
         return redirect()->route('students.show', $student->id)
-            ->with('success', 'Student updated successfully.');
+            ->with('success', __('messages.student_updated_successfully'));
     }
 
     public function destroy($id)
@@ -182,7 +184,7 @@ class StudentController extends Controller
         $student = Student::findOrFail($id);
         $student->delete();
         return redirect()->route('students.index')
-            ->with('success', 'Student deleted successfully.');
+            ->with('success', __('messages.student_deleted_successfully'));
     }
 
     public function recycle()
@@ -228,7 +230,7 @@ class StudentController extends Controller
             ]);
         }
 
-        return response()->json(['error' => 'Invalid request'], 400);
+        return response()->json(['error' => __('messages.invalid_request')], 400);
     }
 
     public function restore($id)
@@ -236,14 +238,18 @@ class StudentController extends Controller
         $student = Student::onlyTrashed()->findOrFail($id);
         $student->restore();
         return redirect()->route('students.show', $student->id)
-            ->with('success', 'Student restored successfully.');
+            ->with('success', __('messages.student_restored_successfully'));
     }
 
     public function deletePermanently($id)
     {
         $student = Student::onlyTrashed()->findOrFail($id);
+        if ($student->image && Storage::disk('public')->exists($student->image) && $student->image !== 'uploads/default.png') {
+            Storage::disk('public')->delete($student->image);
+        }
         $student->forceDelete();
+
         return redirect()->route('students.recycle')
-            ->with('success', 'Student permanently deleted.');
+            ->with('success', __('messages.student_permanently_deleted'));
     }
 }

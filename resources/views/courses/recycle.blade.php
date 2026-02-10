@@ -1,6 +1,6 @@
 @extends('master')
 @section('title')
-    Dashboard | Course Manegment
+    {{ __('messages.dashboard') }} | {{ __('messages.courses_management') }}
 @endsection
 
 @if (@isset($courses) && !@empty($courses))
@@ -10,13 +10,13 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1 class="m-0 text-dark d-inline-block">Dashboard
+                        <h1 class="m-0 text-dark d-inline-block">{{ __('messages.dashboard') }}
                         </h1>
                     </div><!-- /.col -->
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
-                            <li class="breadcrumb-item"><a href="#">Recycle Bin</a></li>
-                            <li class="breadcrumb-item active">Dashboard</li>
+                            <li class="breadcrumb-item"><a href="#">{{ __('messages.recycle_bin') }}</a></li>
+                            <li class="breadcrumb-item active">{{ __('messages.dashboard') }}</li>
                         </ol>
                     </div><!-- /.col -->
                 </div><!-- /.row -->
@@ -32,15 +32,11 @@
                     <div class="alert alert-success alert-dismissible fade show mt-2" role="alert"
                         style="background-color: #28a745; color: white; border-color: #28a745;">
                         {{ session('success') }}
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"
-                            style="color: white; opacity: 1; outline: none; box-shadow: none;">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
                     </div>
                 @endif
                 <div class="card-header">
-                    <h3 class="card-title"> Deleted Courses Table <span class="badge badge-danger"
-                            id="course_count">{{ $coursesCount }}</span></h3>
+                    <h5 class="m-0"> {{ __('messages.deleted_courses_table') }} <span class="badge badge-danger"
+                            id="course_count">{{ $coursesCount }}</span></h5>
                 </div>
                 <div class="card-header">
                     <div class="row w-100">
@@ -48,30 +44,31 @@
                             <div class="input-group input-group-sm">
 
                                 <select name="search_by" id="search_by" class="form-control w-25">
-                                    <option value="all">Search by all</option>
-                                    <option value="id">ID</option>
-                                    <option value="title">Title</option>
-                                    <option value="status">Status</option>
+                                    <option value="all">{{ __('messages.search_by_all') }}</option>
+                                    <option value="id">{{ __('messages.id') }}</option>
+                                    <option value="title">{{ __('messages.title') }}</option>
+                                    <option value="status">{{ __('messages.status') }}</option>
                                 </select>
 
                             </div>
                         </div>
                         <div class="col-8 col-md-8 mt-2 mt-md-0">
                             <div class="input-group input-group-sm">
-                                <input type="text" id="table_search" class="form-control" placeholder="Search" name="search">
+                                <input type="text" id="table_search" class="form-control"
+                                    placeholder="{{ __('messages.search') }}" name="search">
                             </div>
                         </div>
                     </div>
                 </div>
                 <!-- /.card-header -->
                 <div class="card-body table-responsive p-0" style="height: 300px;">
-                    <table id="example1" class="table table-bordered table-striped table-hover">
+                    <table id="example1" class="table table-head-fixed text-nowrap table-bordered table-hover">
                         <thead>
                             <tr>
-                                <th>ID</th>
-                                <th>Course Title</th>
-                                <th>Status</th>
-                                <th>Action</th>
+                                <th>{{ __('messages.id') }}</th>
+                                <th>{{ __('messages.course_title') }}</th>
+                                <th>{{ __('messages.status') }}</th>
+                                <th>{{ __('messages.actions') }}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -82,15 +79,13 @@
                                     <td>{{ $course->title }}</td>
                                     <td>{{ $course->status }}</td>
                                     <td>
-                                        <div class="btn-group-responsive">
                                             <a href="{{ route('courses.show', $course->id) }}" class="btn btn-sm btn-primary"><i
-                                                    class="fas fa-eye"></i> View</a>
+                                                    class="fas fa-eye"></i> {{ __('messages.view') }}</a>
                                             <a href="{{ route('courses.restore', $course->id) }}" class="btn btn-sm btn-success"><i
-                                                    class="fas fa-undo"></i> Restore</a>
+                                                    class="fas fa-undo"></i> {{ __('messages.restore') }}</a>
                                             <a href="{{ route('courses.delete-permanently', $course->id) }}"
-                                                class="btn btn-sm btn-danger"><i class="fas fa-trash"></i> Permanent
-                                                deletion</a>
-                                        </div>
+                                                class="btn btn-sm btn-danger"><i class="fas fa-trash"></i>
+                                                {{ __('messages.permanent_deletion') }}</a>
                                     </td>
                                 </tr>
                             @endforeach
@@ -218,7 +213,7 @@
 @else
     <div class="alert alert-danger alert-dismissible fade show mt-2" role="alert"
         style="background-color: #dc3545; color: white; border-color: #dc3545;">
-        Course not found.
+        {{ __('messages.course_not_found') }}
         <button type="button" class="close" data-dismiss="alert" aria-label="Close"
             style="color: white; opacity: 1; outline: none; box-shadow: none;">
             <span aria-hidden="true">&times;</span>

@@ -52,7 +52,7 @@ class CourseController extends Controller
             ]);
         }
 
-        return response()->json(['error' => 'Invalid request'], 400);
+        return response()->json(['error' => __('messages.invalid_request')], 400);
     }
 
     public function show($id)
@@ -66,7 +66,7 @@ class CourseController extends Controller
     public function enrollmentSearch(Request $request)
     {
         if (!$request->ajax()) {
-            return response()->json(['error' => 'Invalid request'], 400);
+            return response()->json(['error' => __('messages.invalid_request')], 400);
         }
 
         $searchTerm = trim($request->input('search'));
@@ -74,7 +74,7 @@ class CourseController extends Controller
         $courseId = $request->input('course_id');
 
         if (!$courseId) {
-            return response()->json(['error' => 'Course ID is missing'], 400);
+            return response()->json(['error' => __('messages.course_id_missing')], 400);
         }
 
         $course = Course::withTrashed()->findOrFail($courseId);
@@ -123,7 +123,7 @@ class CourseController extends Controller
         $course = Course::create($saveData);
 
         return redirect()->route('courses.show', $course->id)
-            ->with('success', 'Course created successfully.');
+            ->with('success', __('messages.course_created_successfully'));
     }
 
     public function edit($id)
@@ -141,7 +141,7 @@ class CourseController extends Controller
         $course->update($updateData);
 
         return redirect()->route('courses.show', $course->id)
-            ->with('success', 'Course updated successfully.');
+            ->with('success', __('messages.course_updated_successfully'));
     }
 
     public function destroy($id)
@@ -150,7 +150,7 @@ class CourseController extends Controller
         $course->delete();
 
         return redirect()->route('courses.index')
-            ->with('success', 'Course deleted successfully.');
+            ->with('success', __('messages.course_deleted_successfully'));
     }
 
     public function recycle()
@@ -197,7 +197,7 @@ class CourseController extends Controller
             ]);
         }
 
-        return response()->json(['error' => 'Invalid request'], 400);
+        return response()->json(['error' => __('messages.invalid_request')], 400);
     }
 
     public function restore($id)
@@ -206,7 +206,7 @@ class CourseController extends Controller
         $course->restore();
 
         return redirect()->route('courses.show', $course->id)
-            ->with('success', 'Course restored successfully.');
+            ->with('success', __('messages.course_restored_successfully'));
     }
 
     public function deletePermanently($id)
@@ -215,6 +215,6 @@ class CourseController extends Controller
         $course->forceDelete();
 
         return redirect()->route('courses.recycle')
-            ->with('success', 'Course permanently deleted successfully.');
+            ->with('success', __('messages.course_permanently_deleted'));
     }
 }
