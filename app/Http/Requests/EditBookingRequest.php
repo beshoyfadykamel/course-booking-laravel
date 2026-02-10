@@ -3,40 +3,61 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Contracts\Validation\Validator;
+use App\Models\Booking;
 
 class EditBookingRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     */
     public function authorize(): bool
     {
         return true;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
-     */
     public function rules(): array
     {
         return [
-            'student_id' => 'required|exists:students,id',
-            'course_id' => 'required|exists:courses,id',
-            'status' => 'required|in:active,inactive',
+            'student_id' => ['required', 'integer', 'exists:students,id'],
+            'course_id'  => ['required', 'integer', 'exists:courses,id'],
+            'status'     => ['required', 'in:active,inactive'],
         ];
+    }
+
+    public function withValidator(Validator $validator): void
+    {
+        $validator->after(function ($validator) {
+
+            if (! $this->student_id || ! $this->course_id) {
+                return;
+            }
+
+            $bookingId = $this->route('id');
+
+            $exists = Booking::withTrashed()
+                ->where('student_id', $this->student_id)
+                ->where('course_id', $this->course_id)
+                ->where('id', '!=', $bookingId)     
+                ->exists();
+
+            if ($exists) {
+                $validator->errors()->add(
+                    'student_id',
+                    __('validation.student_id.duplicate_enrollment_trash')
+                );
+            }
+        });
     }
 
     public function messages(): array
     {
         return [
-            'student_id.required' => 'Please select a student.',
-            'student_id.exists' => 'The selected student is invalid.',
-            'course_id.required' => 'Please select a course.',
-            'course_id.exists' => 'The selected course is invalid.',
-            'status.required' => 'Please select a status.',
-            'status.in' => 'The status must be either active or inactive.',
+            'student_id.required' => __('validation.student_id.required'),
+            'student_id.exists'   => __('validation.student_id.exists'),
+
+            'course_id.required' => __('validation.course_id.required'),
+            'course_id.exists'   => __('validation.course_id.exists'),
+
+            'status.required' => __('validation.status.required'),
+            'status.in'       => __('validation.status.in'),
         ];
     }
 }

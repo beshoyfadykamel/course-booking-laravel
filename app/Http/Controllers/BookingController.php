@@ -8,6 +8,7 @@ use App\Models\Booking;
 use App\Models\Course;
 use App\Models\Student;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class BookingController extends Controller
@@ -82,13 +83,40 @@ class BookingController extends Controller
 
     public function store(StoreBookingRequest $request)
     {
+        $data = $request->validated();
 
+        [$booking, $wasRestored] = DB::transaction(function () use ($data) {
 
-        $booking = Booking::create($request->validated());
+            $existing = Booking::withTrashed()
+                ->where('student_id', $data['student_id'])
+                ->where('course_id', $data['course_id'])
+                ->first();
 
-        return redirect()->route('bookings.show', $booking->id)
-            ->with('success', __('messages.booking_created_successfully'));
+            if ($existing && $existing->trashed()) {
+                $existing->restore();
+                $existing->update([
+                    'status' => $data['status'],
+                ]);
+
+                return [$existing, true];  
+            }
+
+            if (! $existing) {
+                return [Booking::create($data), false]; 
+            }
+
+            return [$existing, false];
+        });
+
+        $messageKey = $wasRestored
+            ? 'messages.booking_restored_successfully'
+            : 'messages.booking_created_successfully';
+
+        return redirect()
+            ->route('bookings.show', $booking->id)
+            ->with('success', __($messageKey));
     }
+
 
     public function show($id)
     {

@@ -98,15 +98,15 @@ class CourseController extends Controller
             });
         }
 
-        $paginator = $query->paginate(10);
+        $students = $query->paginate(10);
 
         return response()->json([
             'html' => view('courses.partials.enrollment_students_table', [
-                'students' => $paginator,
+                'students' => $students,
                 'searchTerm' => $searchTerm
             ])->render(),
-            'pagination' => (string) $paginator->links(),
-            'count' => $paginator->total(),
+            'pagination' => (string) $students->links(),
+            'count' => $students->total(),
         ]);
     }
 
