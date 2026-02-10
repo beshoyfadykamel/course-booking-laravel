@@ -1,6 +1,6 @@
 @extends('master')
 @section('title')
-    Dashboard | Bookings Manegment
+    {{ __('messages.dashboard') }} | {{ __('messages.bookings_management') }}
 @endsection
 
 @if (@isset($bookings) && !@empty($bookings))
@@ -10,13 +10,13 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1 class="m-0 text-dark d-inline-block">Dashboard
+                        <h1 class="m-0 text-dark d-inline-block">{{ __('messages.dashboard') }}
                         </h1>
                     </div><!-- /.col -->
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
-                            <li class="breadcrumb-item"><a href="#">Bookings Manegment</a></li>
-                            <li class="breadcrumb-item active">Dashboard</li>
+                            <li class="breadcrumb-item"><a href="#">{{ __('messages.bookings_management') }}</a></li>
+                            <li class="breadcrumb-item active">{{ __('messages.dashboard') }}</li>
                         </ol>
                     </div><!-- /.col -->
                 </div><!-- /.row -->
@@ -31,16 +31,12 @@
                 <div class="alert alert-success alert-dismissible fade show mt-2" role="alert"
                     style="background-color: #28a745; color: white; border-color: #28a745;">
                     {{ session('success') }}
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"
-                        style="color: white; opacity: 1; outline: none; box-shadow: none;">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
                 </div>
             @endif
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title">Deleted Bookings Table <span class="badge badge-danger"
-                            id="bookings_count">({{ $bookings_count }})</span></h3>
+                    <h5 class="m-0">{{ __('messages.deleted_bookings_table') }} <span class="badge badge-danger"
+                            id="bookings_count">({{ $bookings_count }})</span></h5>
                 </div>
                 <div class="card-header">
                     <div class="row w-100">
@@ -48,19 +44,19 @@
                             <div class="input-group input-group-sm">
 
                                 <select name="search_by" id="search_by" class="form-control w-25">
-                                    <option value="all">Search by all</option>
-                                    <option value="id">ID</option>
-                                    <option value="course_name">Course Name</option>
-                                    <option value="student_name">Student Name</option>
-                                    <option value="status">Status</option>
+                                    <option value="all">{{ __('messages.search_by_all') }}</option>
+                                    <option value="id">{{ __('messages.id') }}</option>
+                                    <option value="course_name">{{ __('messages.course_name') }}</option>
+                                    <option value="student_name">{{ __('messages.student_name') }}</option>
+                                    <option value="status">{{ __('messages.status') }}</option>
                                 </select>
 
                             </div>
                         </div>
                         <div class="col-8 col-md-8 mt-2 mt-md-0">
                             <div class="input-group input-group-sm">
-                                <input type="text" id="table_search" class="form-control" placeholder="Search"
-                                    name="search">
+                                <input type="text" id="table_search" class="form-control"
+                                    placeholder="{{ __('messages.search') }}" name="search">
                             </div>
                         </div>
 
@@ -68,14 +64,14 @@
                 </div>
                 <!-- /.card-header -->
                 <div class="card-body table-responsive p-0" style="height: 300px;">
-                    <table id="example1" class="table table-bordered table-striped table-hover">
+                    <table id="example1" class="table table-head-fixed text-nowrap table-bordered table-hover">
                         <thead>
                             <tr>
-                                <th>ID</th>
-                                <th>Course</th>
-                                <th>Student</th>
-                                <th>Status</th>
-                                <th>Action</th>
+                                <th>{{ __('messages.id') }}</th>
+                                <th>{{ __('messages.course') }}</th>
+                                <th>{{ __('messages.student') }}</th>
+                                <th>{{ __('messages.status') }}</th>
+                                <th>{{ __('messages.actions') }}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -87,7 +83,7 @@
                                             <a
                                                 href="{{ route('courses.show', $booking->course->id) }}">{{ $booking->course->title }}</a>
                                         @else
-                                            <span class="text-danger">Course Deleted</span>
+                                            <span class="text-danger">{{ __('messages.course_deleted') }}</span>
                                         @endif
                                     </td>
                                     <td>
@@ -95,20 +91,19 @@
                                             <a
                                                 href="{{ route('students.show', $booking->student->id) }}">{{ $booking->student->name }}</a>
                                         @else
-                                            <span class="text-danger">Student Deleted</span>
+                                            <span class="text-danger">{{ __('messages.student_deleted') }}</span>
                                         @endif
                                     </td>
                                     <td>{{ $booking->status }}</td>
                                     <td>
-                                        <div class="btn-group-responsive">
-                                            <a href="{{ route('bookings.show', $booking->id) }}"
-                                                class="btn btn-sm btn-primary"><i class="fas fa-eye"></i> View</a>
+                                            <a href="{{ route('bookings.show', $booking->id) }}" class="btn btn-sm btn-primary"><i
+                                                    class="fas fa-eye"></i> {{ __('messages.view') }}</a>
                                             <a href="{{ route('bookings.restore', $booking->id) }}"
-                                                class="btn btn-sm btn-success"><i class="fas fa-undo"></i> Restore</a>
+                                                class="btn btn-sm btn-success"><i class="fas fa-undo"></i>
+                                                {{ __('messages.restore') }}</a>
                                             <a href="{{ route('bookings.delete-permanently', $booking->id) }}"
-                                                class="btn btn-sm btn-danger"><i class="fas fa-trash"></i> Permanent
-                                                deletion</a>
-                                        </div>
+                                                class="btn btn-sm btn-danger"><i class="fas fa-trash"></i>
+                                                {{ __('messages.permanent_deletion') }}</a>
                                     </td>
                                 </tr>
                             @endforeach
@@ -126,7 +121,7 @@
     @endsection
     @section('scripts')
         <script>
-            $(document).ready(function() {
+            $(document).ready(function () {
 
                 let debounceTimer;
                 let ajaxRequest;
@@ -150,7 +145,7 @@
                             search: search,
                             page: page
                         },
-                        success: function(data) {
+                        success: function (data) {
                             $('#example1 tbody').html(data.html);
                             $('#bookings_count').text('(' + data.count + ')');
                             $('#pagination_links').html(data.pagination);
@@ -180,7 +175,7 @@
                                 window.history.pushState({}, '', url);
                             }
                         },
-                        error: function(xhr, status) {
+                        error: function (xhr, status) {
                             if (status !== 'abort') {
                                 console.log('STATUS:', xhr.status);
                                 console.log('RESPONSE:', xhr.responseText);
@@ -190,18 +185,18 @@
                     });
                 }
 
-                $(document).on('change', '#search_by', function() {
+                $(document).on('change', '#search_by', function () {
                     $('#table_search').trigger('input');
                 });
 
-                $(document).on('input', '#table_search', function() {
+                $(document).on('input', '#table_search', function () {
                     clearTimeout(debounceTimer);
-                    debounceTimer = setTimeout(function() {
+                    debounceTimer = setTimeout(function () {
                         fetchResults(1, true);
                     }, 500);
                 });
 
-                $(document).on('click', '#pagination_links .pagination a', function(e) {
+                $(document).on('click', '#pagination_links .pagination a', function (e) {
                     e.preventDefault();
                     var href = $(this).attr('href');
                     var pageMatch = href.match(/page=(\d+)/);
@@ -225,7 +220,7 @@
 
                 handleUrlParams();
 
-                window.onpopstate = function() {
+                window.onpopstate = function () {
                     handleUrlParams();
                 };
             });
@@ -234,7 +229,7 @@
 @else
     <div class="alert alert-danger alert-dismissible fade show mt-2" role="alert"
         style="background-color: #dc3545; color: white; border-color: #dc3545;">
-        Course not found.
+        {{ __('messages.booking_not_found') }}
         <button type="button" class="close" data-dismiss="alert" aria-label="Close"
             style="color: white; opacity: 1; outline: none; box-shadow: none;">
             <span aria-hidden="true">&times;</span>

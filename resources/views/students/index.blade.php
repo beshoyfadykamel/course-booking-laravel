@@ -1,6 +1,6 @@
 @extends('master')
 @section('title')
-    Dashboard | studnt Manegment
+    {{ __('messages.dashboard') }} | {{ __('messages.students_management') }}
 @endsection
 
 @if (@isset($students) && !@empty($students))
@@ -10,16 +10,16 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1 class="m-0 text-dark d-inline-block">Dashboard
+                        <h1 class="m-0 text-dark d-inline-block">{{ __('messages.dashboard') }}
                             <a href="{{ route('students.recycle') }}" class="btn btn-danger btn-sm ml-2"> <i
-                                    class="fas fa-trash"></i> Recycle Bin ({{ $recycleCount }})</a>
+                                    class="fas fa-trash"></i> {{ __('messages.recycle_bin') }} ({{ $recycleCount }})</a>
 
                         </h1>
                     </div><!-- /.col -->
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
-                            <li class="breadcrumb-item"><a href="#">Students Manegment</a></li>
-                            <li class="breadcrumb-item active">Dashboard</li>
+                            <li class="breadcrumb-item"><a href="#">{{ __('messages.students_management') }}</a></li>
+                            <li class="breadcrumb-item active">{{ __('messages.dashboard') }}</li>
                         </ol>
                     </div><!-- /.col -->
                 </div><!-- /.row -->
@@ -34,53 +34,50 @@
                 <div class="alert alert-success alert-dismissible fade show mt-2" role="alert"
                     style="background-color: #28a745; color: white; border-color: #28a745;">
                     {{ session('success') }}
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"
-                        style="color: white; opacity: 1; outline: none; box-shadow: none;">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
                 </div>
             @endif
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title">Students Table <span class="badge badge-primary" id="students_count">{{ $studentsCount }}</span>
-                    </h3>
+                    <h5 class="m-0">{{ __('messages.students_table') }} <span class="badge badge-primary"
+                            id="students_count">{{ $studentsCount }}</span>
+                    </h5>
                 </div>
                 <div class="card-header">
                     <div class="row w-100">
                         <div class="col-12 col-md-6 mb-2 mb-md-0">
                             <a href="{{ route('students.create') }}" class="btn btn-success btn-block btn-sm"><i
-                                    class="fas fa-plus"></i> Add Student</a>
+                                    class="fas fa-plus"></i> {{ __('messages.add_student') }}</a>
                         </div>
                         <div class="col-6 col-md-2 mt-2 mt-md-0">
                             <div class="input-group input-group-sm">
 
                                 <select name="search_by" id="search_by" class="form-control w-25">
-                                    <option value="all">Search by all</option>
-                                    <option value="id">ID</option>
-                                    <option value="name">Name</option>
-                                    <option value="status">Status</option>
+                                    <option value="all">{{ __('messages.search_by_all') }}</option>
+                                    <option value="id">{{ __('messages.id') }}</option>
+                                    <option value="name">{{ __('messages.name') }}</option>
+                                    <option value="status">{{ __('messages.status') }}</option>
                                 </select>
 
                             </div>
                         </div>
                         <div class="col-6 col-md-4 mt-2 mt-md-0">
                             <div class="input-group input-group-sm">
-                                <input type="text" id="table_search" class="form-control" placeholder="Search"
-                                    name="search">
+                                <input type="text" id="table_search" class="form-control"
+                                    placeholder="{{ __('messages.search') }}" name="search">
                             </div>
                         </div>
                     </div>
                 </div>
                 <!-- /.card-header -->
                 <div class="card-body table-responsive p-0" style="height: 300px;">
-                    <table id="example1" class="table table-bordered table-striped table-hover">
+                    <table id="example1" class="table table-head-fixed text-nowrap table-bordered table-hover">
                         <thead>
                             <tr>
-                                <th>ID</th>
-                                <th>Image</th>
-                                <th>Name</th>
-                                <th>Status</th>
-                                <th>Action</th>
+                                <th>{{ __('messages.id') }}</th>
+                                <th>{{ __('messages.image') }}</th>
+                                <th>{{ __('messages.name') }}</th>
+                                <th>{{ __('messages.status') }}</th>
+                                <th>{{ __('messages.actions') }}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -91,25 +88,23 @@
                                     <td>
                                         @if ($student->image)
                                             <a href="{{ asset('storage/' . $student->image) }}" data-toggle="lightbox"
-                                                data-title="Student Image - {{ $student->id }}">
-                                                <img src="{{ asset('storage/' . $student->image) }}" alt="Student Image"
+                                                data-title="{{ $student->name }} - {{ $student->id }}">
+                                                <img src="{{ asset('storage/' . $student->image) }}" alt="{{ __('messages.student_image') }}"
                                                     class="img-thumbnail" width="50" height="50">
                                             </a>
                                         @else
-                                            <span>No Image</span>
+                                            <span>{{ __('messages.no_image') }}</span>
                                         @endif
                                     </td>
                                     <td>{{ $student->name }}</td>
                                     <td>{{ $student->status }}</td>
                                     <td>
-                                        <div class="btn-group-responsive">
-                                            <a href="{{ route('students.show', $student->id) }}"
-                                                class="btn btn-sm btn-primary"><i class="fas fa-eye"></i> View</a>
-                                            <a href="{{ route('students.edit', $student->id) }}"
-                                                class="btn btn-sm btn-warning"><i class="fas fa-pencil-alt"></i> Edit</a>
-                                            <a href="{{ route('students.destroy', $student->id) }}"
-                                                class="btn btn-sm btn-danger"><i class="fas fa-trash"></i> Delete</a>
-                                        </div>
+                                            <a href="{{ route('students.show', $student->id) }}" class="btn btn-sm btn-primary"><i
+                                                    class="fas fa-eye"></i> {{ __('messages.view') }}</a>
+                                            <a href="{{ route('students.edit', $student->id) }}" class="btn btn-sm btn-warning"><i
+                                                    class="fas fa-pencil-alt"></i> {{ __('messages.edit') }}</a>
+                                            <a href="{{ route('students.destroy', $student->id) }}" class="btn btn-sm btn-danger"><i
+                                                    class="fas fa-trash"></i> {{ __('messages.delete') }}</a>
                                     </td>
                                 </tr>
                             @endforeach
@@ -129,8 +124,8 @@
 
     @section('scripts')
         <script>
-            $(function() {
-                $(document).on('click', '[data-toggle="lightbox"]', function(event) {
+            $(function () {
+                $(document).on('click', '[data-toggle="lightbox"]', function (event) {
                     event.preventDefault();
                     $(this).ekkoLightbox({
                         alwaysShowClose: true
@@ -138,7 +133,7 @@
                 });
             });
 
-            $(document).ready(function() {
+            $(document).ready(function () {
 
                 let debounceTimer;
                 let ajaxRequest;
@@ -162,7 +157,7 @@
                             search: search,
                             page: page
                         },
-                        success: function(data) {
+                        success: function (data) {
                             $('#example1 tbody').html(data.html);
                             $('#students_count').text('(' + data.count + ')');
                             $('#pagination_links').html(data.pagination);
@@ -192,7 +187,7 @@
                                 window.history.pushState({}, '', url);
                             }
                         },
-                        error: function(xhr, status) {
+                        error: function (xhr, status) {
                             if (status !== 'abort') {
                                 console.log('STATUS:', xhr.status);
                                 console.log('RESPONSE:', xhr.responseText);
@@ -202,18 +197,18 @@
                     });
                 }
 
-                $(document).on('change', '#search_by', function() {
+                $(document).on('change', '#search_by', function () {
                     $('#table_search').trigger('input');
                 });
 
-                $(document).on('input', '#table_search', function() {
+                $(document).on('input', '#table_search', function () {
                     clearTimeout(debounceTimer);
-                    debounceTimer = setTimeout(function() {
+                    debounceTimer = setTimeout(function () {
                         fetchResults(1, true);
                     }, 500);
                 });
 
-                $(document).on('click', '#pagination_links .pagination a', function(e) {
+                $(document).on('click', '#pagination_links .pagination a', function (e) {
                     e.preventDefault();
                     var href = $(this).attr('href');
                     var pageMatch = href.match(/page=(\d+)/);
@@ -237,7 +232,7 @@
 
                 handleUrlParams();
 
-                window.onpopstate = function() {
+                window.onpopstate = function () {
                     handleUrlParams();
                 };
             });
@@ -246,7 +241,7 @@
 @else
     <div class="alert alert-danger alert-dismissible fade show mt-2" role="alert"
         style="background-color: #dc3545; color: white; border-color: #dc3545;">
-        Course not found.
+        {{ __('messages.student_not_found') }}
         <button type="button" class="close" data-dismiss="alert" aria-label="Close"
             style="color: white; opacity: 1; outline: none; box-shadow: none;">
             <span aria-hidden="true">&times;</span>

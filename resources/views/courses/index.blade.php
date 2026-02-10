@@ -1,6 +1,6 @@
 @extends('master')
 @section('title')
-    Dashboard | Course Manegment
+    {{ __('messages.dashboard') }} | {{ __('messages.courses_management') }}
 @endsection
 @if (@isset($courses) && !@empty($courses))
 
@@ -10,16 +10,16 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1 class="m-0 text-dark d-inline-block">Dashboard
+                        <h1 class="m-0 text-dark d-inline-block">{{ __('messages.dashboard') }}
                             <a href="{{ route('courses.recycle') }}" class="btn btn-danger btn-sm ml-2"> <i
-                                    class="fas fa-trash"></i> Recycle Bin ({{ $recycleCount }})</a>
+                                    class="fas fa-trash"></i> {{ __('messages.recycle_bin') }} ({{ $recycleCount }})</a>
 
                         </h1>
                     </div><!-- /.col -->
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
-                            <li class="breadcrumb-item"><a href="#">Course Manegment</a></li>
-                            <li class="breadcrumb-item active">Dashboard</li>
+                            <li class="breadcrumb-item"><a href="#">{{ __('messages.courses_management') }}</a></li>
+                            <li class="breadcrumb-item active">{{ __('messages.dashboard') }}</li>
                         </ol>
                     </div><!-- /.col -->
                 </div><!-- /.row -->
@@ -34,40 +34,36 @@
                 <div class="alert alert-success alert-dismissible fade show mt-2" role="alert"
                     style="background-color: #28a745; color: white; border-color: #28a745;">
                     {{ session('success') }}
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"
-                        style="color: white; opacity: 1; outline: none; box-shadow: none;">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
                 </div>
             @endif
             <div class="card" id="course_table">
                 <div class="card-header">
-                    <h3 class="card-title">Courses Table <span class="badge badge-primary"
+                    <h5 class="m-0">{{ __('messages.courses_table') }} <span class="badge badge-primary"
                             id="course_count">({{ $coursesCount }})</span>
-                    </h3>
+                    </h5>
                 </div>
                 <div class="card-header">
                     <div class="row w-100">
                         <div class="col-12 col-md-6 mb-2 mb-md-0">
                             <a href="{{ route('courses.create') }}" class="btn btn-success btn-block btn-sm"><i
-                                    class="fas fa-plus"></i> Add Course</a>
+                                    class="fas fa-plus"></i> {{ __('messages.add_course') }}</a>
                         </div>
                         <div class="col-6 col-md-2 mt-2 mt-md-0">
                             <div class="input-group input-group-sm">
 
                                 <select name="search_by" id="search_by" class="form-control w-25">
-                                    <option value="all">Search by all</option>
-                                    <option value="id">ID</option>
-                                    <option value="title">Title</option>
-                                    <option value="status">Status</option>
+                                    <option value="all">{{ __('messages.search_by_all') }}</option>
+                                    <option value="id">{{ __('messages.id') }}</option>
+                                    <option value="title">{{ __('messages.title') }}</option>
+                                    <option value="status">{{ __('messages.status') }}</option>
                                 </select>
 
                             </div>
                         </div>
                         <div class="col-6 col-md-4 mt-2 mt-md-0">
                             <div class="input-group input-group-sm">
-                                <input type="text" id="table_search" class="form-control" placeholder="Search"
-                                    name="search">
+                                <input type="text" id="table_search" class="form-control"
+                                    placeholder="{{ __('messages.search') }}" name="search">
                             </div>
                         </div>
 
@@ -75,13 +71,13 @@
                 </div>
                 <!-- /.card-header -->
                 <div class="card-body table-responsive p-0" style="height: 300px;">
-                    <table id="example1" class="table table-bordered table-striped table-hover">
+                    <table id="example1" class="table table-head-fixed text-nowrap table-bordered table-hover">
                         <thead>
                             <tr>
-                                <th>ID</th>
-                                <th>Course Title</th>
-                                <th>Status</th>
-                                <th>Action</th>
+                                <th>{{ __('messages.id') }}</th>
+                                <th>{{ __('messages.course_title') }}</th>
+                                <th>{{ __('messages.status') }}</th>
+                                <th>{{ __('messages.actions') }}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -92,14 +88,12 @@
                                     <td>{{ $course->title }}</td>
                                     <td>{{ $course->status }}</td>
                                     <td>
-                                        <div class="btn-group-responsive">
-                                            <a href="{{ route('courses.show', $course->id) }}"
-                                                class="btn btn-sm btn-primary"><i class="fas fa-eye"></i> View</a>
-                                            <a href="{{ route('courses.edit', $course->id) }}"
-                                                class="btn btn-sm btn-warning"><i class="fas fa-pencil-alt"></i> Edit</a>
-                                            <a href="{{ route('courses.destroy', $course->id) }}"
-                                                class="btn btn-sm btn-danger"><i class="fas fa-trash"></i> Delete</a>
-                                        </div>
+                                            <a href="{{ route('courses.show', $course->id) }}" class="btn btn-sm btn-primary"><i
+                                                    class="fas fa-eye"></i> {{ __('messages.view') }}</a>
+                                            <a href="{{ route('courses.edit', $course->id) }}" class="btn btn-sm btn-warning"><i
+                                                    class="fas fa-pencil-alt"></i> {{ __('messages.edit') }}</a>
+                                            <a href="{{ route('courses.destroy', $course->id) }}" class="btn btn-sm btn-danger"><i
+                                                    class="fas fa-trash"></i> {{ __('messages.delete') }}</a>
                                     </td>
                                 </tr>
                             @endforeach
@@ -118,7 +112,7 @@
     @endsection
     @section('scripts')
         <script>
-            $(document).ready(function() {
+            $(document).ready(function () {
 
                 let debounceTimer;
                 let ajaxRequest;
@@ -142,7 +136,7 @@
                             search: search,
                             page: page
                         },
-                        success: function(data) {
+                        success: function (data) {
                             $('#example1 tbody').html(data.html);
                             $('#course_count').text('(' + data.count + ')');
                             $('#pagination_links').html(data.pagination);
@@ -172,7 +166,7 @@
                                 window.history.pushState({}, '', url);
                             }
                         },
-                        error: function(xhr, status) {
+                        error: function (xhr, status) {
                             if (status !== 'abort') {
                                 console.log('STATUS:', xhr.status);
                                 console.log('RESPONSE:', xhr.responseText);
@@ -182,18 +176,18 @@
                     });
                 }
 
-                $(document).on('change', '#search_by', function() {
+                $(document).on('change', '#search_by', function () {
                     $('#table_search').trigger('input');
                 });
 
-                $(document).on('input', '#table_search', function() {
+                $(document).on('input', '#table_search', function () {
                     clearTimeout(debounceTimer);
-                    debounceTimer = setTimeout(function() {
+                    debounceTimer = setTimeout(function () {
                         fetchResults(1, true);
                     }, 500);
                 });
 
-                $(document).on('click', '#pagination_links .pagination a', function(e) {
+                $(document).on('click', '#pagination_links .pagination a', function (e) {
                     e.preventDefault();
                     var href = $(this).attr('href');
                     var pageMatch = href.match(/page=(\d+)/);
@@ -217,7 +211,7 @@
 
                 handleUrlParams();
 
-                window.onpopstate = function() {
+                window.onpopstate = function () {
                     handleUrlParams();
                 };
             });
@@ -226,7 +220,7 @@
 @else
     <div class="alert alert-danger alert-dismissible fade show mt-2" role="alert"
         style="background-color: #dc3545; color: white; border-color: #dc3545;">
-        Course not found.
+        {{ __('messages.course_not_found') }}
         <button type="button" class="close" data-dismiss="alert" aria-label="Close"
             style="color: white; opacity: 1; outline: none; box-shadow: none;">
             <span aria-hidden="true">&times;</span>

@@ -9,6 +9,18 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
 
+Route::post('/lang', function (\Illuminate\Http\Request $request) {
+    $locale = $request->input('locale');
+
+    if (! in_array($locale, ['ar', 'en'])) {
+        abort(400);
+    }
+
+    session(['locale' => $locale]);
+
+    return redirect()->back();
+})->name('lang.set');
+
 
 // Start Course Routes
 Route::prefix('courses')->group(function () {
