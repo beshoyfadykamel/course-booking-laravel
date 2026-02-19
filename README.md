@@ -301,12 +301,6 @@ A full-featured **Learning Management Platform** built with Laravel 12 for manag
 
 8. **Access the application** at `http://127.0.0.1:8000`
 
-### Default Test User
-| Field | Value |
-|:---|:---|
-| Email | `test@example.com` |
-| Password | `password` |
-
 ---
 
 ## 🧪 Testing
