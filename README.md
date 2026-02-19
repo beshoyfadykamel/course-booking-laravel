@@ -299,7 +299,7 @@ A full-featured **Learning Management Platform** built with Laravel 12 for manag
    composer dev
    ```
 
-8. **Access the application** at `http://127.0.0.1:8000`
+8. ** Access the application** at `http://127.0.0.1:8000`
 
 ---
 
