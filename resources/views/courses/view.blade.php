@@ -1,320 +1,208 @@
-@extends('master')
+@extends('layouts.master')
 @section('title')
     {{ __('messages.view_course') }} | {{ __('messages.courses_management') }}
 @endsection
 
-@if (@isset($course) && !@empty($course))
-    @section('content-header')
-        <!-- Content Header (Page header) -->
-        <div class="content-header">
-            <div class="container-fluid">
-                <div class="row mb-2">
-                    <div class="col-sm-6">
-                        <h1 class="m-0 text-dark">{{ __('messages.view_course') }}</h1>
-                    </div><!-- /.col -->
-                    <div class="col-sm-6">
-                        <ol class="breadcrumb float-sm-right">
-                            <li class="breadcrumb-item"><a
-                                    href="{{ route('courses.index') }}">{{ __('messages.courses_management') }}</a></li>
-                            <li class="breadcrumb-item active">{{ __('messages.view_course') }}</li>
-                        </ol>
-                    </div><!-- /.col -->
-                </div><!-- /.row -->
-            </div><!-- /.container-fluid -->
-        </div>
-        <!-- /.content-header -->
-    @endsection
-
-    @section('content')
-        <div class="col-12">
-            @if (session()->has('success'))
-                <div class="alert alert-success alert-dismissible fade show mt-2" role="alert"
-                    style="background-color: #28a745; color: white; border-color: #28a745;">
-                    {{ session('success') }}
-                </div>
-            @endif
-            <div class="card">
-                <div class="card-header">
-                    <h5 class="m-0">{{ __('messages.course_details') }} "{{ $course->title }}"</h5>
-                </div>
-                <!-- /.card-header -->
-                <div class="card-body table-responsive p-0" style="height: 120px;">
-                    <table id="example2" class="table table-head-fixed text-nowrap table-bordered table-hover">
-                        <thead>
-                            <tr>
-                                <th>{{ __('messages.id') }}</th>
-                                <th>{{ __('messages.course_title') }}</th>
-                                <th>{{ __('messages.course_description') }}</th>
-                                <th>{{ __('messages.status') }}</th>
-                                <th>{{ __('messages.created_at') }}</th>
-                                <th>{{ __('messages.updated_at') }}</th>
-                                <th>{{ __('messages.actions') }}</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-
-                            <tr>
-                                <td>{{ $course->id }}</td>
-                                <td>{{ $course->title }}</td>
-                                <td>{{ $course->description }}</td>
-                                <td>{{ $course->status }}</td>
-                                <td>{{ $course->created_at }}</td>
-                                <td>{{ $course->updated_at }}</td>
-                                <td>
-                                        @if ($course->trashed())
-                                            <a href="{{ route('courses.restore', $course->id) }}"
-                                                class="btn btn-sm btn-success"><i class="fas fa-undo"></i>
-                                                {{ __('messages.restore') }}</a>
-                                            <a href="{{ route('courses.delete-permanently', $course->id) }}"
-                                                class="btn btn-sm btn-danger"><i class="fas fa-trash"></i> Permanent
-                                                deletion</a>
-                                        @else
-                                            <a href="{{ route('courses.edit', $course->id) }}"
-                                                class="btn btn-sm btn-warning"><i class="fas fa-pencil-alt"></i>
-                                                {{ __('messages.edit') }}</a>
-                                            <a href="{{ route('courses.destroy', $course->id) }}"
-                                                class="btn btn-sm btn-danger"><i class="fas fa-trash"></i>
-                                                {{ __('messages.delete') }}</a>
-                                        @endif
-                                </td>
-                            </tr>
-
-
-                        </tbody>
-                    </table>
-                </div>
-                <!-- /.card-body -->
+@section('content')
+    @if (isset($course))
+        @if (session()->has('success'))
+            <div class="mb-4 p-4 bg-green-100 text-green-800 rounded-lg border border-green-200">
+                <i class="fas fa-check-circle me-2"></i>
+                {{ session('success') }}
             </div>
-            <!-- /.card -->
-            <div class="card">
-                <div class="card-header">
-                    <h5 class="m-0"> {{ __('messages.course') }} "{{ $course->title }}"
-                        {{ __('messages.student_enrollment_table') }} <span id="course_count"
-                            class="badge badge-primary">({{ count($course->students) }})</span>
-                    </h5>
+        @endif
+
+        <!-- Course Details Card -->
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden mb-6">
+            <div class="px-6 py-4 border-b border-gray-200 flex flex-col sm:flex-row sm:items-center sm:justify-between">
+                <h2 class="text-lg font-semibold text-gray-900">{{ __('messages.course_details') }} "{{ $course->title }}"</h2>
+                <div class="flex gap-2 mt-2 sm:mt-0">
+                    @if ($course->trashed())
+                        <form action="{{ route('courses.restore', $course->id) }}" method="POST" class="inline">
+                            @csrf
+                            <button type="submit" class="inline-flex items-center px-3 py-1.5 bg-green-600 text-white rounded-lg hover:bg-green-700 transition text-sm">
+                                <i class="fas fa-undo me-1"></i> {{ __('messages.restore') }}
+                            </button>
+                        </form>
+                        <form action="{{ route('courses.delete-permanently', $course->id) }}" method="POST" class="inline" onsubmit="return confirm('{{ __('messages.confirm_delete') }}')">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="inline-flex items-center px-3 py-1.5 bg-red-600 text-white rounded-lg hover:bg-red-700 transition text-sm">
+                                <i class="fas fa-trash me-1"></i> {{ __('messages.permanent_deletion') }}
+                            </button>
+                        </form>
+                    @else
+                        <a href="{{ route('courses.edit', $course->id) }}" class="inline-flex items-center px-3 py-1.5 bg-yellow-600 text-white rounded-lg hover:bg-yellow-700 transition text-sm">
+                            <i class="fas fa-pencil-alt me-1"></i> {{ __('messages.edit') }}
+                        </a>
+                        <form action="{{ route('courses.destroy', $course->id) }}" method="POST" class="inline" onsubmit="return confirm('{{ __('messages.confirm_delete') }}')">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="inline-flex items-center px-3 py-1.5 bg-red-600 text-white rounded-lg hover:bg-red-700 transition text-sm">
+                                <i class="fas fa-trash me-1"></i> {{ __('messages.delete') }}
+                            </button>
+                        </form>
+                    @endif
                 </div>
-                <div class="card-header">
-                    <div class="row w-100">
-                        <div class="col-12 col-md-6 mb-2 mb-md-0">
-                            <a href="{{ route('bookings.create') }}" class="btn btn-success btn-block btn-sm"><i
-                                    class="fas fa-plus"></i> {{ __('messages.add_booking') }}</a>
-                        </div>
-                        <div class="col-6 col-md-2 mt-2 mt-md-0">
-                            <div class="input-group input-group-sm">
-
-                                <select name="search_by" id="search_by" class="form-control w-25">
-                                    <option value="all">{{ __('messages.search_by_all') }}</option>
-                                    <option value="id">{{ __('messages.id') }}</option>
-                                    <option value="name">{{ __('messages.name') }}</option>
-                                    <option value="status">{{ __('messages.enrollment_status') }}</option>
-                                </select>
-
-                            </div>
-                        </div>
-                        <div class="col-6 col-md-4 mt-2 mt-md-0">
-                            <div class="input-group input-group-sm">
-                                <input type="text" id="table_search" class="form-control"
-                                    placeholder="{{ __('messages.search') }}" name="search">
-                            </div>
-                        </div>
+            </div>
+            <div class="p-6">
+                <dl class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <div>
+                        <dt class="text-sm font-medium text-gray-500">{{ __('messages.id') }}</dt>
+                        <dd class="mt-1 text-sm text-gray-900">{{ $course->id }}</dd>
                     </div>
-                </div>
-                <!-- /.card-header -->
-                <div class="card-body table-responsive p-0" style="height: 300px;">
-                    <table id="example1" class="table table-head-fixed text-nowrap table-bordered table-hover">
-                        <thead>
-                            <tr>
-                                <th>{{ __('messages.id') }}</th>
-                                <th>{{ __('messages.image') }}</th>
-                                <th>{{ __('messages.name') }}</th>
-                                <th>{{ __('messages.enrollment_status') }}</th>
-                                <th>{{ __('messages.actions') }}</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @if (isset($students) && !empty($students))
-                                @foreach ($students as $student)
-                                    <tr>
-                                        <td>{{ $student->id }}</td>
-
-                                        <td>
-                                            @if ($student->image)
-                                                <a href="{{ asset('storage/' . $student->image) }}" data-toggle="lightbox"
-                                                    data-title="{{ $student->name }} - {{ $student->id }}">
-                                                    <img src="{{ asset('storage/' . $student->image) }}"
-                                                        alt="{{ __('messages.student_image') }}" class="img-thumbnail"
-                                                        width="50" height="50">
-                                                </a>
-                                            @else
-                                                <span>{{ __('messages.no_image') }}</span>
-                                            @endif
-                                        </td>
-
-                                        <td>{{ $student->name }}</td>
-                                        <td>{{ $student->pivot->status }}</td>
-                                        <td>
-                                            <div class="btn-group-responsive">
-                                                <a href="{{ route('students.show', $student->id) }}"
-                                                    class="btn btn-sm btn-primary"><i class="fas fa-eye"></i>
-                                                    {{ __('messages.view_student') }}</a>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                @endforeach
+                    <div>
+                        <dt class="text-sm font-medium text-gray-500">{{ __('messages.course_title') }}</dt>
+                        <dd class="mt-1 text-sm text-gray-900 font-medium">{{ $course->title }}</dd>
+                    </div>
+                    <div>
+                        <dt class="text-sm font-medium text-gray-500">{{ __('messages.status') }}</dt>
+                        <dd class="mt-1">
+                            @if($course->status == 'active')
+                                <span class="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-medium">{{ __('messages.active') }}</span>
+                            @else
+                                <span class="px-3 py-1 bg-gray-100 text-gray-800 rounded-full text-sm font-medium">{{ __('messages.inactive') }}</span>
                             @endif
-
-                        </tbody>
-                    </table>
-                </div>
-                <!-- /.card-body -->
-                <div class="card-footer clearfix" id="pagination_links">
-                    {{ $students->links() }}
-                </div>
+                        </dd>
+                    </div>
+                    <div class="sm:col-span-2 lg:col-span-3">
+                        <dt class="text-sm font-medium text-gray-500">{{ __('messages.course_description') }}</dt>
+                        <dd class="mt-1 text-sm text-gray-900">{{ $course->description }}</dd>
+                    </div>
+                    <div>
+                        <dt class="text-sm font-medium text-gray-500">{{ __('messages.created_at') }}</dt>
+                        <dd class="mt-1 text-sm text-gray-900">{{ $course->created_at?->format('Y-m-d H:i') }}</dd>
+                    </div>
+                    <div>
+                        <dt class="text-sm font-medium text-gray-500">{{ __('messages.updated_at') }}</dt>
+                        <dd class="mt-1 text-sm text-gray-900">{{ $course->updated_at?->format('Y-m-d H:i') }}</dd>
+                    </div>
+                </dl>
             </div>
         </div>
-    @endsection
-    @section('scripts')
-        <script>
-            $(function() {
-                $(document).on('click', '[data-toggle="lightbox"]', function(event) {
-                    event.preventDefault();
-                    $(this).ekkoLightbox({
-                        alwaysShowClose: true
-                    });
-                });
-            });
 
-            $(document).ready(function() {
+        <!-- Enrolled Students Card -->
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+            <div class="px-6 py-4 border-b border-gray-200">
+                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                    <h2 class="text-lg font-semibold text-gray-900">
+                        {{ __('messages.student_enrollment_table') }}
+                        <span id="course_count" class="ms-2 px-2 py-1 bg-indigo-100 text-indigo-700 rounded-full text-sm">({{ $studentsCount }})</span>
+                    </h2>
+                    <a href="{{ route('bookings.create') }}" class="inline-flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition text-sm">
+                        <i class="fas fa-plus me-2"></i> {{ __('messages.add_booking') }}
+                    </a>
+                </div>
+            </div>
 
-                let debounceTimer;
-                let ajaxRequest;
+            <!-- Search -->
+            <div class="px-6 py-3 border-b border-gray-100 bg-gray-50">
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    <select name="search_by" id="search_by" class="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 select-rtl-fix">
+                        <option value="all">{{ __('messages.search_by_all') }}</option>
+                        <option value="id">{{ __('messages.id') }}</option>
+                        <option value="name">{{ __('messages.name') }}</option>
+                        <option value="status">{{ __('messages.enrollment_status') }}</option>
+                    </select>
+                    <input type="text" id="table_search" class="sm:col-span-2 px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="{{ __('messages.search') }}...">
+                </div>
+            </div>
 
-                // Reusable function for fetching results
-                function fetchResults(page = 1, pushState = true) {
-                    var search = $('#table_search').val().trim();
-                    var search_by = $('#search_by').val();
-                    var course_id = "{{ $course->id }}";
+            <div class="overflow-x-auto">
+                <table id="enrollment_table" class="w-full">
+                    <thead class="bg-gray-100 border-b border-gray-200">
+                        <tr>
+                            <th class="px-6 py-3 text-start text-sm font-semibold text-gray-900">{{ __('messages.id') }}</th>
+                            <th class="px-6 py-3 text-start text-sm font-semibold text-gray-900">{{ __('messages.image') }}</th>
+                            <th class="px-6 py-3 text-start text-sm font-semibold text-gray-900">{{ __('messages.name') }}</th>
+                            <th class="px-6 py-3 text-start text-sm font-semibold text-gray-900">{{ __('messages.enrollment_status') }}</th>
+                            <th class="px-6 py-3 text-start text-sm font-semibold text-gray-900">{{ __('messages.actions') }}</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200">
+                        @if (isset($students) && $students->count() > 0)
+                            @include('courses.partials.enrollment_students_table', ['students' => $students, 'searchTerm' => ''])
+                        @endif
+                    </tbody>
+                </table>
+            </div>
 
-                    if (ajaxRequest) {
-                        ajaxRequest.abort();
-                    }
+            <div id="pagination_links" class="px-6 py-4 border-t border-gray-200">
+                {{ $students->links() }}
+            </div>
+        </div>
+    @else
+        <div class="p-4 bg-red-100 text-red-800 rounded-lg border border-red-200">
+            <i class="fas fa-exclamation-circle me-2"></i>
+            {{ __('messages.course_not_found') }}
+        </div>
+    @endif
+@endsection
 
-                    $('#example1 tbody').css('opacity', '0.5');
+@section('scripts')
+    <script>
+        $(document).ready(function() {
+            let debounceTimer;
+            let ajaxRequest;
 
-                    ajaxRequest = $.ajax({
-                        url: "{{ route('courses.enrollment.search') }}",
-                        method: 'get',
-                        dataType: 'json',
-                        data: {
-                            search_by: search_by,
-                            search: search,
-                            course_id: course_id,
-                            page: page
-                        },
-                        success: function(data) {
-                            console.log('Search Success:', data);
-                            if (data.html !== undefined) {
-                                $('#example1 tbody').html(data.html);
-                            }
-                            if (data.count !== undefined) {
-                                $('#course_count').text('(' + data.count + ')');
-                            }
-                            if (data.pagination !== undefined) {
-                                $('#pagination_links').html(data.pagination);
-                            } else {
-                                $('#pagination_links').html('');
-                            }
-                            $('#example1 tbody').css('opacity', '1');
+            function fetchResults(page = 1, pushState = true) {
+                var search = $('#table_search').val().trim();
+                var search_by = $('#search_by').val();
+                var course_id = "{{ $course->id ?? '' }}";
 
-                            if (pushState) {
-                                let url = new URL(window.location.href);
+                if (ajaxRequest) { ajaxRequest.abort(); }
+                $('#enrollment_table tbody').css('opacity', '0.5');
 
-                                if (search) {
-                                    url.searchParams.set('search', search);
-                                } else {
-                                    url.searchParams.delete('search');
-                                }
+                ajaxRequest = $.ajax({
+                    url: "{{ route('courses.enrollment.search') }}",
+                    method: 'get',
+                    dataType: 'json',
+                    data: { search_by: search_by, search: search, course_id: course_id, page: page },
+                    success: function(data) {
+                        if (data.html !== undefined) { $('#enrollment_table tbody').html(data.html); }
+                        if (data.count !== undefined) { $('#course_count').text('(' + data.count + ')'); }
+                        if (data.pagination !== undefined) { $('#pagination_links').html(data.pagination); }
+                        $('#enrollment_table tbody').css('opacity', '1');
 
-                                if (search_by !== 'all') {
-                                    url.searchParams.set('search_by', search_by);
-                                } else {
-                                    url.searchParams.delete('search_by');
-                                }
-
-                                if (page > 1) {
-                                    url.searchParams.set('page', page);
-                                } else {
-                                    url.searchParams.delete('page');
-                                }
-
-                                window.history.pushState({}, '', url);
-                            }
-                        },
-                        error: function(xhr, status, error) {
-                            if (status !== 'abort') {
-                                console.error('Search Error:', {
-                                    status: xhr.status,
-                                    error: error,
-                                    response: xhr.responseText
-                                });
-                            }
-                            $('#example1 tbody').css('opacity', '1');
+                        if (pushState) {
+                            let url = new URL(window.location.href);
+                            search ? url.searchParams.set('search', search) : url.searchParams.delete('search');
+                            search_by !== 'all' ? url.searchParams.set('search_by', search_by) : url.searchParams.delete('search_by');
+                            page > 1 ? url.searchParams.set('page', page) : url.searchParams.delete('page');
+                            window.history.pushState({}, '', url);
                         }
-                    });
-                }
-
-                $(document).on('change', '#search_by', function() {
-                    $('#table_search').trigger('input');
-                });
-
-                $(document).on('input', '#table_search', function() {
-                    clearTimeout(debounceTimer);
-                    debounceTimer = setTimeout(function() {
-                        // Reset to page 1 for new search
-                        fetchResults(1, true);
-                    }, 500);
-                });
-
-                $(document).on('click', '#pagination_links .pagination a', function(e) {
-                    e.preventDefault();
-                    var href = $(this).attr('href');
-                    var pageMatch = href.match(/page=(\d+)/);
-                    var page = pageMatch ? pageMatch[1] : 1;
-                    fetchResults(page, true);
-                });
-
-                // Initialize from URL
-                function handleUrlParams() {
-                    let urlParams = new URLSearchParams(window.location.search);
-                    let search = urlParams.get('search') || '';
-                    let search_by = urlParams.get('search_by') || 'all';
-                    let page = urlParams.get('page') || 1;
-
-                    // Only trigger if there's actual state to restore
-                    if (search !== '' || search_by !== 'all' || page > 1) {
-                        $('#table_search').val(search);
-                        $('#search_by').val(search_by);
-                        fetchResults(page, false); // false = don't push state
+                    },
+                    error: function(xhr, status) {
+                        if (status !== 'abort') { console.error('Search Error:', xhr.status); }
+                        $('#enrollment_table tbody').css('opacity', '1');
                     }
-                }
+                });
+            }
 
-                handleUrlParams();
-
-                // Handle Browser Back/Forward buttons
-                window.onpopstate = function() {
-                    handleUrlParams();
-                };
+            $(document).on('change', '#search_by', function() { $('#table_search').trigger('input'); });
+            $(document).on('input', '#table_search', function() {
+                clearTimeout(debounceTimer);
+                debounceTimer = setTimeout(function() { fetchResults(1, true); }, 500);
             });
-        </script>
-    @endsection
-@else
-    <div class="alert alert-danger alert-dismissible fade show mt-2" role="alert"
-        style="background-color: #dc3545; color: white; border-color: #dc3545;">
-        {{ __('messages.course_not_found') }}
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close"
-            style="color: white; opacity: 1; outline: none; box-shadow: none;">
-            <span aria-hidden="true">&times;</span>
-        </button>
-    </div>
+            $(document).on('click', '#pagination_links a', function(e) {
+                e.preventDefault();
+                var page = $(this).attr('href').match(/page=(\d+)/);
+                fetchResults(page ? page[1] : 1, true);
+            });
 
-@endif
+            function handleUrlParams() {
+                let urlParams = new URLSearchParams(window.location.search);
+                let search = urlParams.get('search') || '';
+                let search_by = urlParams.get('search_by') || 'all';
+                let page = urlParams.get('page') || 1;
+                if (search !== '' || search_by !== 'all' || page > 1) {
+                    $('#table_search').val(search);
+                    $('#search_by').val(search_by);
+                    fetchResults(page, false);
+                }
+            }
+            handleUrlParams();
+            window.onpopstate = function() { handleUrlParams(); };
+        });
+    </script>
+@endsection

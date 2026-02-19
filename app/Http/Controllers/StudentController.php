@@ -102,13 +102,13 @@ class StudentController extends Controller
 
         $searchTerm = trim($request->input('search'));
         $searchBy = $request->input('search_by', 'all');
-        $courseId = $request->input('student_id');
+        $studentId = $request->input('student_id');
 
-        if (!$courseId) {
-            return response()->json(['error' => 'Course ID is missing'], 400);
+        if (!$studentId) {
+            return response()->json(['error' => __('messages.student_id_missing')], 400);
         }
 
-        $student = Student::withTrashed()->findOrFail($courseId);
+        $student = Student::withTrashed()->findOrFail($studentId);
 
         $query = $student->courses();
 

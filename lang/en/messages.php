@@ -140,4 +140,33 @@ return [
     // Modal and Form Labels
     'please_select_student' => 'Please select a student first',
     'please_select_course' => 'Please select a course first',
+
+    // Additional Keys
+    'all_rights_reserved' => 'All Rights Reserved',
+    'language' => 'Language',
+    'quick_actions' => 'Quick Actions',
+    'view_reports' => 'View Reports',
+    'student_id_missing' => 'Student ID is missing.',
+    'booking_date' => 'Booking Date',
+
+    // Profile
+    'profile_subtitle' => 'Manage your account settings and preferences',
+    'profile_information' => 'Profile Information',
+    'profile_information_desc' => 'Update your account\'s profile information and email address.',
+    'update_password' => 'Update Password',
+    'update_password_desc' => 'Ensure your account is using a long, random password to stay secure.',
+    'delete_account' => 'Delete Account',
+    'delete_account_desc' => 'Permanently delete your account and all associated data.',
+    'delete_account_warning' => 'Once your account is deleted, all of its resources and data will be permanently deleted. Before deleting your account, please download any data or information that you wish to retain.',
+    'confirm_delete_account' => 'Are you sure you want to delete your account?',
+    'confirm_delete_account_desc' => 'Once deleted, all of your data will be permanently removed. Please enter your password to confirm.',
+    'current_password' => 'Current Password',
+    'new_password' => 'New Password',
+    'confirm_password' => 'Confirm Password',
+    'password' => 'Password',
+    'enter_password_to_confirm' => 'Enter your password to confirm',
+    'saved' => 'Saved.',
+    'email_unverified' => 'Your email address is unverified.',
+    'resend_verification' => 'Click here to re-send the verification email.',
+    'verification_sent' => 'A new verification link has been sent to your email address.',
 ];
