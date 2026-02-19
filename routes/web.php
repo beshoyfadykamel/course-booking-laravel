@@ -26,7 +26,7 @@ Route::post('/lang', function (\Illuminate\Http\Request $request) {
 })->name('lang.set');
 
 // All authenticated routes
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('/home', [HomeController::class, 'index'])->name('home');
 
