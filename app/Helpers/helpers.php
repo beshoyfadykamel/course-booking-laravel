@@ -1,7 +1,7 @@
 <?php
 
 if (!function_exists('highlight')) {
-    function highlight($text, $term, $className = 'bg-warning text-dark')
+    function highlight($text, $term, $className = 'bg-yellow-200 text-gray-900 px-0.5 rounded')
     {
         $text = (string) $text;
         $term = trim((string) ($term ?? ''));

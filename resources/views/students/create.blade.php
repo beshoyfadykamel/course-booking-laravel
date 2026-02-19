@@ -1,129 +1,125 @@
-@extends('master')
+@extends('layouts.master')
+
 @section('title')
-    {{ __('messages.dashboard') }} | {{ __('messages.students_management') }}
-@endsection
-
-
-@section('content-header')
-    <!-- Content Header (Page header) -->
-    <div class="content-header">
-        <div class="container-fluid">
-            <div class="row mb-2">
-                <div class="col-sm-6">
-                    <h1 class="m-0 text-dark d-inline-block">{{ __('messages.dashboard') }}
-                    </h1>
-                </div><!-- /.col -->
-                <div class="col-sm-6">
-                    <ol class="breadcrumb float-sm-right">
-                        <li class="breadcrumb-item"><a href="#">{{ __('messages.add_student') }}</a></li>
-                        <li class="breadcrumb-item active">{{ __('messages.dashboard') }}</li>
-                    </ol>
-                </div><!-- /.col -->
-            </div><!-- /.row -->
-        </div><!-- /.container-fluid -->
-    </div>
-    <!-- /.content-header -->
+    {{ __('messages.add_student') }}
 @endsection
 
 @section('content')
-    <div class="col-md-8 m-auto">
-        <!-- general form elements -->
-        <div class="card card-primary">
-            <div class="card-header">
-                <h5 class="m-0">{{ __('messages.add_new_student') }}</h5>
-            </div>
-            <!-- /.card-header -->
-            <!-- form start -->
-            <form role="form" action="{{ route('students.store') }}" method="POST" enctype="multipart/form-data">
+    <div class="max-w-2xl mx-auto">
+        <div class="mb-6">
+            <h1 class="text-3xl font-bold text-gray-900">{{ __('messages.add_new_student') }}</h1>
+            <p class="mt-2 text-gray-600">{{ __('messages.add_new_student') }}</p>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+            <!-- Success Message -->
+            @if (session()->has('success'))
+                <div class="mb-4 p-4 bg-green-100 text-green-800 rounded-lg border border-green-200">
+                    <i class="fas fa-check-circle me-2"></i>
+                    {{ session('success') }}
+                </div>
+            @endif
+
+            <form action="{{ route('students.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
                 @csrf
-                <div class="card-body">
-                    <div class="form-group">
-                        <label for="name">{{ __('messages.student_name') }}</label>
-                        <input type="text" class="form-control" id="name"
-                            placeholder="{{ __('messages.enter_student_name') }}" name="name" value="{{ old('name') }}">
-                        @error('name')
-                            <small class="text-danger">{{ $message }}</small>
-                        @enderror
-                    </div>
-                    <div class="form-group">
-                        <label for="email">{{ __('messages.student_email') }}</label>
-                        <input type="email" class="form-control" id="email"
-                            placeholder="{{ __('messages.enter_student_email') }}" name="email" value="{{ old('email') }}">
-                        @error('email')
-                            <small class="text-danger">{{ $message }}</small>
-                        @enderror
-                    </div>
-                    <div class="form-group">
-                        <label for="country_id">{{ __('messages.student_country') }}</label>
 
-                        <select class="form-control" id="country_id" name="country_id">
-                            <option value="">{{ __('messages.select_country') }}</option>
-
-                            @foreach ($countries as $country)
-                                <option value="{{ $country->id }}" {{ old('country_id') == $country->id ? 'selected' : '' }}>
-                                    {{ $country->name }}
-                                </option>
-                            @endforeach
-                        </select>
-
-                        @error('country_id')
-                            <small class="text-danger">{{ $message }}</small>
-                        @enderror
-                    </div>
-                    <div class="form-group">
-                        <label for="status">{{ __('messages.status') }}</label>
-                        <select class="form-control" id="status" name="status">
-                            <option value="">{{ __('messages.choose_status') }}</option>
-                            <option value="active" {{ old('status') == 'active' ? 'selected' : '' }}>
-                                {{ __('messages.active') }}
-                            </option>
-                            <option value="inactive" {{ old('status') == 'inactive' ? 'selected' : '' }}>
-                                {{ __('messages.inactive') }}
-                            </option>
-                        </select>
-                        @error('status')
-                            <small class="text-danger">{{ $message }}</small>
-                        @enderror
-                    </div>
-                    <div class="form-group">
-                        <label for="exampleInputFile">{{ __('messages.image_optional') }}</label>
-                        <div class="input-group">
-                            <input type="file" class="w-100 form-control" id="exampleInputFile" name="image">
-                        </div>
-                    </div>
-                    @error('image')
-                        <small class="text-danger">{{ $message }}</small>
+                <!-- Name Field -->
+                <div>
+                    <x-input-label for="name" :value="__('messages.student_name')" />
+                    <x-text-input 
+                        id="name" 
+                        class="block mt-1 w-full @error('name') border-red-500 @enderror" 
+                        type="text" 
+                        name="name"
+                        placeholder="{{ __('messages.enter_student_name') }}"
+                        :value="old('name')" 
+                        required 
+                        autofocus />
+                    @error('name')
+                        <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
                     @enderror
                 </div>
-                <!-- /.card-body -->
 
-                <div class="card-footer">
-                    <button type="submit" class="btn btn-primary  w-100">{{ __('messages.submit') }}</button>
+                <!-- Email Field -->
+                <div>
+                    <x-input-label for="email" :value="__('messages.student_email')" />
+                    <x-text-input 
+                        id="email" 
+                        class="block mt-1 w-full @error('email') border-red-500 @enderror" 
+                        type="email" 
+                        name="email"
+                        placeholder="{{ __('messages.enter_student_email') }}"
+                        :value="old('email')"
+                        required />
+                    @error('email')
+                        <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <!-- Country Field -->
+                <div>
+                    <x-input-label for="country_id" :value="__('messages.student_country')" />
+                    <select 
+                        id="country_id" 
+                        name="country_id"
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 select-rtl-fix @error('country_id') border-red-500 @enderror">
+                        <option value="">{{ __('messages.select_country') }}</option>
+                        @foreach ($countries as $country)
+                            <option value="{{ $country->id }}" {{ old('country_id') == $country->id ? 'selected' : '' }}>
+                                {{ $country->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                    @error('country_id')
+                        <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <!-- Status Field -->
+                <div>
+                    <x-input-label for="status" :value="__('messages.status')" />
+                    <select 
+                        id="status" 
+                        name="status"
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 select-rtl-fix @error('status') border-red-500 @enderror"
+                        required>
+                        <option value="">{{ __('messages.choose_status') }}</option>
+                        <option value="active" {{ old('status') == 'active' ? 'selected' : '' }}>
+                            {{ __('messages.active') }}
+                        </option>
+                        <option value="inactive" {{ old('status') == 'inactive' ? 'selected' : '' }}>
+                            {{ __('messages.inactive') }}
+                        </option>
+                    </select>
+                    @error('status')
+                        <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <!-- Image Field -->
+                <div>
+                    <x-input-label for="image" :value="__('messages.image_optional')" />
+                    <input 
+                        type="file" 
+                        id="image" 
+                        name="image"
+                        accept="image/*"
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 @error('image') border-red-500 @enderror" />
+                    @error('image')
+                        <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <!-- Actions -->
+                <div class="flex gap-4 pt-6 border-t border-gray-200">
+                    <x-primary-button type="submit" class="flex-1">
+                        <i class="fas fa-save me-2"></i>{{ __('messages.submit') }}
+                    </x-primary-button>
+                    <x-secondary-button type="button" onclick="window.history.back()" class="flex-1">
+                        <i class="fas fa-times me-2"></i>{{ __('messages.cancel') }}
+                    </x-secondary-button>
                 </div>
             </form>
         </div>
-        <!-- /.card -->
-
-
     </div>
-@endsection
-
-@section('scripts')
-    <script>
-        $(function () {
-            $(document).on('click', '[data-toggle="lightbox"]', function (event) {
-                event.preventDefault();
-                $(this).ekkoLightbox({
-                    alwaysShowClose: true
-                });
-            });
-        });
-        $(document).ready(function () {
-            // Fallback for custom file input since plugin is missing
-            $('.custom-file-input').on('change', function () {
-                var fileName = $(this).val().split('\\').pop();
-                $(this).next('.custom-file-label').addClass("selected").html(fileName);
-            });
-        });
-    </script>
 @endsection

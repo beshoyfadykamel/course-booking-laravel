@@ -1,243 +1,125 @@
-@extends('master')
+@extends('layouts.master')
 @section('title')
-    Dashboard | Students Manegment
+    {{ __('messages.recycle_bin') }} | {{ __('messages.students_management') }}
 @endsection
 
-@if (@isset($students) && !@empty($students))
-    @section('content-header')
-        <!-- Content Header (Page header) -->
-        <div class="content-header">
-            <div class="container-fluid">
-                <div class="row mb-2">
-                    <div class="col-sm-6">
-                        <h1 class="m-0 text-dark d-inline-block">{{ __('messages.dashboard') }}</h1>
-                        </h1>
-                    </div><!-- /.col -->
-                    <div class="col-sm-6">
-                        <ol class="breadcrumb float-sm-right">
-                            <li class="breadcrumb-item"><a href="#">{{ __('messages.recycle_bin') }}</a></li>
-                            <li class="breadcrumb-item active">{{ __('messages.dashboard') }}</li>
-                        </ol>
-                    </div><!-- /.col -->
-                </div><!-- /.row -->
-            </div><!-- /.container-fluid -->
+@section('content')
+    @if (session()->has('success'))
+        <div class="mb-4 p-4 bg-green-100 text-green-800 rounded-lg border border-green-200">
+            <i class="fas fa-check-circle me-2"></i>
+            {{ session('success') }}
         </div>
-        <!-- /.content-header -->
-    @endsection
+    @endif
 
-    @section('content')
-        <div class="col-12">
-            <div class="card">
-                @if (session()->has('success'))
-                    <div class="alert alert-success alert-dismissible fade show mt-2" role="alert"
-                        style="background-color: #28a745; color: white; border-color: #28a745;">
-                        {{ session('success') }}
-                    </div>
-                @endif
-                <div class="card-header">
-                    <h5 class="m-0"> {{ __('messages.deleted_students_table') }} <span class="badge badge-danger"
-                            id="students_count">({{ $studentsCount }})</span></h5>
-                </div>
-                <div class="card-header">
-                    <div class="row w-100">
-                        <div class="col-4 col-md-4 mt-2 mt-md-0">
-                            <div class="input-group input-group-sm">
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+        <div class="px-6 py-4 border-b border-gray-200">
+            <h2 class="text-lg font-semibold text-gray-900">
+                {{ __('messages.deleted_students_table') }}
+                <span id="students_count" class="ms-2 px-2 py-1 bg-red-100 text-red-700 rounded-full text-sm">({{ $studentsCount }})</span>
+            </h2>
+        </div>
 
-                                <select name="search_by" id="search_by" class="form-control w-25">
-                                    <option value="all">{{ __('messages.search_by_all') }}</option>
-                                    <option value="id">{{ __('messages.id') }}</option>
-                                    <option value="name">{{ __('messages.name') }}</option>
-                                    <option value="status">{{ __('messages.status') }}</option>
-                                </select>
-
-                            </div>
-                        </div>
-                        <div class="col-8 col-md-8 mt-2 mt-md-0">
-                            <div class="input-group input-group-sm">
-                                <input type="text" id="table_search" class="form-control"
-                                    placeholder="{{ __('messages.search') }}" name="search">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- /.card-header -->
-                <div class="card-body table-responsive p-0" style="height: 300px;">
-                    <table id="example1" class="table table-bordered table-striped table-hover text-nowrap">
-                        <thead>
-                            <tr>
-                                <th>{{ __('messages.id') }}</th>
-                                <th>{{ __('messages.image') }}</th>
-                                <th>{{ __('messages.name') }}</th>
-                                <th>{{ __('messages.status') }}</th>
-                                <th>{{ __('messages.actions') }}</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-
-                            @foreach ($students as $student)
-                                <tr>
-                                    <td>{{ $student->id }}</td>
-                                    <td>
-                                        @if ($student->image)
-                                            <a href="{{ asset('storage/' . $student->image) }}" data-toggle="lightbox"
-                                                data-title="{{ $student->name }} - {{ $student->id }}">
-                                                <img src="{{ asset('storage/' . $student->image) }}" alt="{{ __('messages.student_image') }}"
-                                                    class="img-thumbnail" width="50" height="50">
-                                            </a>
-                                        @else
-                                            <span>{{ __('messages.no_image') }}</span>
-                                        @endif
-                                    </td>
-                                    <td>{{ $student->name }}</td>
-                                    <td>{{ $student->status }}</td>
-                                    <td> 
-                                            <a href="{{ route('students.show', $student->id) }}"
-                                                class="btn btn-sm btn-primary"><i class="fas fa-eye"></i>
-                                                {{ __('messages.view') }}</a>
-                                            <a href="{{ route('students.restore', $student->id) }}"
-                                                class="btn btn-sm btn-success"><i class="fas fa-undo"></i>
-                                                {{ __('messages.restore') }}</a>
-                                            <a href="{{ route('students.delete-permanently', $student->id) }}"
-                                                class="btn btn-sm btn-danger"><i class="fas fa-trash"></i>
-                                                {{ __('messages.permanent_deletion') }}</a>
-                                    </td>
-                                </tr>
-                            @endforeach
-
-
-                        </tbody>
-                    </table>
-                </div>
-                <!-- /.card-body -->
-                <div class="card-footer clearfix" id="pagination_links">
-                    {{ $students->links() }}
-                </div>
-                <!-- /.card -->
+        <!-- Search -->
+        <div class="px-6 py-3 border-b border-gray-100 bg-gray-50">
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <select name="search_by" id="search_by" class="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 select-rtl-fix">
+                    <option value="all">{{ __('messages.search_by_all') }}</option>
+                    <option value="id">{{ __('messages.id') }}</option>
+                    <option value="name">{{ __('messages.name') }}</option>
+                    <option value="status">{{ __('messages.status') }}</option>
+                </select>
+                <input type="text" id="table_search" class="sm:col-span-2 px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="{{ __('messages.search') }}...">
             </div>
-        @endsection
-        @section('scripts')
-            <script>
-                $(function() {
-                    $(document).on('click', '[data-toggle="lightbox"]', function(event) {
-                        event.preventDefault();
-                        $(this).ekkoLightbox({
-                            alwaysShowClose: true
-                        });
-                    });
-                });
-                $(document).ready(function() {
-
-                    let debounceTimer;
-                    let ajaxRequest;
-
-                    function fetchResults(page = 1, pushState = true) {
-                        var search = $('#table_search').val().trim();
-                        var search_by = $('#search_by').val();
-
-                        if (ajaxRequest) {
-                            ajaxRequest.abort();
-                        }
-
-                        $('#example1 tbody').css('opacity', '0.5');
-
-                        ajaxRequest = $.ajax({
-                            url: "{{ route('students.recycle.search') }}",
-                            method: 'get',
-                            dataType: 'json',
-                            data: {
-                                search_by: search_by,
-                                search: search,
-                                page: page
-                            },
-                            success: function(data) {
-                                $('#example1 tbody').html(data.html);
-                                $('#students_count').text('(' + data.count + ')');
-                                $('#pagination_links').html(data.pagination);
-                                $('#example1 tbody').css('opacity', '1');
-
-                                if (pushState) {
-                                    let url = new URL(window.location.href);
-
-                                    if (search) {
-                                        url.searchParams.set('search', search);
-                                    } else {
-                                        url.searchParams.delete('search');
-                                    }
-
-                                    if (search_by !== 'all') {
-                                        url.searchParams.set('search_by', search_by);
-                                    } else {
-                                        url.searchParams.delete('search_by');
-                                    }
-
-                                    if (page > 1) {
-                                        url.searchParams.set('page', page);
-                                    } else {
-                                        url.searchParams.delete('page');
-                                    }
-
-                                    window.history.pushState({}, '', url);
-                                }
-                            },
-                            error: function(xhr, status) {
-                                if (status !== 'abort') {
-                                    console.log('STATUS:', xhr.status);
-                                    console.log('RESPONSE:', xhr.responseText);
-                                }
-                                $('#example1 tbody').css('opacity', '1');
-                            }
-                        });
-                    }
-
-                    $(document).on('change', '#search_by', function() {
-                        $('#table_search').trigger('input');
-                    });
-
-                    $(document).on('input', '#table_search', function() {
-                        clearTimeout(debounceTimer);
-                        debounceTimer = setTimeout(function() {
-                            fetchResults(1, true);
-                        }, 500);
-                    });
-
-                    $(document).on('click', '#pagination_links .pagination a', function(e) {
-                        e.preventDefault();
-                        var href = $(this).attr('href');
-                        var pageMatch = href.match(/page=(\d+)/);
-                        var page = pageMatch ? pageMatch[1] : 1;
-                        fetchResults(page, true);
-                    });
-
-                    // Initialize from URL
-                    function handleUrlParams() {
-                        let urlParams = new URLSearchParams(window.location.search);
-                        let search = urlParams.get('search') || '';
-                        let search_by = urlParams.get('search_by') || 'all';
-                        let page = urlParams.get('page') || 1;
-
-                        if (search !== '' || search_by !== 'all' || page > 1) {
-                            $('#table_search').val(search);
-                            $('#search_by').val(search_by);
-                            fetchResults(page, false);
-                        }
-                    }
-
-                    handleUrlParams();
-
-                    window.onpopstate = function() {
-                        handleUrlParams();
-                    };
-                });
-            </script>
-        @endsection
-    @else
-        <div class="alert alert-danger alert-dismissible fade show mt-2" role="alert"
-            style="background-color: #dc3545; color: white; border-color: #dc3545;">
-            Course not found.
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close"
-                style="color: white; opacity: 1; outline: none; box-shadow: none;">
-                <span aria-hidden="true">&times;</span>
-            </button>
         </div>
 
-@endif
+        <div class="overflow-x-auto">
+            <table id="data_table" class="w-full">
+                <thead class="bg-gray-100 border-b border-gray-200">
+                    <tr>
+                        <th class="px-6 py-3 text-start text-sm font-semibold text-gray-900">{{ __('messages.id') }}</th>
+                        <th class="px-6 py-3 text-start text-sm font-semibold text-gray-900">{{ __('messages.image') }}</th>
+                        <th class="px-6 py-3 text-start text-sm font-semibold text-gray-900">{{ __('messages.name') }}</th>
+                        <th class="px-6 py-3 text-start text-sm font-semibold text-gray-900">{{ __('messages.status') }}</th>
+                        <th class="px-6 py-3 text-start text-sm font-semibold text-gray-900">{{ __('messages.actions') }}</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-200">
+                    @if (isset($students) && $students->count() > 0)
+                        @include('students.partials.recycle_table', ['students' => $students, 'searchTerm' => ''])
+                    @endif
+                </tbody>
+            </table>
+        </div>
+
+        <div id="pagination_links" class="px-6 py-4 border-t border-gray-200">
+            {{ $students->links() }}
+        </div>
+    </div>
+@endsection
+
+@section('scripts')
+    <script>
+        $(document).ready(function() {
+            let debounceTimer;
+            let ajaxRequest;
+
+            function fetchResults(page = 1, pushState = true) {
+                var search = $('#table_search').val().trim();
+                var search_by = $('#search_by').val();
+
+                if (ajaxRequest) { ajaxRequest.abort(); }
+                $('#data_table tbody').css('opacity', '0.5');
+
+                ajaxRequest = $.ajax({
+                    url: "{{ route('students.recycle.search') }}",
+                    method: 'get',
+                    dataType: 'json',
+                    data: { search_by: search_by, search: search, page: page },
+                    success: function(data) {
+                        if (data.html !== undefined) { $('#data_table tbody').html(data.html); }
+                        if (data.count !== undefined) { $('#students_count').text('(' + data.count + ')'); }
+                        if (data.pagination !== undefined) { $('#pagination_links').html(data.pagination); }
+                        $('#data_table tbody').css('opacity', '1');
+
+                        if (pushState) {
+                            let url = new URL(window.location.href);
+                            search ? url.searchParams.set('search', search) : url.searchParams.delete('search');
+                            search_by !== 'all' ? url.searchParams.set('search_by', search_by) : url.searchParams.delete('search_by');
+                            page > 1 ? url.searchParams.set('page', page) : url.searchParams.delete('page');
+                            window.history.pushState({}, '', url);
+                        }
+                    },
+                    error: function(xhr, status) {
+                        if (status !== 'abort') { console.error('Search Error:', xhr.status); }
+                        $('#data_table tbody').css('opacity', '1');
+                    }
+                });
+            }
+
+            $(document).on('change', '#search_by', function() { $('#table_search').trigger('input'); });
+            $(document).on('input', '#table_search', function() {
+                clearTimeout(debounceTimer);
+                debounceTimer = setTimeout(function() { fetchResults(1, true); }, 500);
+            });
+            $(document).on('click', '#pagination_links a', function(e) {
+                e.preventDefault();
+                var page = $(this).attr('href').match(/page=(\d+)/);
+                fetchResults(page ? page[1] : 1, true);
+            });
+
+            function handleUrlParams() {
+                let urlParams = new URLSearchParams(window.location.search);
+                let search = urlParams.get('search') || '';
+                let search_by = urlParams.get('search_by') || 'all';
+                let page = urlParams.get('page') || 1;
+                if (search !== '' || search_by !== 'all' || page > 1) {
+                    $('#table_search').val(search);
+                    $('#search_by').val(search_by);
+                    fetchResults(page, false);
+                }
+            }
+            handleUrlParams();
+            window.onpopstate = function() { handleUrlParams(); };
+        });
+    </script>
+@endsection

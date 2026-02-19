@@ -140,4 +140,33 @@ return [
     // Modal and Form Labels
     'please_select_student' => 'اختر طالب أولاً من فضلك',
     'please_select_course' => 'اختر دورة أولاً من فضلك',
+
+    // Additional Keys
+    'all_rights_reserved' => 'جميع الحقوق محفوظة',
+    'language' => 'اللغة',
+    'quick_actions' => 'إجراءات سريعة',
+    'view_reports' => 'عرض التقارير',
+    'student_id_missing' => 'معرف الطالب مفقود.',
+    'booking_date' => 'تاريخ الحجز',
+
+    // Profile
+    'profile_subtitle' => 'إدارة إعدادات حسابك وتفضيلاتك',
+    'profile_information' => 'معلومات الملف الشخصي',
+    'profile_information_desc' => 'تحديث معلومات ملفك الشخصي وعنوان البريد الإلكتروني.',
+    'update_password' => 'تحديث كلمة المرور',
+    'update_password_desc' => 'تأكد من أن حسابك يستخدم كلمة مرور طويلة وعشوائية للبقاء آمنًا.',
+    'delete_account' => 'حذف الحساب',
+    'delete_account_desc' => 'حذف حسابك نهائيًا وجميع البيانات المرتبطة به.',
+    'delete_account_warning' => 'بمجرد حذف حسابك، سيتم حذف جميع موارده وبياناته نهائيًا. قبل حذف حسابك، يرجى تنزيل أي بيانات أو معلومات ترغب في الاحتفاظ بها.',
+    'confirm_delete_account' => 'هل أنت متأكد أنك تريد حذف حسابك؟',
+    'confirm_delete_account_desc' => 'بمجرد الحذف، سيتم إزالة جميع بياناتك نهائيًا. يرجى إدخال كلمة المرور للتأكيد.',
+    'current_password' => 'كلمة المرور الحالية',
+    'new_password' => 'كلمة المرور الجديدة',
+    'confirm_password' => 'تأكيد كلمة المرور',
+    'password' => 'كلمة المرور',
+    'enter_password_to_confirm' => 'أدخل كلمة المرور للتأكيد',
+    'saved' => 'تم الحفظ.',
+    'email_unverified' => 'لم يتم التحقق من بريدك الإلكتروني.',
+    'resend_verification' => 'اضغط هنا لإعادة إرسال بريد التحقق.',
+    'verification_sent' => 'تم إرسال رابط تحقق جديد إلى بريدك الإلكتروني.',
 ];
