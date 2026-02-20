@@ -8,6 +8,7 @@ use App\Models\Booking;
 use App\Models\Course;
 use App\Models\Student;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
@@ -15,9 +16,9 @@ class BookingController extends Controller
 {
     public function index()
     {
-        $bookings = Booking::with('student', 'course')->paginate(10);
-        $bookings_count = Booking::with('student', 'course')->count();
-        $recycleCount = Booking::onlyTrashed()->count();
+        $bookings = Booking::with('student', 'course', 'user')->forCurrentUser()->paginate(10);
+        $bookings_count = Booking::forCurrentUser()->count();
+        $recycleCount = Booking::onlyTrashed()->forCurrentUser()->count();
         return view('bookings.index', compact('bookings', 'bookings_count', 'recycleCount'));
     }
 
@@ -28,7 +29,7 @@ class BookingController extends Controller
             $searchTerm = $request->input('search');
             $searchBy = $request->input('search_by');
 
-            $query = Booking::query();
+            $query = Booking::query()->forCurrentUser();
 
             if ($searchTerm !== '') {
                 $query->where(function ($main) use ($searchTerm, $searchBy) {
@@ -62,7 +63,7 @@ class BookingController extends Controller
                 });
             }
 
-            $bookings = $query->paginate(10);
+            $bookings = $query->with('user')->paginate(10);
 
             return response()->json([
                 'html' => view('bookings.partials.bookings_table', compact('bookings', 'searchTerm'))->render(),
@@ -76,14 +77,15 @@ class BookingController extends Controller
 
     public function create()
     {
-        $students = Student::all();
-        $courses = Course::all();
+        $students = Student::where('user_id', Auth::id())->get();
+        $courses = Course::where('user_id', Auth::id())->get();
         return view('bookings.create', compact('students', 'courses'));
     }
 
     public function store(StoreBookingRequest $request)
     {
         $data = $request->validated();
+        $data['user_id'] = Auth::id();
 
         [$booking, $wasRestored] = DB::transaction(function () use ($data) {
 
@@ -113,40 +115,40 @@ class BookingController extends Controller
             : 'messages.booking_created_successfully';
 
         return redirect()
-            ->route('bookings.show', $booking->id)
+            ->to(roleRoute('bookings.show', $booking->id))
             ->with('success', __($messageKey));
     }
 
 
     public function show($id)
     {
-        $booking = Booking::with('student', 'course')->withTrashed()->findOrFail($id);
+        $booking = Booking::with('student', 'course', 'user')->withTrashed()->forCurrentUser()->findOrFail($id);
         return view('bookings.view', compact('booking'));
     }
 
     public function edit($id)
     {
-        $booking = Booking::findOrFail($id);
-        $students = Student::all();
-        $courses = Course::all();
+        $booking = Booking::forCurrentUser()->findOrFail($id);
+        $students = Student::where('user_id', $booking->user_id)->get();
+        $courses = Course::where('user_id', $booking->user_id)->get();
         return view('bookings.edit', compact('booking', 'students', 'courses'));
     }
 
     public function update(EditBookingRequest $request, $id)
     {
-        $booking = Booking::findOrFail($id);
+        $booking = Booking::forCurrentUser()->findOrFail($id);
         $booking->update($request->validated());
         $booking->updated_at = now();
         $booking->save();
-        return redirect()->route('bookings.show', $booking->id)
+        return redirect()->to(roleRoute('bookings.show', $booking->id))
             ->with('success', __('messages.booking_updated_successfully'));
     }
 
     public function destroy($id)
     {
-        $booking = Booking::findOrFail($id);
+        $booking = Booking::forCurrentUser()->findOrFail($id);
         $booking->delete();
-        return redirect()->route('bookings.index')
+        return redirect()->to(roleRoute('bookings.index'))
             ->with('success', __('messages.booking_deleted_successfully'));
     }
 
@@ -154,8 +156,8 @@ class BookingController extends Controller
 
     public function recycle()
     {
-        $bookings = Booking::onlyTrashed()->with('student', 'course')->paginate(10);
-        $bookings_count = Booking::onlyTrashed()->count();
+        $bookings = Booking::onlyTrashed()->forCurrentUser()->with('student', 'course', 'user')->paginate(10);
+        $bookings_count = Booking::onlyTrashed()->forCurrentUser()->count();
         return view('bookings.recycle', compact('bookings', 'bookings_count'));
     }
 
@@ -165,7 +167,7 @@ class BookingController extends Controller
             $searchTerm = $request->input('search');
             $searchBy = $request->input('search_by'); // Not really used in recycle view based on previous examples, but good to have
 
-            $query = Booking::with('student', 'course')->onlyTrashed();
+            $query = Booking::with('student', 'course', 'user')->onlyTrashed()->forCurrentUser();
 
             if ($searchTerm !== '') {
                 $query->where(function ($main) use ($searchTerm, $searchBy) {
@@ -212,17 +214,17 @@ class BookingController extends Controller
 
     public function restore($id)
     {
-        $booking = Booking::onlyTrashed()->findOrFail($id);
+        $booking = Booking::onlyTrashed()->forCurrentUser()->findOrFail($id);
         $booking->restore();
-        return redirect()->route('bookings.show', $booking->id)
+        return redirect()->to(roleRoute('bookings.show', $booking->id))
             ->with('success', __('messages.booking_restored_successfully'));
     }
 
     public function deletePermanently($id)
     {
-        $booking = Booking::onlyTrashed()->findOrFail($id);
+        $booking = Booking::onlyTrashed()->forCurrentUser()->findOrFail($id);
         $booking->forceDelete();
-        return redirect()->route('bookings.recycle')
+        return redirect()->to(roleRoute('bookings.recycle'))
             ->with('success', __('messages.booking_permanently_deleted'));
     }
 }

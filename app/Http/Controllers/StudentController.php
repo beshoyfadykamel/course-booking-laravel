@@ -7,6 +7,7 @@ use App\Http\Requests\StoreStudentRequest;
 use App\Models\Country;
 use App\Models\Student;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
@@ -14,9 +15,9 @@ class StudentController extends Controller
 {
     public function index()
     {
-        $students = Student::with('country')->paginate(10);
-        $studentsCount = Student::with('country')->count();
-        $recycleCount = Student::onlyTrashed()->count();
+        $students = Student::forCurrentUser()->with('country', 'user')->paginate(10);
+        $studentsCount = Student::forCurrentUser()->count();
+        $recycleCount = Student::onlyTrashed()->forCurrentUser()->count();
         return view('students.index', compact('students', 'recycleCount', 'studentsCount'));
     }
 
@@ -26,7 +27,7 @@ class StudentController extends Controller
             $searchTerm = $request->input('search');
             $searchBy = $request->input('search_by');
 
-            $query = Student::query();
+            $query = Student::forCurrentUser();
 
             if ($searchTerm) {
                 if ($searchBy === 'name') {
@@ -44,7 +45,7 @@ class StudentController extends Controller
                 }
             }
 
-            $students = $query->paginate(10);
+            $students = $query->with('user')->paginate(10);
 
             return response()->json([
                 'html' => view('students.partials.student_table', compact('students', 'searchTerm'))->render(),
@@ -68,8 +69,7 @@ class StudentController extends Controller
 
 
         $saveData = $request->validated();
-        $saveData['created_at'] = now();
-        $saveData['updated_at'] = now();
+        $saveData['user_id'] = Auth::id();
 
         if ($request->hasFile('image')) {
             $file = $request->file('image');
@@ -82,15 +82,15 @@ class StudentController extends Controller
         }
         $student = Student::create($saveData);
 
-        return redirect()->route('students.show', $student->id)
+        return redirect()->to(roleRoute('students.show', $student->id))
             ->with('success', __('messages.student_created_successfully'));
     }
 
     public function show($id)
     {
-        $student = Student::withTrashed()->findOrFail($id);
+        $student = Student::withTrashed()->forCurrentUser()->with('user')->findOrFail($id);
         $courses = $student->courses()->paginate(10);
-        $coursesCount = $student->courses()->count();
+        $coursesCount = $student->courses()->forCurrentUser()->count();
         return view('students.view', compact('student', 'courses', 'coursesCount'));
     }
 
@@ -108,7 +108,7 @@ class StudentController extends Controller
             return response()->json(['error' => __('messages.student_id_missing')], 400);
         }
 
-        $student = Student::withTrashed()->findOrFail($studentId);
+        $student = Student::withTrashed()->forCurrentUser()->findOrFail($studentId);
 
         $query = $student->courses();
 
@@ -143,14 +143,14 @@ class StudentController extends Controller
 
     public function edit($id)
     {
-        $student = Student::findOrFail($id);
+        $student = Student::forCurrentUser()->findOrFail($id);
         $countries = Country::all();
         return view('students.edit', compact('student', 'countries'));
     }
 
     public function update(EditStudentRequest $request, $id)
     {
-        $student = Student::findOrFail($id);
+        $student = Student::forCurrentUser()->findOrFail($id);
 
         $updateData = $request->validated();
         $updateData['updated_at'] = now();
@@ -175,22 +175,22 @@ class StudentController extends Controller
 
         $student->update($updateData);
 
-        return redirect()->route('students.show', $student->id)
+        return redirect()->to(roleRoute('students.show', $student->id))
             ->with('success', __('messages.student_updated_successfully'));
     }
 
     public function destroy($id)
     {
-        $student = Student::findOrFail($id);
+        $student = Student::forCurrentUser()->findOrFail($id);
         $student->delete();
-        return redirect()->route('students.index')
+        return redirect()->to(roleRoute('students.index'))
             ->with('success', __('messages.student_deleted_successfully'));
     }
 
     public function recycle()
     {
-        $students = Student::onlyTrashed()->paginate(10);
-        $studentsCount = Student::onlyTrashed()->count();
+        $students = Student::onlyTrashed()->forCurrentUser()->with('user')->paginate(10);
+        $studentsCount = Student::onlyTrashed()->forCurrentUser()->count();
         return view('students.recycle', compact('students', 'studentsCount'));
     }
 
@@ -200,7 +200,7 @@ class StudentController extends Controller
             $searchTerm = $request->input('search');
             $searchBy = $request->input('search_by');
 
-            $query = Student::onlyTrashed();
+            $query = Student::onlyTrashed()->forCurrentUser();
 
             if ($searchTerm) {
                 if ($searchBy === 'name') {
@@ -218,7 +218,7 @@ class StudentController extends Controller
                 }
             }
 
-            $students = $query->paginate(10);
+            $students = $query->with('user')->paginate(10);
 
             return response()->json([
                 'html' => view('students.partials.recycle_table', [
@@ -235,21 +235,21 @@ class StudentController extends Controller
 
     public function restore($id)
     {
-        $student = Student::onlyTrashed()->findOrFail($id);
+        $student = Student::onlyTrashed()->forCurrentUser()->findOrFail($id);
         $student->restore();
-        return redirect()->route('students.show', $student->id)
+        return redirect()->to(roleRoute('students.show', $student->id))
             ->with('success', __('messages.student_restored_successfully'));
     }
 
     public function deletePermanently($id)
     {
-        $student = Student::onlyTrashed()->findOrFail($id);
+        $student = Student::onlyTrashed()->forCurrentUser()->findOrFail($id);
         if ($student->image && Storage::disk('public')->exists($student->image) && $student->image !== 'uploads/default.png') {
             Storage::disk('public')->delete($student->image);
         }
         $student->forceDelete();
 
-        return redirect()->route('students.recycle')
+        return redirect()->to(roleRoute('students.recycle'))
             ->with('success', __('messages.student_permanently_deleted'));
     }
 }

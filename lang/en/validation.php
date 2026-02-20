@@ -223,6 +223,12 @@ return [
     'image.mimes' => 'The image must be a file of type: jpg, jpeg, png, webp, gif.',
     'image.max' => 'The image size must not exceed 2MB.',
 
+    // User Validation Messages
+    'password.required' => 'The password field is required.',
+    'password.confirmed' => 'The password confirmation does not match.',
+    'role.required' => 'The role field is required.',
+    'role.in' => 'The role must be either admin or user.',
+
     /*
     |--------------------------------------------------------------------------
     | Custom Validation Attributes

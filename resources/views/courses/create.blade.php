@@ -1,4 +1,4 @@
-@extends('layouts.master')
+﻿@extends('layouts.master')
 
 @section('title')
     {{ __('messages.add_course') }}
@@ -20,7 +20,7 @@
                 </div>
             @endif
 
-            <form action="{{ route('courses.store') }}" method="POST" class="space-y-6">
+            <form action="{{ roleRoute('courses.store') }}" method="POST" class="space-y-6">
                 @csrf
 
                 <!-- Title Field -->

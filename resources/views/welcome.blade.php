@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" dir="{{ app()->getLocale() == 'ar' ? 'rtl' : 'ltr' }}">
 <head>
     <meta charset="utf-8">
@@ -22,7 +22,7 @@
             </a>
             <div class="flex items-center space-x-3 rtl:space-x-reverse">
                 @auth
-                    <a href="{{ route('home') }}" class="px-5 py-2.5 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg transition">
+                    <a href="{{ roleRoute('home') }}" class="px-5 py-2.5 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg transition">
                         {{ __('messages.dashboard') }}
                     </a>
                 @else
@@ -62,7 +62,7 @@
 
             <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
                 @auth
-                    <a href="{{ route('home') }}" class="w-full sm:w-auto inline-flex items-center justify-center px-8 py-3.5 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-xl transition shadow-lg shadow-indigo-500/25">
+                    <a href="{{ roleRoute('home') }}" class="w-full sm:w-auto inline-flex items-center justify-center px-8 py-3.5 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-xl transition shadow-lg shadow-indigo-500/25">
                         <i class="fas fa-chart-line me-2"></i> {{ __('messages.dashboard') }}
                     </a>
                 @else

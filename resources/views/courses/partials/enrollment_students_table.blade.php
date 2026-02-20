@@ -1,4 +1,4 @@
-@foreach ($students as $student)
+﻿@foreach ($students as $student)
     <tr class="hover:bg-gray-50">
         <td class="px-6 py-3 text-sm text-gray-900">{!! highlight($student->id, $searchTerm) !!}</td>
         <td class="px-6 py-3 text-sm">
@@ -17,7 +17,7 @@
             @endif
         </td>
         <td class="px-6 py-3 text-sm">
-            <a href="{{ route('students.show', $student->id) }}" class="inline-flex items-center px-2.5 py-1 bg-indigo-600 text-white rounded hover:bg-indigo-700 transition text-xs"><i class="fas fa-eye me-1"></i> {{ __('messages.view_student') }}</a>
+            <a href="{{ roleRoute('students.show', $student->id) }}" class="inline-flex items-center px-2.5 py-1 bg-indigo-600 text-white rounded hover:bg-indigo-700 transition text-xs"><i class="fas fa-eye me-1"></i> {{ __('messages.view_student') }}</a>
         </td>
     </tr>
 @endforeach

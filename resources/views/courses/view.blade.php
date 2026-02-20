@@ -15,30 +15,37 @@
         <!-- Course Details Card -->
         <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden mb-6">
             <div class="px-6 py-4 border-b border-gray-200 flex flex-col sm:flex-row sm:items-center sm:justify-between">
-                <h2 class="text-lg font-semibold text-gray-900">{{ __('messages.course_details') }} "{{ $course->title }}"</h2>
+                <h2 class="text-lg font-semibold text-gray-900">{{ __('messages.course_details') }} "{{ $course->title }}"
+                </h2>
                 <div class="flex gap-2 mt-2 sm:mt-0">
                     @if ($course->trashed())
-                        <form action="{{ route('courses.restore', $course->id) }}" method="POST" class="inline">
+                        <form action="{{ roleRoute('courses.restore', $course->id) }}" method="POST" class="inline-flex">
                             @csrf
-                            <button type="submit" class="inline-flex items-center px-3 py-1.5 bg-green-600 text-white rounded-lg hover:bg-green-700 transition text-sm">
+                            <button type="submit"
+                                class="inline-flex items-center px-3 py-1.5 bg-green-600 text-white rounded-lg hover:bg-green-700 transition text-sm">
                                 <i class="fas fa-undo me-1"></i> {{ __('messages.restore') }}
                             </button>
                         </form>
-                        <form action="{{ route('courses.delete-permanently', $course->id) }}" method="POST" class="inline" onsubmit="return confirm('{{ __('messages.confirm_delete') }}')">
+                        <form action="{{ roleRoute('courses.delete-permanently', $course->id) }}" method="POST"
+                            class="inline-flex" onsubmit="return confirm('{{ __('messages.confirm_delete') }}')">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="inline-flex items-center px-3 py-1.5 bg-red-600 text-white rounded-lg hover:bg-red-700 transition text-sm">
+                            <button type="submit"
+                                class="inline-flex items-center px-3 py-1.5 bg-red-600 text-white rounded-lg hover:bg-red-700 transition text-sm">
                                 <i class="fas fa-trash me-1"></i> {{ __('messages.permanent_deletion') }}
                             </button>
                         </form>
                     @else
-                        <a href="{{ route('courses.edit', $course->id) }}" class="inline-flex items-center px-3 py-1.5 bg-yellow-600 text-white rounded-lg hover:bg-yellow-700 transition text-sm">
+                        <a href="{{ roleRoute('courses.edit', $course->id) }}"
+                            class="inline-flex items-center px-3 py-1.5 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition text-sm">
                             <i class="fas fa-pencil-alt me-1"></i> {{ __('messages.edit') }}
                         </a>
-                        <form action="{{ route('courses.destroy', $course->id) }}" method="POST" class="inline" onsubmit="return confirm('{{ __('messages.confirm_delete') }}')">
+                        <form action="{{ roleRoute('courses.destroy', $course->id) }}" method="POST" class="inline-flex"
+                            onsubmit="return confirm('{{ __('messages.confirm_delete') }}')">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="inline-flex items-center px-3 py-1.5 bg-red-600 text-white rounded-lg hover:bg-red-700 transition text-sm">
+                            <button type="submit"
+                                class="inline-flex items-center px-3 py-1.5 bg-red-600 text-white rounded-lg hover:bg-red-700 transition text-sm">
                                 <i class="fas fa-trash me-1"></i> {{ __('messages.delete') }}
                             </button>
                         </form>
@@ -58,10 +65,12 @@
                     <div>
                         <dt class="text-sm font-medium text-gray-500">{{ __('messages.status') }}</dt>
                         <dd class="mt-1">
-                            @if($course->status == 'active')
-                                <span class="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-medium">{{ __('messages.active') }}</span>
+                            @if ($course->status == 'active')
+                                <span
+                                    class="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-medium">{{ __('messages.active') }}</span>
                             @else
-                                <span class="px-3 py-1 bg-gray-100 text-gray-800 rounded-full text-sm font-medium">{{ __('messages.inactive') }}</span>
+                                <span
+                                    class="px-3 py-1 bg-gray-100 text-gray-800 rounded-full text-sm font-medium">{{ __('messages.inactive') }}</span>
                             @endif
                         </dd>
                     </div>
@@ -77,6 +86,18 @@
                         <dt class="text-sm font-medium text-gray-500">{{ __('messages.updated_at') }}</dt>
                         <dd class="mt-1 text-sm text-gray-900">{{ $course->updated_at?->format('Y-m-d H:i') }}</dd>
                     </div>
+                    @if (auth()->user()->isAdmin())
+                        <div>
+                            <dt class="text-sm font-medium text-gray-500">{{ __('messages.owner') }}</dt>
+                            <dd class="mt-1 text-sm">
+                                <a href="{{ $course->user ? route('admin.users.show', $course->user->id) : '#' }}"
+                                    class="text-gray-900 hover:underline">
+                                    <span class="font-medium text-gray-900">{{ $course->user->name ?? '' }}</span>
+                                    <span class="text-xs text-gray-400 block">{{ $course->user->email ?? '' }}</span>
+                                </a>
+                            </dd>
+                        </div>
+                    @endif
                 </dl>
             </div>
         </div>
@@ -87,9 +108,11 @@
                 <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                     <h2 class="text-lg font-semibold text-gray-900">
                         {{ __('messages.student_enrollment_table') }}
-                        <span id="course_count" class="ms-2 px-2 py-1 bg-indigo-100 text-indigo-700 rounded-full text-sm">({{ $studentsCount }})</span>
+                        <span id="course_count"
+                            class="ms-2 px-2 py-1 bg-indigo-100 text-indigo-700 rounded-full text-sm">({{ $studentsCount }})</span>
                     </h2>
-                    <a href="{{ route('bookings.create') }}" class="inline-flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition text-sm">
+                    <a href="{{ roleRoute('bookings.create') }}"
+                        class="inline-flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition text-sm">
                         <i class="fas fa-plus me-2"></i> {{ __('messages.add_booking') }}
                     </a>
                 </div>
@@ -98,13 +121,16 @@
             <!-- Search -->
             <div class="px-6 py-3 border-b border-gray-100 bg-gray-50">
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                    <select name="search_by" id="search_by" class="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 select-rtl-fix">
+                    <select name="search_by" id="search_by"
+                        class="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 select-rtl-fix">
                         <option value="all">{{ __('messages.search_by_all') }}</option>
                         <option value="id">{{ __('messages.id') }}</option>
                         <option value="name">{{ __('messages.name') }}</option>
                         <option value="status">{{ __('messages.enrollment_status') }}</option>
                     </select>
-                    <input type="text" id="table_search" class="sm:col-span-2 px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="{{ __('messages.search') }}...">
+                    <input type="text" id="table_search"
+                        class="sm:col-span-2 px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                        placeholder="{{ __('messages.search') }}...">
                 </div>
             </div>
 
@@ -112,16 +138,24 @@
                 <table id="enrollment_table" class="w-full">
                     <thead class="bg-gray-100 border-b border-gray-200">
                         <tr>
-                            <th class="px-6 py-3 text-start text-sm font-semibold text-gray-900">{{ __('messages.id') }}</th>
-                            <th class="px-6 py-3 text-start text-sm font-semibold text-gray-900">{{ __('messages.image') }}</th>
-                            <th class="px-6 py-3 text-start text-sm font-semibold text-gray-900">{{ __('messages.name') }}</th>
-                            <th class="px-6 py-3 text-start text-sm font-semibold text-gray-900">{{ __('messages.enrollment_status') }}</th>
-                            <th class="px-6 py-3 text-start text-sm font-semibold text-gray-900">{{ __('messages.actions') }}</th>
+                            <th class="px-6 py-3 text-start text-sm font-semibold text-gray-900">{{ __('messages.id') }}
+                            </th>
+                            <th class="px-6 py-3 text-start text-sm font-semibold text-gray-900">{{ __('messages.image') }}
+                            </th>
+                            <th class="px-6 py-3 text-start text-sm font-semibold text-gray-900">{{ __('messages.name') }}
+                            </th>
+                            <th class="px-6 py-3 text-start text-sm font-semibold text-gray-900">
+                                {{ __('messages.enrollment_status') }}</th>
+                            <th class="px-6 py-3 text-start text-sm font-semibold text-gray-900">
+                                {{ __('messages.actions') }}</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-200">
                         @if (isset($students) && $students->count() > 0)
-                            @include('courses.partials.enrollment_students_table', ['students' => $students, 'searchTerm' => ''])
+                            @include('courses.partials.enrollment_students_table', [
+                                'students' => $students,
+                                'searchTerm' => '',
+                            ])
                         @endif
                     </tbody>
                 </table>
@@ -150,39 +184,61 @@
                 var search_by = $('#search_by').val();
                 var course_id = "{{ $course->id ?? '' }}";
 
-                if (ajaxRequest) { ajaxRequest.abort(); }
+                if (ajaxRequest) {
+                    ajaxRequest.abort();
+                }
                 $('#enrollment_table tbody').css('opacity', '0.5');
 
                 ajaxRequest = $.ajax({
-                    url: "{{ route('courses.enrollment.search') }}",
+                    url: "{{ roleRoute('courses.enrollment.search') }}",
                     method: 'get',
                     dataType: 'json',
-                    data: { search_by: search_by, search: search, course_id: course_id, page: page },
+                    data: {
+                        search_by: search_by,
+                        search: search,
+                        course_id: course_id,
+                        page: page
+                    },
                     success: function(data) {
-                        if (data.html !== undefined) { $('#enrollment_table tbody').html(data.html); }
-                        if (data.count !== undefined) { $('#course_count').text('(' + data.count + ')'); }
-                        if (data.pagination !== undefined) { $('#pagination_links').html(data.pagination); }
+                        if (data.html !== undefined) {
+                            $('#enrollment_table tbody').html(data.html);
+                        }
+                        if (data.count !== undefined) {
+                            $('#course_count').text('(' + data.count + ')');
+                        }
+                        if (data.pagination !== undefined) {
+                            $('#pagination_links').html(data.pagination);
+                        }
                         $('#enrollment_table tbody').css('opacity', '1');
 
                         if (pushState) {
                             let url = new URL(window.location.href);
-                            search ? url.searchParams.set('search', search) : url.searchParams.delete('search');
-                            search_by !== 'all' ? url.searchParams.set('search_by', search_by) : url.searchParams.delete('search_by');
-                            page > 1 ? url.searchParams.set('page', page) : url.searchParams.delete('page');
+                            search ? url.searchParams.set('search', search) : url.searchParams.delete(
+                                'search');
+                            search_by !== 'all' ? url.searchParams.set('search_by', search_by) : url
+                                .searchParams.delete('search_by');
+                            page > 1 ? url.searchParams.set('page', page) : url.searchParams.delete(
+                                'page');
                             window.history.pushState({}, '', url);
                         }
                     },
                     error: function(xhr, status) {
-                        if (status !== 'abort') { console.error('Search Error:', xhr.status); }
+                        if (status !== 'abort') {
+                            console.error('Search Error:', xhr.status);
+                        }
                         $('#enrollment_table tbody').css('opacity', '1');
                     }
                 });
             }
 
-            $(document).on('change', '#search_by', function() { $('#table_search').trigger('input'); });
+            $(document).on('change', '#search_by', function() {
+                $('#table_search').trigger('input');
+            });
             $(document).on('input', '#table_search', function() {
                 clearTimeout(debounceTimer);
-                debounceTimer = setTimeout(function() { fetchResults(1, true); }, 500);
+                debounceTimer = setTimeout(function() {
+                    fetchResults(1, true);
+                }, 500);
             });
             $(document).on('click', '#pagination_links a', function(e) {
                 e.preventDefault();
@@ -202,7 +258,9 @@
                 }
             }
             handleUrlParams();
-            window.onpopstate = function() { handleUrlParams(); };
+            window.onpopstate = function() {
+                handleUrlParams();
+            };
         });
     </script>
 @endsection

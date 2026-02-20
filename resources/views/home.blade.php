@@ -1,4 +1,4 @@
-@extends('layouts.master')
+﻿@extends('layouts.master')
 @section('title')
     {{ __('messages.home') }}
 @endsection
@@ -17,7 +17,7 @@
                 </div>
             </div>
             <div class="px-6 py-4">
-                <a href="{{ route('courses.index') }}" class="inline-flex items-center text-blue-600 hover:text-blue-700 font-medium text-sm">
+                <a href="{{ roleRoute('courses.index') }}" class="inline-flex items-center text-blue-600 hover:text-blue-700 font-medium text-sm">
                     {{ __('messages.more_info') }}
                     <i class="fas fa-arrow-right ms-2"></i>
                 </a>
@@ -36,7 +36,7 @@
                 </div>
             </div>
             <div class="px-6 py-4">
-                <a href="{{ route('students.index') }}" class="inline-flex items-center text-green-600 hover:text-green-700 font-medium text-sm">
+                <a href="{{ roleRoute('students.index') }}" class="inline-flex items-center text-green-600 hover:text-green-700 font-medium text-sm">
                     {{ __('messages.more_info') }}
                     <i class="fas fa-arrow-right ms-2"></i>
                 </a>
@@ -55,7 +55,7 @@
                 </div>
             </div>
             <div class="px-6 py-4">
-                <a href="{{ route('bookings.index') }}" class="inline-flex items-center text-amber-600 hover:text-amber-700 font-medium text-sm">
+                <a href="{{ roleRoute('bookings.index') }}" class="inline-flex items-center text-amber-600 hover:text-amber-700 font-medium text-sm">
                     {{ __('messages.more_info') }}
                     <i class="fas fa-arrow-right ms-2"></i>
                 </a>
@@ -67,19 +67,19 @@
     <div class="mt-8 bg-white rounded-lg shadow-sm border border-gray-200 p-6">
         <h2 class="text-lg font-semibold text-gray-900 mb-4">{{ __('messages.quick_actions') }}</h2>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            <a href="{{ route('courses.create') }}" class="flex items-center space-x-3 p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition">
+            <a href="{{ roleRoute('courses.create') }}" class="flex items-center space-x-3 p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition">
                 <i class="fas fa-plus-circle text-indigo-600 text-xl"></i>
                 <span class="text-sm font-medium text-gray-700">{{ __('messages.add_course') }}</span>
             </a>
-            <a href="{{ route('students.create') }}" class="flex items-center space-x-3 p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition">
+            <a href="{{ roleRoute('students.create') }}" class="flex items-center space-x-3 p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition">
                 <i class="fas fa-plus-circle text-green-600 text-xl"></i>
                 <span class="text-sm font-medium text-gray-700">{{ __('messages.add_student') }}</span>
             </a>
-            <a href="{{ route('bookings.create') }}" class="flex items-center space-x-3 p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition">
+            <a href="{{ roleRoute('bookings.create') }}" class="flex items-center space-x-3 p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition">
                 <i class="fas fa-plus-circle text-amber-600 text-xl"></i>
                 <span class="text-sm font-medium text-gray-700">{{ __('messages.add_booking') }}</span>
             </a>
-            <a href="{{ route('students.index') }}" class="flex items-center space-x-3 p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition">
+            <a href="{{ roleRoute('students.index') }}" class="flex items-center space-x-3 p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition">
                 <i class="fas fa-chart-bar text-purple-600 text-xl"></i>
                 <span class="text-sm font-medium text-gray-700">{{ __('messages.view_reports') }}</span>
             </a>

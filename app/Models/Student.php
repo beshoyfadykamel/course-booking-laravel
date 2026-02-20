@@ -2,22 +2,21 @@
 
 namespace App\Models;
 
+use App\Models\Traits\OwnedByUser;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Student extends Model
 {
-    use SoftDeletes;
+    use SoftDeletes, OwnedByUser;
     use \Illuminate\Database\Eloquent\Factories\HasFactory;
     protected $fillable = [
         'name',
+        'user_id',
         'email',
         'image',
         'country_id',
         'status',
-        'created_at',
-        'updated_at',
-        'deleted_at',
     ];
 
     public function country()
@@ -36,5 +35,10 @@ class Student extends Model
     public function bookings()
     {
         return $this->hasMany(Booking::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class , 'user_id');
     }
 }

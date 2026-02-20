@@ -2,9 +2,11 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Booking;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Support\Facades\Auth;
 
 class StoreBookingRequest extends FormRequest
 {
@@ -15,9 +17,11 @@ class StoreBookingRequest extends FormRequest
 
     public function rules(): array
     {
+        $isAdmin = Auth::user()->isAdmin();
+
         return [
-            'student_id' => ['required', 'integer', 'exists:students,id'],
-            'course_id'  => ['required', 'integer', 'exists:courses,id'],
+            'student_id' => ['required', 'integer', Rule::exists('students', 'id')->where(fn($q) => $q->where('user_id', Auth::id())),],
+            'course_id'  => ['required', 'integer', Rule::exists('courses', 'id')->where(fn($q) => $q->where('user_id', Auth::id())),],
             'status'     => ['required', Rule::in(['active', 'inactive'])],
         ];
     }
@@ -33,7 +37,7 @@ class StoreBookingRequest extends FormRequest
                 return;
             }
 
-            $exists = \App\Models\Booking::where('student_id', $this->student_id)
+            $exists = Booking::where('student_id', $this->student_id)
                 ->where('course_id', $this->course_id)
                 ->whereNull('deleted_at')
                 ->exists();

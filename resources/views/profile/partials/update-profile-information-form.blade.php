@@ -1,9 +1,9 @@
-<section>
+﻿<section>
     <form id="send-verification" method="post" action="{{ route('verification.send') }}">
         @csrf
     </form>
 
-    <form method="post" action="{{ route('profile.update') }}" class="space-y-5">
+    <form method="post" action="{{ roleRoute('profile.update') }}" class="space-y-5">
         @csrf
         @method('patch')
 

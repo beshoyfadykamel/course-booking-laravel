@@ -30,3 +30,25 @@ if (!function_exists('highlight')) {
         return preg_replace($pattern, '<span class="' . $className . '">$1</span>', $escaped);
     }
 }
+
+if (!function_exists('roleRoute')) {
+    /**
+     * Generate a URL for a named route, automatically prefixing with 'admin.'
+     * when the authenticated user has an admin role.
+     */
+    function roleRoute($name, $params = [], $absolute = true)
+    {
+        $prefix = auth()->check() && auth()->user()->role === 'admin' ? 'admin.' : '';
+        return route($prefix . $name, $params, $absolute);
+    }
+}
+
+if (!function_exists('roleRouteIs')) {
+    /**
+     * Check if the current route matches the given name for both user and admin prefixes.
+     */
+    function roleRouteIs($name)
+    {
+        return request()->routeIs($name, 'admin.' . $name);
+    }
+}
