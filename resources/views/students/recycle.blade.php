@@ -1,4 +1,4 @@
-@extends('layouts.master')
+﻿@extends('layouts.master')
 @section('title')
     {{ __('messages.recycle_bin') }} | {{ __('messages.students_management') }}
 @endsection
@@ -40,6 +40,9 @@
                         <th class="px-6 py-3 text-start text-sm font-semibold text-gray-900">{{ __('messages.image') }}</th>
                         <th class="px-6 py-3 text-start text-sm font-semibold text-gray-900">{{ __('messages.name') }}</th>
                         <th class="px-6 py-3 text-start text-sm font-semibold text-gray-900">{{ __('messages.status') }}</th>
+                        @if(auth()->user()->isAdmin())
+                            <th class="px-6 py-3 text-start text-sm font-semibold text-gray-900">{{ __('messages.owner') }}</th>
+                        @endif
                         <th class="px-6 py-3 text-start text-sm font-semibold text-gray-900">{{ __('messages.actions') }}</th>
                     </tr>
                 </thead>
@@ -71,7 +74,7 @@
                 $('#data_table tbody').css('opacity', '0.5');
 
                 ajaxRequest = $.ajax({
-                    url: "{{ route('students.recycle.search') }}",
+                    url: "{{ roleRoute('students.recycle.search') }}",
                     method: 'get',
                     dataType: 'json',
                     data: { search_by: search_by, search: search, page: page },

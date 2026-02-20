@@ -5,20 +5,41 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use App\Models\Booking;
+use Illuminate\Validation\Rule;
 
 class EditBookingRequest extends FormRequest
 {
+    // Cache the booking so the DB is hit only once
+    private ?Booking $resolvedBooking = null;
+
+    private function resolveBooking(): Booking
+    {
+        if ($this->resolvedBooking === null) {
+            $this->resolvedBooking = Booking::findOrFail($this->route('id'));
+        }
+
+        return $this->resolvedBooking;
+    }
+
     public function authorize(): bool
     {
-        return true;
+        return $this->user()->can('update', $this->resolveBooking());
     }
 
     public function rules(): array
     {
+        $ownerId = $this->resolveBooking()->user_id;
+
         return [
-            'student_id' => ['required', 'integer', 'exists:students,id'],
-            'course_id'  => ['required', 'integer', 'exists:courses,id'],
-            'status'     => ['required', 'in:active,inactive'],
+            'student_id' => [
+                'required', 'integer',
+                Rule::exists('students', 'id')->where(fn($q) => $q->where('user_id', $ownerId)),
+            ],
+            'course_id' => [
+                'required', 'integer',
+                Rule::exists('courses', 'id')->where(fn($q) => $q->where('user_id', $ownerId)),
+            ],
+            'status' => ['required', 'in:active,inactive'],
         ];
     }
 
@@ -30,12 +51,10 @@ class EditBookingRequest extends FormRequest
                 return;
             }
 
-            $bookingId = $this->route('id');
-
             $exists = Booking::withTrashed()
                 ->where('student_id', $this->student_id)
                 ->where('course_id', $this->course_id)
-                ->where('id', '!=', $bookingId)     
+                ->where('id', '!=', $this->route('id'))
                 ->exists();
 
             if ($exists) {

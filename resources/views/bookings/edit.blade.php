@@ -1,4 +1,4 @@
-@extends('layouts.master')
+﻿@extends('layouts.master')
 
 @section('title')
     {{ __('messages.edit_booking') }}
@@ -13,7 +13,7 @@
         </div>
 
         <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-            <form action="{{ route('bookings.update', $booking->id) }}" method="POST" enctype="multipart/form-data" class="space-y-6">
+            <form action="{{ roleRoute('bookings.update', $booking->id) }}" method="POST" enctype="multipart/form-data" class="space-y-6">
                 @csrf
                 @method('PUT')
 

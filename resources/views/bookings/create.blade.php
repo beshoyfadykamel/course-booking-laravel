@@ -1,4 +1,4 @@
-@extends('layouts.master')
+﻿@extends('layouts.master')
 
 @section('title')
     {{ __('messages.add_booking') }}
@@ -21,7 +21,7 @@
                 </div>
             @endif
 
-            <form action="{{ route('bookings.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
+            <form action="{{ roleRoute('bookings.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
                 @csrf
 
                 <!-- Course Selection -->

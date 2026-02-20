@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\EditCourseRequest;
 use App\Http\Requests\StoreCourseRequest;
 use Illuminate\Http\Request;
@@ -11,11 +11,12 @@ use App\Models\Booking;
 
 class CourseController extends Controller
 {
+    
     public function index()
     {
-        $courses = Course::paginate(10);
-        $coursesCount = Course::all()->count();
-        $recycleCount = Course::onlyTrashed()->count();
+        $courses = Course::forCurrentUser()->with('user')->paginate(10);
+        $coursesCount = Course::forCurrentUser()->count();
+        $recycleCount = Course::onlyTrashed()->forCurrentUser()->count();
         return view('courses.index', compact('courses', 'coursesCount', 'recycleCount'));
     }
 
@@ -25,7 +26,7 @@ class CourseController extends Controller
             $searchTerm = $request->input('search');
             $searchBy = $request->input('search_by');
 
-            $query = Course::query();
+            $query = Course::forCurrentUser();
 
             if ($searchTerm) {
                 if ($searchBy === 'title') {
@@ -43,7 +44,7 @@ class CourseController extends Controller
                 }
             }
 
-            $courses = $query->paginate(10);
+            $courses = $query->with('user')->paginate(10);
 
             return response()->json([
                 'html' => view('courses.partials.course_table', compact('courses', 'searchTerm'))->render(),
@@ -57,7 +58,7 @@ class CourseController extends Controller
 
     public function show($id)
     {
-        $course = Course::withTrashed()->findOrFail($id);
+        $course = Course::withTrashed()->forCurrentUser()->with('user')->findOrFail($id);
         $students = $course->students()->paginate(10);
         $studentsCount = $course->students()->count();
         return view('courses.view', compact('course', 'students', 'studentsCount'));
@@ -118,45 +119,44 @@ class CourseController extends Controller
     public function store(StoreCourseRequest $request)
     {
         $saveData = $request->validated();
-        $saveData['created_at'] = now();
-        $saveData['updated_at'] = now();
+        $saveData['user_id'] = Auth::id();
         $course = Course::create($saveData);
 
-        return redirect()->route('courses.show', $course->id)
+        return redirect()->to(roleRoute('courses.show', $course->id))
             ->with('success', __('messages.course_created_successfully'));
     }
 
     public function edit($id)
     {
-        $course = Course::findOrFail($id);
+        $course = Course::forCurrentUser()->findOrFail($id);
         return view('courses.edit', compact('course'));
     }
 
     public function update(EditCourseRequest $request, $id)
     {
-        $course = Course::findOrFail($id);
+        $course = Course::forCurrentUser()->findOrFail($id);
 
         $updateData = $request->validated();
         $updateData['updated_at'] = now();
         $course->update($updateData);
 
-        return redirect()->route('courses.show', $course->id)
+        return redirect()->to(roleRoute('courses.show', $course->id))
             ->with('success', __('messages.course_updated_successfully'));
     }
 
     public function destroy($id)
     {
-        $course = Course::findOrFail($id);
+        $course = Course::forCurrentUser()->findOrFail($id);
         $course->delete();
 
-        return redirect()->route('courses.index')
+        return redirect()->to(roleRoute('courses.index'))
             ->with('success', __('messages.course_deleted_successfully'));
     }
 
     public function recycle()
     {
-        $courses = Course::onlyTrashed()->paginate(10);
-        $coursesCount = Course::onlyTrashed()->count();
+        $courses = Course::onlyTrashed()->forCurrentUser()->with('user')->paginate(10);
+        $coursesCount = Course::onlyTrashed()->forCurrentUser()->count();
         return view('courses.recycle', compact('courses', 'coursesCount'));
     }
 
@@ -167,7 +167,7 @@ class CourseController extends Controller
             $searchTerm = $request->input('search');
             $searchBy = $request->input('search_by');
 
-            $query = Course::onlyTrashed();
+            $query = Course::onlyTrashed()->forCurrentUser();
 
             if ($searchTerm) {
                 if ($searchBy === 'title') {
@@ -185,7 +185,7 @@ class CourseController extends Controller
                 }
             }
 
-            $courses = $query->paginate(10);
+            $courses = $query->with('user')->paginate(10);
 
             return response()->json([
                 'html' => view('courses.partials.recycle_table', [
@@ -202,19 +202,19 @@ class CourseController extends Controller
 
     public function restore($id)
     {
-        $course = Course::onlyTrashed()->findOrFail($id);
+        $course = Course::onlyTrashed()->forCurrentUser()->findOrFail($id);
         $course->restore();
 
-        return redirect()->route('courses.show', $course->id)
+        return redirect()->to(roleRoute('courses.show', $course->id))
             ->with('success', __('messages.course_restored_successfully'));
     }
 
     public function deletePermanently($id)
     {
-        $course = Course::onlyTrashed()->findOrFail($id);
+        $course = Course::onlyTrashed()->forCurrentUser()->findOrFail($id);
         $course->forceDelete();
 
-        return redirect()->route('courses.recycle')
+        return redirect()->to(roleRoute('courses.recycle'))
             ->with('success', __('messages.course_permanently_deleted'));
     }
 }

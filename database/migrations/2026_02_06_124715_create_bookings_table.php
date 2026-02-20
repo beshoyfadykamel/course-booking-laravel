@@ -13,8 +13,9 @@ return new class extends Migration
     {
         Schema::create('bookings', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('student_id')->nullable()->references('id')->on('students')->onDelete('set null')->onUpdate('set null');
-            $table->foreignId('course_id')->nullable()->references('id')->on('courses')->onDelete('set null')->onUpdate('set null');
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->foreignId('student_id')->references('id')->on('students')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreignId('course_id')->references('id')->on('courses')->onDelete('cascade')->onUpdate('cascade');
             $table->enum('status', ['active', 'inactive'])->default('active');
             $table->softDeletes();
             $table->timestamps();

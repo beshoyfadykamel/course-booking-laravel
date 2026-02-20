@@ -18,13 +18,16 @@
         <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-6">
             <h1 class="text-3xl font-bold text-gray-900">{{ __('messages.courses_management') }}</h1>
             <div class="flex gap-3 mt-4 md:mt-0">
-                <a href="{{ route('courses.create') }}" class="inline-flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition">
+                <a href="{{ roleRoute('courses.create') }}"
+                    class="inline-flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition">
                     <i class="fas fa-plus me-2"></i>
                     {{ __('messages.add_course') }}
                 </a>
-                <a href="{{ route('courses.recycle') }}" class="inline-flex items-center px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition">
+                <a href="{{ roleRoute('courses.recycle') }}"
+                    class="inline-flex items-center px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition">
                     <i class="fas fa-trash me-2"></i>
-                    {{ __('messages.recycle_bin') }} <span class="ms-2 bg-red-800 px-2 py-1 rounded-full text-sm">{{ $recycleCount }}</span>
+                    {{ __('messages.recycle_bin') }} <span
+                        class="ms-2 bg-red-800 px-2 py-1 rounded-full text-sm">{{ $recycleCount }}</span>
                 </a>
             </div>
         </div>
@@ -34,7 +37,8 @@
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">{{ __('messages.search_by') }}</label>
-                    <select name="search_by" id="search_by" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 select-rtl-fix">
+                    <select name="search_by" id="search_by"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 select-rtl-fix">
                         <option value="all">{{ __('messages.search_by_all') }}</option>
                         <option value="id">{{ __('messages.id') }}</option>
                         <option value="title">{{ __('messages.title') }}</option>
@@ -43,7 +47,8 @@
                 </div>
                 <div class="md:col-span-2">
                     <label class="block text-sm font-medium text-gray-700 mb-1">{{ __('messages.search') }}</label>
-                    <input type="text" id="table_search" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" 
+                    <input type="text" id="table_search"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
                         placeholder="{{ __('messages.search') }}...">
                 </div>
             </div>
@@ -55,10 +60,18 @@
                 <table id="course_table" class="w-full">
                     <thead class="bg-gray-100 border-b border-gray-200">
                         <tr>
-                            <th class="px-6 py-3 text-start text-sm font-semibold text-gray-900">{{ __('messages.id') }}</th>
-                            <th class="px-6 py-3 text-start text-sm font-semibold text-gray-900">{{ __('messages.course_title') }}</th>
-                            <th class="px-6 py-3 text-start text-sm font-semibold text-gray-900">{{ __('messages.status') }}</th>
-                            <th class="px-6 py-3 text-start text-sm font-semibold text-gray-900">{{ __('messages.actions') }}</th>
+                            <th class="px-6 py-3 text-start text-sm font-semibold text-gray-900">{{ __('messages.id') }}
+                            </th>
+                            <th class="px-6 py-3 text-start text-sm font-semibold text-gray-900">
+                                {{ __('messages.course_title') }}</th>
+                            <th class="px-6 py-3 text-start text-sm font-semibold text-gray-900">
+                                {{ __('messages.status') }}</th>
+                            @if (auth()->user()->isAdmin())
+                                <th class="px-6 py-3 text-start text-sm font-semibold text-gray-900">
+                                    {{ __('messages.owner') }}</th>
+                            @endif
+                            <th class="px-6 py-3 text-start text-sm font-semibold text-gray-900">
+                                {{ __('messages.actions') }}</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-200">
@@ -67,26 +80,44 @@
                                 <td class="px-6 py-4 text-sm text-gray-900">{{ $course->id }}</td>
                                 <td class="px-6 py-4 text-sm text-gray-900 font-medium">{{ $course->title }}</td>
                                 <td class="px-6 py-4">
-                                    @if($course->status == 'active')
-                                        <span class="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-medium">{{ __('messages.active') }}</span>
+                                    @if ($course->status == 'active')
+                                        <span
+                                            class="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-medium">{{ __('messages.active') }}</span>
                                     @else
-                                        <span class="px-3 py-1 bg-gray-100 text-gray-800 rounded-full text-sm font-medium">{{ __('messages.inactive') }}</span>
+                                        <span
+                                            class="px-3 py-1 bg-gray-100 text-gray-800 rounded-full text-sm font-medium">{{ __('messages.inactive') }}</span>
                                     @endif
                                 </td>
+                                @if (auth()->user()->isAdmin())
+                                    <td class="px-6 py-4 text-sm text-gray-600">
+                                        <div class="flex flex-col">
+                                            <a href="{{ $course->user ? route('admin.users.show', $course->user->id) : '#' }}"
+                                                class="text-gray-900 hover:underline">
+                                                <span
+                                                    class="font-medium text-gray-900">{{ $course->user->name ?? '' }}</span>
+                                                <span
+                                                    class="text-xs text-gray-400 block">{{ $course->user->email ?? '' }}</span>
+                                            </a>
+                                        </div>
+                                    </td>
+                                @endif
                                 <td class="px-6 py-4 text-sm">
-                                    <div class="flex gap-2">
-                                        <a href="{{ route('courses.show', $course->id) }}" class="inline-flex items-center px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition text-sm" title="{{ __('messages.view') }}">
-                                            <i class="fas fa-eye"></i>
-                                        </a>
-                                        <a href="{{ route('courses.edit', $course->id) }}" class="inline-flex items-center px-3 py-1 bg-yellow-600 text-white rounded hover:bg-yellow-700 transition text-sm" title="{{ __('messages.edit') }}">
-                                            <i class="fas fa-edit"></i>
-                                        </a>
-                                        <form action="{{ route('courses.destroy', $course->id) }}" method="POST" class="inline" onsubmit="return confirm('{{ __('messages.confirm_delete') }}')">
+                                    <div class="flex items-center gap-1.5 flex-nowrap">
+                                        <a href="{{ roleRoute('courses.show', $course->id) }}"
+                                            class="inline-flex items-center justify-center w-8 h-8 bg-indigo-600 text-white rounded-full hover:bg-indigo-700 transition shadow-sm"
+                                            title="{{ __('messages.view') }}"><i class="fas fa-eye text-xs"></i></a>
+                                        <a href="{{ roleRoute('courses.edit', $course->id) }}"
+                                            class="inline-flex items-center justify-center w-8 h-8 bg-orange-500 text-white rounded-full hover:bg-orange-600 transition shadow-sm"
+                                            title="{{ __('messages.edit') }}"><i class="fas fa-pencil-alt text-xs"></i></a>
+                                        <form action="{{ roleRoute('courses.destroy', $course->id) }}" method="POST"
+                                            class="inline-flex"
+                                            onsubmit="return confirm('{{ __('messages.confirm_delete') }}')">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="inline-flex items-center px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700 transition text-sm" title="{{ __('messages.delete') }}">
-                                                <i class="fas fa-trash"></i>
-                                            </button>
+                                            <button type="submit"
+                                                class="inline-flex items-center justify-center w-8 h-8 bg-red-600 text-white rounded-full hover:bg-red-700 transition shadow-sm"
+                                                title="{{ __('messages.delete') }}"><i
+                                                    class="fas fa-trash text-xs"></i></button>
                                         </form>
                                     </div>
                                 </td>
@@ -101,7 +132,6 @@
                 {{ $courses->links() }}
             </div>
         </div>
-
     @else
         <div class="p-4 bg-red-100 text-red-800 rounded-lg border border-red-200 mb-4">
             <i class="fas fa-exclamation-circle me-2"></i>
@@ -112,7 +142,7 @@
 
 @section('scripts')
     <script>
-        $(document).ready(function () {
+        $(document).ready(function() {
             let debounceTimer;
             let ajaxRequest;
 
@@ -127,7 +157,7 @@
                 $('#course_table tbody').css('opacity', '0.5');
 
                 ajaxRequest = $.ajax({
-                    url: "{{ route('courses.search') }}",
+                    url: "{{ roleRoute('courses.search') }}",
                     method: 'get',
                     dataType: 'json',
                     data: {
@@ -135,7 +165,7 @@
                         search: search,
                         page: page
                     },
-                    success: function (data) {
+                    success: function(data) {
                         $('#course_table tbody').html(data.html);
                         $('#pagination_links').html(data.pagination);
                         $('#course_table tbody').css('opacity', '1');
@@ -160,7 +190,7 @@
                             window.history.pushState({}, '', url);
                         }
                     },
-                    error: function (xhr, status) {
+                    error: function(xhr, status) {
                         if (status !== 'abort') {
                             console.log('Error:', xhr.status);
                         }
@@ -169,18 +199,18 @@
                 });
             }
 
-            $(document).on('change', '#search_by', function () {
+            $(document).on('change', '#search_by', function() {
                 $('#table_search').trigger('input');
             });
 
-            $(document).on('input', '#table_search', function () {
+            $(document).on('input', '#table_search', function() {
                 clearTimeout(debounceTimer);
-                debounceTimer = setTimeout(function () {
+                debounceTimer = setTimeout(function() {
                     fetchResults(1, true);
                 }, 500);
             });
 
-            $(document).on('click', '#pagination_links a', function (e) {
+            $(document).on('click', '#pagination_links a', function(e) {
                 e.preventDefault();
                 var href = $(this).attr('href');
                 var pageMatch = href.match(/page=(\d+)/);
@@ -203,7 +233,7 @@
 
             handleUrlParams();
 
-            window.onpopstate = function () {
+            window.onpopstate = function() {
                 handleUrlParams();
             };
         });

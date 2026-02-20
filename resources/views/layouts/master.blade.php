@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="{{ app()->getLocale() }}" dir="{{ app()->getLocale() == 'ar' ? 'rtl' : 'ltr' }}">
 
 <head>
@@ -41,7 +41,7 @@
             class="fixed md:sticky md:translate-x-0 inset-y-0 start-0 z-30 w-64 bg-white shadow-lg transition-transform duration-300 overflow-y-auto flex flex-col top-0 h-screen">
             <!-- Logo -->
             <div class="flex items-center justify-between h-16 px-4 border-b border-gray-200 shrink-0">
-                <a href="{{ route('home') }}" class="flex items-center space-x-2 rtl:space-x-reverse">
+                <a href="{{ roleRoute('home') }}" class="flex items-center space-x-2 rtl:space-x-reverse">
                     <i class="fas fa-graduation-cap text-indigo-600 text-2xl"></i>
                     <span class="text-lg font-bold text-gray-900">{{ config('app.name', 'Laravel') }}</span>
                 </a>
@@ -52,26 +52,38 @@
 
             <!-- Sidebar Navigation -->
             <nav class="p-4 space-y-2 flex-1">
-                <a href="{{ route('home') }}"
-                    class="flex items-center space-x-3 rtl:space-x-reverse px-4 py-2.5 rounded-lg transition-colors {{ request()->routeIs('home') || request()->routeIs('dashboard') ? 'bg-indigo-100 text-indigo-600' : 'text-gray-700 hover:bg-gray-100' }}">
+
+                
+
+
+                <a href="{{ roleRoute('home') }}"
+                    class="flex items-center space-x-3 rtl:space-x-reverse px-4 py-2.5 rounded-lg transition-colors {{ roleRouteIs('home') || request()->routeIs('dashboard') ? 'bg-indigo-100 text-indigo-600' : 'text-gray-700 hover:bg-gray-100' }}">
                     <i class="fas fa-chart-line w-5"></i>
                     <span class="font-medium">{{ __('messages.home') }}</span>
                 </a>
 
-                <a href="{{ route('courses.index') }}"
-                    class="flex items-center space-x-3 rtl:space-x-reverse px-4 py-2.5 rounded-lg transition-colors {{ request()->routeIs('courses.*') ? 'bg-indigo-100 text-indigo-600' : 'text-gray-700 hover:bg-gray-100' }}">
+                @can('access-admin')
+                    <a href="{{ route('admin.users.index') }}"
+                        class="flex items-center space-x-3 rtl:space-x-reverse px-4 py-2.5 rounded-lg transition-colors {{ request()->routeIs('admin.users.*') ? 'bg-indigo-100 text-indigo-600' : 'text-gray-700 hover:bg-gray-100' }}">
+                        <i class="fas fa-user-shield w-5"></i>
+                        <span class="font-medium">{{ __('messages.users_management') }}</span>
+                    </a>
+                @endcan
+
+                <a href="{{ roleRoute('courses.index') }}"
+                    class="flex items-center space-x-3 rtl:space-x-reverse px-4 py-2.5 rounded-lg transition-colors {{ roleRouteIs('courses.*') ? 'bg-indigo-100 text-indigo-600' : 'text-gray-700 hover:bg-gray-100' }}">
                     <i class="fas fa-book w-5"></i>
                     <span class="font-medium">{{ __('messages.courses_management') }}</span>
                 </a>
 
-                <a href="{{ route('students.index') }}"
-                    class="flex items-center space-x-3 rtl:space-x-reverse px-4 py-2.5 rounded-lg transition-colors {{ request()->routeIs('students.*') ? 'bg-indigo-100 text-indigo-600' : 'text-gray-700 hover:bg-gray-100' }}">
+                <a href="{{ roleRoute('students.index') }}"
+                    class="flex items-center space-x-3 rtl:space-x-reverse px-4 py-2.5 rounded-lg transition-colors {{ roleRouteIs('students.*') ? 'bg-indigo-100 text-indigo-600' : 'text-gray-700 hover:bg-gray-100' }}">
                     <i class="fas fa-users w-5"></i>
                     <span class="font-medium">{{ __('messages.students_management') }}</span>
                 </a>
 
-                <a href="{{ route('bookings.index') }}"
-                    class="flex items-center space-x-3 rtl:space-x-reverse px-4 py-2.5 rounded-lg transition-colors {{ request()->routeIs('bookings.*') ? 'bg-indigo-100 text-indigo-600' : 'text-gray-700 hover:bg-gray-100' }}">
+                <a href="{{ roleRoute('bookings.index') }}"
+                    class="flex items-center space-x-3 rtl:space-x-reverse px-4 py-2.5 rounded-lg transition-colors {{ roleRouteIs('bookings.*') ? 'bg-indigo-100 text-indigo-600' : 'text-gray-700 hover:bg-gray-100' }}">
                     <i class="fas fa-calendar-check w-5"></i>
                     <span class="font-medium">{{ __('messages.bookings_management') }}</span>
                 </a>
@@ -121,7 +133,7 @@
                             <div x-show="userOpen" @click.outside="userOpen = false" x-transition
                                 class="absolute end-0 mt-2 w-48 bg-white rounded-lg shadow-xl z-20 border border-gray-100"
                                 style="display: none;">
-                                <a href="{{ route('profile.edit') }}"
+                                <a href="{{ roleRoute('profile.edit') }}"
                                     class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-t-lg">
                                     <i class="fas fa-user me-2"></i>{{ __('messages.profile') }}
                                 </a>

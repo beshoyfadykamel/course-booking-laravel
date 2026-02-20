@@ -1,4 +1,4 @@
-@extends('layouts.master')
+﻿@extends('layouts.master')
 
 @section('title')
     {{ __('messages.add_student') }}
@@ -20,7 +20,7 @@
                 </div>
             @endif
 
-            <form action="{{ route('students.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
+            <form action="{{ roleRoute('students.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
                 @csrf
 
                 <!-- Name Field -->

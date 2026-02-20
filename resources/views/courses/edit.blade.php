@@ -1,4 +1,4 @@
-@extends('layouts.master')
+﻿@extends('layouts.master')
 
 @section('title')
     {{ __('messages.edit_course') }}
@@ -20,7 +20,7 @@
                 </div>
             @endif
 
-            <form action="{{ route('courses.update', $course->id) }}" method="POST" class="space-y-6">
+            <form action="{{ roleRoute('courses.update', $course->id) }}" method="POST" class="space-y-6">
                 @csrf
                 @method('PUT')
 

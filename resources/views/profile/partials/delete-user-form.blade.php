@@ -1,4 +1,4 @@
-<section class="space-y-5">
+﻿<section class="space-y-5">
     <p class="text-sm text-gray-600 leading-relaxed">
         <i class="fas fa-info-circle text-red-400 me-1"></i>
         {{ __('messages.delete_account_warning') }}
@@ -12,7 +12,7 @@
     </button>
 
     <x-modal name="confirm-user-deletion" :show="$errors->userDeletion->isNotEmpty()" focusable>
-        <form method="post" action="{{ route('profile.destroy') }}" class="p-6">
+        <form method="post" action="{{ roleRoute('profile.destroy') }}" class="p-6">
             @csrf
             @method('delete')
 

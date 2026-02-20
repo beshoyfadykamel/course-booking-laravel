@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
-});
+})->name('welcome');
 
 require __DIR__ . '/auth.php';
 
@@ -25,14 +25,15 @@ Route::post('/lang', function (\Illuminate\Http\Request $request) {
     return redirect()->back();
 })->name('lang.set');
 
-// All authenticated routes
-Route::middleware(['auth', 'verified'])->group(function () {
-
+/*
+|--------------------------------------------------------------------------
+| Shared Routes (used by both admin and normal user)
+|--------------------------------------------------------------------------
+| Defined once, registered twice — with and without the /admin prefix.
+| Admin sees all data; user sees only their own (handled by OwnedByUser trait).
+*/
+$sharedRoutes = function () {
     Route::get('/home', [HomeController::class, 'index'])->name('home');
-
-    Route::get('/dashboard', function () {
-        return redirect()->route('home');
-    })->name('dashboard');
 
     // Profile
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -88,4 +89,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::post('/restore/{id}', [BookingController::class, 'restore'])->name('bookings.restore');
         Route::delete('/delete-permanently/{id}', [BookingController::class, 'deletePermanently'])->name('bookings.delete-permanently');
     });
-});
+};
+
+// Normal user routes: /home, /courses, /students, /bookings
+Route::middleware(['auth', 'role:user'])->group($sharedRoutes);
+
+// Admin routes: /admin/home, /admin/courses, /admin/students, /admin/bookings
+Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group($sharedRoutes);
