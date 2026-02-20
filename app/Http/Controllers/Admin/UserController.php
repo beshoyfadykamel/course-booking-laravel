@@ -13,6 +13,7 @@ class UserController extends Controller
 {
     public function index()
     {
+        $this->authorize('viewAny', User::class);
         $users = User::paginate(10);
         $usersCount = User::count();
         $recycleCount = User::onlyTrashed()->count();
@@ -22,6 +23,7 @@ class UserController extends Controller
     public function search(Request $request)
     {
         if ($request->ajax()) {
+            $this->authorize('viewAny', User::class);
             $searchTerm = $request->input('search');
             $searchBy = $request->input('search_by');
 
@@ -60,11 +62,13 @@ class UserController extends Controller
 
     public function create()
     {
+        $this->authorize('create', User::class);
         return view('users.create');
     }
 
     public function store(StoreUserRequest $request)
     {
+        $this->authorize('create', User::class);
         $data = $request->validated();
         $data['password'] = Hash::make($data['password']);
 
@@ -77,6 +81,7 @@ class UserController extends Controller
     public function show($id)
     {
         $user = User::withTrashed()->findOrFail($id);
+        $this->authorize('view', $user);
         $studentsCount = $user->students()->count();
         $coursesCount = $user->courses()->count();
         $bookingsCount = $user->bookings()->count();
@@ -86,12 +91,14 @@ class UserController extends Controller
     public function edit($id)
     {
         $user = User::findOrFail($id);
+        $this->authorize('update', $user);
         return view('users.edit', compact('user'));
     }
 
     public function update(EditUserRequest $request, $id)
     {
         $user = User::findOrFail($id);
+        $this->authorize('update', $user);
         $data = $request->validated();
 
         if (!empty($data['password'])) {
@@ -109,6 +116,7 @@ class UserController extends Controller
     public function destroy($id)
     {
         $user = User::findOrFail($id);
+        $this->authorize('delete', $user);
 
         if ($user->id === auth()->id()) {
             return redirect()->route('admin.users.index')
@@ -123,6 +131,7 @@ class UserController extends Controller
 
     public function recycle()
     {
+        $this->authorize('viewAny', User::class);
         $users = User::onlyTrashed()->paginate(10);
         $usersCount = User::onlyTrashed()->count();
         return view('users.recycle', compact('users', 'usersCount'));
@@ -131,6 +140,7 @@ class UserController extends Controller
     public function recycleSearch(Request $request)
     {
         if ($request->ajax()) {
+            $this->authorize('viewAny', User::class);
             $searchTerm = $request->input('search');
             $searchBy = $request->input('search_by');
 
@@ -170,6 +180,7 @@ class UserController extends Controller
     public function restore($id)
     {
         $user = User::onlyTrashed()->findOrFail($id);
+        $this->authorize('restore', $user);
         $user->restore();
 
         return redirect()->route('admin.users.show', $user->id)
@@ -179,6 +190,7 @@ class UserController extends Controller
     public function deletePermanently($id)
     {
         $user = User::onlyTrashed()->findOrFail($id);
+        $this->authorize('forceDelete', $user);
 
         if ($user->id === auth()->id()) {
             return redirect()->route('admin.users.recycle')

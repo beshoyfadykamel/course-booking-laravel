@@ -15,6 +15,7 @@ class StudentController extends Controller
 {
     public function index()
     {
+        $this->authorize('viewAny', Student::class);
         $students = Student::forCurrentUser()->with('country', 'user')->paginate(10);
         $studentsCount = Student::forCurrentUser()->count();
         $recycleCount = Student::onlyTrashed()->forCurrentUser()->count();
@@ -24,6 +25,7 @@ class StudentController extends Controller
     public function search(Request $request)
     {
         if ($request->ajax()) {
+            $this->authorize('viewAny', Student::class);
             $searchTerm = $request->input('search');
             $searchBy = $request->input('search_by');
 
@@ -60,13 +62,14 @@ class StudentController extends Controller
 
     public function create()
     {
+        $this->authorize('create', Student::class);
         $countries = Country::all();
         return view('students.create', compact('countries'));
     }
 
     public function store(StoreStudentRequest $request)
     {
-
+        $this->authorize('create', Student::class);
 
         $saveData = $request->validated();
         $saveData['user_id'] = Auth::id();
@@ -89,6 +92,7 @@ class StudentController extends Controller
     public function show($id)
     {
         $student = Student::withTrashed()->forCurrentUser()->with('user')->findOrFail($id);
+        $this->authorize('view', $student);
         $courses = $student->courses()->paginate(10);
         $coursesCount = $student->courses()->forCurrentUser()->count();
         return view('students.view', compact('student', 'courses', 'coursesCount'));
@@ -109,6 +113,7 @@ class StudentController extends Controller
         }
 
         $student = Student::withTrashed()->forCurrentUser()->findOrFail($studentId);
+        $this->authorize('view', $student);
 
         $query = $student->courses();
 
@@ -144,6 +149,7 @@ class StudentController extends Controller
     public function edit($id)
     {
         $student = Student::forCurrentUser()->findOrFail($id);
+        $this->authorize('update', $student);
         $countries = Country::all();
         return view('students.edit', compact('student', 'countries'));
     }
@@ -151,6 +157,7 @@ class StudentController extends Controller
     public function update(EditStudentRequest $request, $id)
     {
         $student = Student::forCurrentUser()->findOrFail($id);
+        $this->authorize('update', $student);
 
         $updateData = $request->validated();
         $updateData['updated_at'] = now();
@@ -182,6 +189,7 @@ class StudentController extends Controller
     public function destroy($id)
     {
         $student = Student::forCurrentUser()->findOrFail($id);
+        $this->authorize('delete', $student);
         $student->delete();
         return redirect()->to(roleRoute('students.index'))
             ->with('success', __('messages.student_deleted_successfully'));
@@ -189,6 +197,7 @@ class StudentController extends Controller
 
     public function recycle()
     {
+        $this->authorize('viewAny', Student::class);
         $students = Student::onlyTrashed()->forCurrentUser()->with('user')->paginate(10);
         $studentsCount = Student::onlyTrashed()->forCurrentUser()->count();
         return view('students.recycle', compact('students', 'studentsCount'));
@@ -197,6 +206,7 @@ class StudentController extends Controller
     public function recycleSearch(Request $request)
     {
         if ($request->ajax()) {
+            $this->authorize('viewAny', Student::class);
             $searchTerm = $request->input('search');
             $searchBy = $request->input('search_by');
 
@@ -236,6 +246,7 @@ class StudentController extends Controller
     public function restore($id)
     {
         $student = Student::onlyTrashed()->forCurrentUser()->findOrFail($id);
+        $this->authorize('restore', $student);
         $student->restore();
         return redirect()->to(roleRoute('students.show', $student->id))
             ->with('success', __('messages.student_restored_successfully'));
@@ -244,6 +255,7 @@ class StudentController extends Controller
     public function deletePermanently($id)
     {
         $student = Student::onlyTrashed()->forCurrentUser()->findOrFail($id);
+        $this->authorize('forceDelete', $student);
         if ($student->image && Storage::disk('public')->exists($student->image) && $student->image !== 'uploads/default.png') {
             Storage::disk('public')->delete($student->image);
         }

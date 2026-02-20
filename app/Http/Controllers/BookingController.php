@@ -16,6 +16,7 @@ class BookingController extends Controller
 {
     public function index()
     {
+        $this->authorize('viewAny', Booking::class);
         $bookings = Booking::with('student', 'course', 'user')->forCurrentUser()->paginate(10);
         $bookings_count = Booking::forCurrentUser()->count();
         $recycleCount = Booking::onlyTrashed()->forCurrentUser()->count();
@@ -26,6 +27,7 @@ class BookingController extends Controller
     public function search(Request $request)
     {
         if ($request->ajax()) {
+            $this->authorize('viewAny', Booking::class);
             $searchTerm = $request->input('search');
             $searchBy = $request->input('search_by');
 
@@ -77,6 +79,7 @@ class BookingController extends Controller
 
     public function create()
     {
+        $this->authorize('create', Booking::class);
         $students = Student::where('user_id', Auth::id())->get();
         $courses = Course::where('user_id', Auth::id())->get();
         return view('bookings.create', compact('students', 'courses'));
@@ -84,6 +87,7 @@ class BookingController extends Controller
 
     public function store(StoreBookingRequest $request)
     {
+        $this->authorize('create', Booking::class);
         $data = $request->validated();
         $data['user_id'] = Auth::id();
 
@@ -123,12 +127,14 @@ class BookingController extends Controller
     public function show($id)
     {
         $booking = Booking::with('student', 'course', 'user')->withTrashed()->forCurrentUser()->findOrFail($id);
+        $this->authorize('view', $booking);
         return view('bookings.view', compact('booking'));
     }
 
     public function edit($id)
     {
         $booking = Booking::forCurrentUser()->findOrFail($id);
+        $this->authorize('update', $booking);
         $students = Student::where('user_id', $booking->user_id)->get();
         $courses = Course::where('user_id', $booking->user_id)->get();
         return view('bookings.edit', compact('booking', 'students', 'courses'));
@@ -137,6 +143,7 @@ class BookingController extends Controller
     public function update(EditBookingRequest $request, $id)
     {
         $booking = Booking::forCurrentUser()->findOrFail($id);
+        $this->authorize('update', $booking);
         $booking->update($request->validated());
         $booking->updated_at = now();
         $booking->save();
@@ -147,6 +154,7 @@ class BookingController extends Controller
     public function destroy($id)
     {
         $booking = Booking::forCurrentUser()->findOrFail($id);
+        $this->authorize('delete', $booking);
         $booking->delete();
         return redirect()->to(roleRoute('bookings.index'))
             ->with('success', __('messages.booking_deleted_successfully'));
@@ -156,6 +164,7 @@ class BookingController extends Controller
 
     public function recycle()
     {
+        $this->authorize('viewAny', Booking::class);
         $bookings = Booking::onlyTrashed()->forCurrentUser()->with('student', 'course', 'user')->paginate(10);
         $bookings_count = Booking::onlyTrashed()->forCurrentUser()->count();
         return view('bookings.recycle', compact('bookings', 'bookings_count'));
@@ -164,6 +173,7 @@ class BookingController extends Controller
     public function recycleSearch(Request $request)
     {
         if ($request->ajax()) {
+            $this->authorize('viewAny', Booking::class);
             $searchTerm = $request->input('search');
             $searchBy = $request->input('search_by'); // Not really used in recycle view based on previous examples, but good to have
 
@@ -215,6 +225,7 @@ class BookingController extends Controller
     public function restore($id)
     {
         $booking = Booking::onlyTrashed()->forCurrentUser()->findOrFail($id);
+        $this->authorize('restore', $booking);
         $booking->restore();
         return redirect()->to(roleRoute('bookings.show', $booking->id))
             ->with('success', __('messages.booking_restored_successfully'));
@@ -223,6 +234,7 @@ class BookingController extends Controller
     public function deletePermanently($id)
     {
         $booking = Booking::onlyTrashed()->forCurrentUser()->findOrFail($id);
+        $this->authorize('forceDelete', $booking);
         $booking->forceDelete();
         return redirect()->to(roleRoute('bookings.recycle'))
             ->with('success', __('messages.booking_permanently_deleted'));
