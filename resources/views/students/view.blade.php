@@ -1,4 +1,4 @@
-@extends('layouts.master')
+﻿@extends('layouts.master')
 @section('title')
     {{ __('messages.view_student') }} | {{ __('messages.students_management') }}
 @endsection
@@ -18,14 +18,14 @@
                 <h2 class="text-lg font-semibold text-gray-900">{{ __('messages.student_details') }}</h2>
                 <div class="flex gap-2 mt-2 sm:mt-0">
                     @if ($student->trashed())
-                        <form action="{{ roleRoute('students.restore', $student->id) }}" method="POST" class="inline-flex">
+                        <form action="{{ route('students.restore', $student->id) }}" method="POST" class="inline-flex">
                             @csrf
                             <button type="submit"
                                 class="inline-flex items-center px-3 py-1.5 bg-green-600 text-white rounded-lg hover:bg-green-700 transition text-sm">
                                 <i class="fas fa-undo me-1"></i> {{ __('messages.restore') }}
                             </button>
                         </form>
-                        <form action="{{ roleRoute('students.delete-permanently', $student->id) }}" method="POST"
+                        <form action="{{ route('students.delete-permanently', $student->id) }}" method="POST"
                             class="inline-flex" onsubmit="return confirm('{{ __('messages.confirm_delete') }}')">
                             @csrf
                             @method('DELETE')
@@ -35,11 +35,11 @@
                             </button>
                         </form>
                     @else
-                        <a href="{{ roleRoute('students.edit', $student->id) }}"
+                        <a href="{{ route('students.edit', $student->id) }}"
                             class="inline-flex items-center px-3 py-1.5 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition text-sm">
                             <i class="fas fa-pencil-alt me-1"></i> {{ __('messages.edit') }}
                         </a>
-                        <form action="{{ roleRoute('students.destroy', $student->id) }}" method="POST" class="inline-flex"
+                        <form action="{{ route('students.destroy', $student->id) }}" method="POST" class="inline-flex"
                             onsubmit="return confirm('{{ __('messages.confirm_delete') }}')">
                             @csrf
                             @method('DELETE')
@@ -106,7 +106,7 @@
                             <div>
                                 <dt class="text-sm font-medium text-gray-500">{{ __('messages.owner') }}</dt>
                                 <dd class="mt-1 text-sm">
-                                    <a href="{{ $student->user ? route('admin.users.show', $student->user->id) : '#' }}"
+                                    <a href="{{ $student->user ? route('users.show', $student->user->id) : '#' }}"
                                         class="text-gray-900 hover:underline">
                                         <span class="font-medium text-gray-900">{{ $student->user->name ?? '' }}</span>
                                         <span class="text-xs text-gray-400 block">{{ $student->user->email ?? '' }}</span>
@@ -128,7 +128,7 @@
                         <span id="courses_count"
                             class="ms-2 px-2 py-1 bg-indigo-100 text-indigo-700 rounded-full text-sm">({{ $coursesCount }})</span>
                     </h2>
-                    <a href="{{ roleRoute('bookings.create') }}"
+                    <a href="{{ route('bookings.create') }}"
                         class="inline-flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition text-sm">
                         <i class="fas fa-plus me-2"></i> {{ __('messages.add_booking') }}
                     </a>
@@ -205,7 +205,7 @@
                 $('#enrollment_table tbody').css('opacity', '0.5');
 
                 ajaxRequest = $.ajax({
-                    url: "{{ roleRoute('students.enrollment.search') }}",
+                    url: "{{ route('students.enrollment.search') }}",
                     method: 'get',
                     dataType: 'json',
                     data: {

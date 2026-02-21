@@ -74,7 +74,7 @@
                 $('#data_table tbody').css('opacity', '0.5');
 
                 ajaxRequest = $.ajax({
-                    url: "{{ roleRoute('students.recycle.search') }}",
+                    url: "{{ route('students.recycle.search') }}",
                     method: 'get',
                     dataType: 'json',
                     data: { search_by: search_by, search: search, page: page },

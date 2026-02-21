@@ -26,7 +26,7 @@
                 <span id="users_count"
                     class="ms-2 px-2 py-1 bg-red-100 text-red-700 rounded-full text-sm">({{ $usersCount }})</span>
             </h2>
-            <a href="{{ route('admin.users.index') }}"
+            <a href="{{ route('users.index') }}"
                 class="inline-flex items-center px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition text-sm font-medium mt-2 sm:mt-0">
                 <i class="fas fa-arrow-left me-2"></i> {{ __('messages.back') }}
             </a>
@@ -95,7 +95,7 @@
                 $('#data_table tbody').css('opacity', '0.5');
 
                 ajaxRequest = $.ajax({
-                    url: "{{ route('admin.users.recycle.search') }}",
+                    url: "{{ route('users.recycle.search') }}",
                     method: 'get',
                     dataType: 'json',
                     data: { search_by: search_by, search: search, page: page },

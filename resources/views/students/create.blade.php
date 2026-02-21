@@ -20,7 +20,7 @@
                 </div>
             @endif
 
-            <form action="{{ roleRoute('students.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
+            <form action="{{ route('students.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
                 @csrf
 
                 <!-- Name Field -->

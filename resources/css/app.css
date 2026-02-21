@@ -2,14 +2,22 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer utilities {
-	.select-rtl-fix {
-		padding-right: 2.5rem;
-	}
+html,
+body {
+    height: 100%;
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+}
 
-	html[dir="rtl"] .select-rtl-fix {
-		padding-left: 2.5rem;
-		padding-right: 0.75rem;
-		background-position: left 0.5rem center;
-	}
+@layer utilities {
+    .select-rtl-fix {
+        padding-right: 2.5rem;
+    }
+
+    html[dir="rtl"] .select-rtl-fix {
+        padding-left: 2.5rem;
+        padding-right: 0.75rem;
+        background-position: left 0.5rem center;
+    }
 }

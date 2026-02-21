@@ -26,13 +26,14 @@ class UserPolicy
 
     public function update(User $user, User $model): bool
     {
-        return $user->isAdmin();
+        // Users can update their own profile, admins can update anyone
+        return $user->id === $model->id || $user->isAdmin();
     }
 
     public function delete(User $user, User $model): bool
     {
-        // Admin cannot delete themselves
-        return $user->isAdmin() && $user->id !== $model->id;
+        // Users can delete their own account, admins can delete others (not themselves)
+        return $user->id === $model->id || ($user->isAdmin() && $user->id !== $model->id);
     }
 
     public function restore(User $user, User $model): bool

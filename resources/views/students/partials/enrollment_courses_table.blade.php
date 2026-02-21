@@ -10,7 +10,7 @@
             @endif
         </td>
         <td class="px-6 py-3 text-sm">
-            <a href="{{ roleRoute('courses.show', $course->id) }}" class="inline-flex items-center px-2.5 py-1 bg-indigo-600 text-white rounded hover:bg-indigo-700 transition text-xs"><i class="fas fa-eye me-1"></i> {{ __('messages.view_course') }}</a>
+            <a href="{{ route('courses.show', $course->id) }}" class="inline-flex items-center px-2.5 py-1 bg-indigo-600 text-white rounded hover:bg-indigo-700 transition text-xs"><i class="fas fa-eye me-1"></i> {{ __('messages.view_course') }}</a>
         </td>
     </tr>
 @endforeach
