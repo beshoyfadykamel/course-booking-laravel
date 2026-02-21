@@ -1,4 +1,4 @@
-@extends('layouts.master')
+﻿@extends('layouts.master')
 
 @section('title')
     {{ __('messages.courses_management') }}
@@ -18,16 +18,16 @@
         <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-6">
             <h1 class="text-3xl font-bold text-gray-900">{{ __('messages.courses_management') }}</h1>
             <div class="flex gap-3 mt-4 md:mt-0">
-                <a href="{{ roleRoute('courses.create') }}"
-                    class="inline-flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition">
+                <a href="{{ route('courses.create') }}"
+                    class="inline-flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition text-sm font-medium">
                     <i class="fas fa-plus me-2"></i>
                     {{ __('messages.add_course') }}
                 </a>
-                <a href="{{ roleRoute('courses.recycle') }}"
-                    class="inline-flex items-center px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition">
+                <a href="{{ route('courses.recycle') }}"
+                    class="inline-flex items-center px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition text-sm font-medium">
                     <i class="fas fa-trash me-2"></i>
                     {{ __('messages.recycle_bin') }} <span
-                        class="ms-2 bg-red-800 px-2 py-1 rounded-full text-sm">{{ $recycleCount }}</span>
+                        class="ms-2 bg-red-800 px-2 py-0.5 rounded-full text-xs">{{ $recycleCount }}</span>
                 </a>
             </div>
         </div>
@@ -82,16 +82,16 @@
                                 <td class="px-6 py-4">
                                     @if ($course->status == 'active')
                                         <span
-                                            class="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-medium">{{ __('messages.active') }}</span>
+                                            class="px-3 py-1 bg-green-100 text-green-800 rounded-full text-xs font-medium">{{ __('messages.active') }}</span>
                                     @else
                                         <span
-                                            class="px-3 py-1 bg-gray-100 text-gray-800 rounded-full text-sm font-medium">{{ __('messages.inactive') }}</span>
+                                            class="px-3 py-1 bg-gray-100 text-gray-800 rounded-full text-xs font-medium">{{ __('messages.inactive') }}</span>
                                     @endif
                                 </td>
                                 @if (auth()->user()->isAdmin())
                                     <td class="px-6 py-4 text-sm text-gray-600">
                                         <div class="flex flex-col">
-                                            <a href="{{ $course->user ? route('admin.users.show', $course->user->id) : '#' }}"
+                                            <a href="{{ $course->user ? route('users.show', $course->user->id) : '#' }}"
                                                 class="text-gray-900 hover:underline">
                                                 <span
                                                     class="font-medium text-gray-900">{{ $course->user->name ?? '' }}</span>
@@ -103,13 +103,13 @@
                                 @endif
                                 <td class="px-6 py-4 text-sm">
                                     <div class="flex items-center gap-1.5 flex-nowrap">
-                                        <a href="{{ roleRoute('courses.show', $course->id) }}"
+                                        <a href="{{ route('courses.show', $course->id) }}"
                                             class="inline-flex items-center justify-center w-8 h-8 bg-indigo-600 text-white rounded-full hover:bg-indigo-700 transition shadow-sm"
                                             title="{{ __('messages.view') }}"><i class="fas fa-eye text-xs"></i></a>
-                                        <a href="{{ roleRoute('courses.edit', $course->id) }}"
+                                        <a href="{{ route('courses.edit', $course->id) }}"
                                             class="inline-flex items-center justify-center w-8 h-8 bg-orange-500 text-white rounded-full hover:bg-orange-600 transition shadow-sm"
                                             title="{{ __('messages.edit') }}"><i class="fas fa-pencil-alt text-xs"></i></a>
-                                        <form action="{{ roleRoute('courses.destroy', $course->id) }}" method="POST"
+                                        <form action="{{ route('courses.destroy', $course->id) }}" method="POST"
                                             class="inline-flex"
                                             onsubmit="return confirm('{{ __('messages.confirm_delete') }}')">
                                             @csrf
@@ -157,7 +157,7 @@
                 $('#course_table tbody').css('opacity', '0.5');
 
                 ajaxRequest = $.ajax({
-                    url: "{{ roleRoute('courses.search') }}",
+                    url: "{{ route('courses.search') }}",
                     method: 'get',
                     dataType: 'json',
                     data: {

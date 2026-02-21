@@ -6,11 +6,13 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\EditUserRequest;
 use App\Http\Requests\StoreUserRequest;
 use App\Models\User;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
+    use AuthorizesRequests;
     public function index()
     {
         $this->authorize('viewAny', User::class);
@@ -74,7 +76,7 @@ class UserController extends Controller
 
         $user = User::create($data);
 
-        return redirect()->route('admin.users.show', $user->id)
+        return redirect()->route('users.show', $user->id)
             ->with('success', __('messages.user_created_successfully'));
     }
 
@@ -109,7 +111,7 @@ class UserController extends Controller
 
         $user->update($data);
 
-        return redirect()->route('admin.users.show', $user->id)
+        return redirect()->route('users.show', $user->id)
             ->with('success', __('messages.user_updated_successfully'));
     }
 
@@ -119,13 +121,13 @@ class UserController extends Controller
         $this->authorize('delete', $user);
 
         if ($user->id === auth()->id()) {
-            return redirect()->route('admin.users.index')
+            return redirect()->route('users.index')
                 ->with('error', __('messages.cannot_delete_self'));
         }
 
         $user->delete();
 
-        return redirect()->route('admin.users.index')
+        return redirect()->route('users.index')
             ->with('success', __('messages.user_deleted_successfully'));
     }
 
@@ -183,7 +185,7 @@ class UserController extends Controller
         $this->authorize('restore', $user);
         $user->restore();
 
-        return redirect()->route('admin.users.show', $user->id)
+        return redirect()->route('users.show', $user->id)
             ->with('success', __('messages.user_restored_successfully'));
     }
 
@@ -193,13 +195,13 @@ class UserController extends Controller
         $this->authorize('forceDelete', $user);
 
         if ($user->id === auth()->id()) {
-            return redirect()->route('admin.users.recycle')
+            return redirect()->route('users.recycle')
                 ->with('error', __('messages.cannot_delete_self'));
         }
 
         $user->forceDelete();
 
-        return redirect()->route('admin.users.recycle')
+        return redirect()->route('users.recycle')
             ->with('success', __('messages.user_permanently_deleted'));
     }
 }

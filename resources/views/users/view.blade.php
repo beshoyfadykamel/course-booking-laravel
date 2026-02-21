@@ -19,7 +19,7 @@
                 <h2 class="text-lg font-semibold text-gray-900">{{ __('messages.user_details') }}</h2>
                 <div class="flex gap-2 mt-2 sm:mt-0">
                     @if ($user->trashed())
-                        <form action="{{ route('admin.users.restore', $user->id) }}" method="POST" class="inline-flex">
+                        <form action="{{ route('users.restore', $user->id) }}" method="POST" class="inline-flex">
                             @csrf
                             <button type="submit"
                                 class="inline-flex items-center px-3 py-1.5 bg-green-600 text-white rounded-lg hover:bg-green-700 transition text-sm font-medium">
@@ -27,7 +27,7 @@
                             </button>
                         </form>
                         @if($user->id !== auth()->id())
-                            <form action="{{ route('admin.users.delete-permanently', $user->id) }}" method="POST"
+                            <form action="{{ route('users.delete-permanently', $user->id) }}" method="POST"
                                 class="inline-flex" onsubmit="return confirm('{{ __('messages.confirm_permanent_delete') }}')">
                                 @csrf
                                 @method('DELETE')
@@ -38,12 +38,12 @@
                             </form>
                         @endif
                     @else
-                        <a href="{{ route('admin.users.edit', $user->id) }}"
+                        <a href="{{ route('users.edit', $user->id) }}"
                             class="inline-flex items-center px-3 py-1.5 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition text-sm font-medium">
                             <i class="fas fa-pencil-alt me-1"></i> {{ __('messages.edit') }}
                         </a>
                         @if($user->id !== auth()->id())
-                            <form action="{{ route('admin.users.destroy', $user->id) }}" method="POST" class="inline-flex"
+                            <form action="{{ route('users.destroy', $user->id) }}" method="POST" class="inline-flex"
                                 onsubmit="return confirm('{{ __('messages.confirm_delete') }}')">
                                 @csrf
                                 @method('DELETE')

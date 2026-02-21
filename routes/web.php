@@ -1,11 +1,18 @@
 <?php
 
+use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\StudentController;
 use Illuminate\Support\Facades\Route;
+
+/*
+|--------------------------------------------------------------------------
+| Public Routes
+|--------------------------------------------------------------------------
+*/
 
 Route::get('/', function () {
     return view('welcome');
@@ -27,12 +34,14 @@ Route::post('/lang', function (\Illuminate\Http\Request $request) {
 
 /*
 |--------------------------------------------------------------------------
-| Shared Routes (used by both admin and normal user)
+| Authenticated Routes (Admin + User)
 |--------------------------------------------------------------------------
-| Defined once, registered twice — with and without the /admin prefix.
-| Admin sees all data; user sees only their own (handled by OwnedByUser trait).
+| Controllers use forCurrentUser() scope to filter data per role.
+| Policies handle authorization. No route duplication needed.
 */
-$sharedRoutes = function () {
+Route::middleware('auth')->group(function () {
+
+    // Dashboard
     Route::get('/home', [HomeController::class, 'index'])->name('home');
 
     // Profile
@@ -41,58 +50,72 @@ $sharedRoutes = function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     // Courses
-    Route::prefix('courses')->group(function () {
-        Route::get('/', [CourseController::class, 'index'])->name('courses.index');
-        Route::get('/search', [CourseController::class, 'search'])->name('courses.search');
-        Route::get('/enrollment-search', [CourseController::class, 'enrollmentSearch'])->name('courses.enrollment.search');
-        Route::get('/create', [CourseController::class, 'create'])->name('courses.create');
-        Route::post('/store', [CourseController::class, 'store'])->name('courses.store');
-        Route::get('/show/{id}', [CourseController::class, 'show'])->name('courses.show');
-        Route::get('/edit/{id}', [CourseController::class, 'edit'])->name('courses.edit');
-        Route::put('/update/{id}', [CourseController::class, 'update'])->name('courses.update');
-        Route::delete('/destroy/{id}', [CourseController::class, 'destroy'])->name('courses.destroy');
-        Route::get('/recycle', [CourseController::class, 'recycle'])->name('courses.recycle');
-        Route::get('/recycle-search', [CourseController::class, 'recycleSearch'])->name('courses.recycle.search');
-        Route::post('/restore/{id}', [CourseController::class, 'restore'])->name('courses.restore');
-        Route::delete('/delete-permanently/{id}', [CourseController::class, 'deletePermanently'])->name('courses.delete-permanently');
+    Route::prefix('courses')->name('courses.')->group(function () {
+        Route::get('/', [CourseController::class, 'index'])->name('index');
+        Route::get('/search', [CourseController::class, 'search'])->name('search');
+        Route::get('/enrollment-search', [CourseController::class, 'enrollmentSearch'])->name('enrollment.search');
+        Route::get('/create', [CourseController::class, 'create'])->name('create');
+        Route::post('/', [CourseController::class, 'store'])->name('store');
+        Route::get('/archive/list', [CourseController::class, 'recycle'])->name('recycle');
+        Route::get('/archive/search', [CourseController::class, 'recycleSearch'])->name('recycle.search');
+        Route::get('/{id}', [CourseController::class, 'show'])->name('show');
+        Route::get('/{id}/edit', [CourseController::class, 'edit'])->name('edit');
+        Route::put('/{id}', [CourseController::class, 'update'])->name('update');
+        Route::delete('/{id}', [CourseController::class, 'destroy'])->name('destroy');
+        Route::post('/{id}/restore', [CourseController::class, 'restore'])->name('restore');
+        Route::delete('/{id}/permanent', [CourseController::class, 'deletePermanently'])->name('delete-permanently');
     });
 
     // Students
-    Route::prefix('students')->group(function () {
-        Route::get('/', [StudentController::class, 'index'])->name('students.index');
-        Route::get('/search', [StudentController::class, 'search'])->name('students.search');
-        Route::get('/enrollment-search', [StudentController::class, 'enrollmentSearch'])->name('students.enrollment.search');
-        Route::get('/create', [StudentController::class, 'create'])->name('students.create');
-        Route::post('/store', [StudentController::class, 'store'])->name('students.store');
-        Route::get('/show/{id}', [StudentController::class, 'show'])->name('students.show');
-        Route::get('/edit/{id}', [StudentController::class, 'edit'])->name('students.edit');
-        Route::put('/update/{id}', [StudentController::class, 'update'])->name('students.update');
-        Route::delete('/destroy/{id}', [StudentController::class, 'destroy'])->name('students.destroy');
-        Route::get('/recycle', [StudentController::class, 'recycle'])->name('students.recycle');
-        Route::get('/recycle-search', [StudentController::class, 'recycleSearch'])->name('students.recycle.search');
-        Route::post('/restore/{id}', [StudentController::class, 'restore'])->name('students.restore');
-        Route::delete('/delete-permanently/{id}', [StudentController::class, 'deletePermanently'])->name('students.delete-permanently');
+    Route::prefix('students')->name('students.')->group(function () {
+        Route::get('/', [StudentController::class, 'index'])->name('index');
+        Route::get('/search', [StudentController::class, 'search'])->name('search');
+        Route::get('/enrollment-search', [StudentController::class, 'enrollmentSearch'])->name('enrollment.search');
+        Route::get('/create', [StudentController::class, 'create'])->name('create');
+        Route::post('/', [StudentController::class, 'store'])->name('store');
+        Route::get('/archive/list', [StudentController::class, 'recycle'])->name('recycle');
+        Route::get('/archive/search', [StudentController::class, 'recycleSearch'])->name('recycle.search');
+        Route::get('/{id}', [StudentController::class, 'show'])->name('show');
+        Route::get('/{id}/edit', [StudentController::class, 'edit'])->name('edit');
+        Route::put('/{id}', [StudentController::class, 'update'])->name('update');
+        Route::delete('/{id}', [StudentController::class, 'destroy'])->name('destroy');
+        Route::post('/{id}/restore', [StudentController::class, 'restore'])->name('restore');
+        Route::delete('/{id}/permanent', [StudentController::class, 'deletePermanently'])->name('delete-permanently');
     });
 
     // Bookings
-    Route::prefix('bookings')->group(function () {
-        Route::get('/', [BookingController::class, 'index'])->name('bookings.index');
-        Route::get('/search', [BookingController::class, 'search'])->name('bookings.search');
-        Route::get('/create', [BookingController::class, 'create'])->name('bookings.create');
-        Route::post('/store', [BookingController::class, 'store'])->name('bookings.store');
-        Route::get('/show/{id}', [BookingController::class, 'show'])->name('bookings.show');
-        Route::get('/edit/{id}', [BookingController::class, 'edit'])->name('bookings.edit');
-        Route::put('/update/{id}', [BookingController::class, 'update'])->name('bookings.update');
-        Route::delete('/destroy/{id}', [BookingController::class, 'destroy'])->name('bookings.destroy');
-        Route::get('/recycle', [BookingController::class, 'recycle'])->name('bookings.recycle');
-        Route::get('/recycle-search', [BookingController::class, 'recycleSearch'])->name('bookings.recycle.search');
-        Route::post('/restore/{id}', [BookingController::class, 'restore'])->name('bookings.restore');
-        Route::delete('/delete-permanently/{id}', [BookingController::class, 'deletePermanently'])->name('bookings.delete-permanently');
+    Route::prefix('bookings')->name('bookings.')->group(function () {
+        Route::get('/', [BookingController::class, 'index'])->name('index');
+        Route::get('/search', [BookingController::class, 'search'])->name('search');
+        Route::get('/create', [BookingController::class, 'create'])->name('create');
+        Route::post('/', [BookingController::class, 'store'])->name('store');
+        Route::get('/archive/list', [BookingController::class, 'recycle'])->name('recycle');
+        Route::get('/archive/search', [BookingController::class, 'recycleSearch'])->name('recycle.search');
+        Route::get('/{id}', [BookingController::class, 'show'])->name('show');
+        Route::get('/{id}/edit', [BookingController::class, 'edit'])->name('edit');
+        Route::put('/{id}', [BookingController::class, 'update'])->name('update');
+        Route::delete('/{id}', [BookingController::class, 'destroy'])->name('destroy');
+        Route::post('/{id}/restore', [BookingController::class, 'restore'])->name('restore');
+        Route::delete('/{id}/permanent', [BookingController::class, 'deletePermanently'])->name('delete-permanently');
     });
-};
 
-// Normal user routes: /home, /courses, /students, /bookings
-Route::middleware(['auth', 'role:user'])->group($sharedRoutes);
-
-// Admin routes: /admin/home, /admin/courses, /admin/students, /admin/bookings
-Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group($sharedRoutes);
+    /*
+    |----------------------------------------------------------------------
+    | Admin-Only Routes
+    |----------------------------------------------------------------------
+    */
+    Route::middleware('role:admin')->prefix('users')->name('users.')->group(function () {
+        Route::get('/', [UserController::class, 'index'])->name('index');
+        Route::get('/search', [UserController::class, 'search'])->name('search');
+        Route::get('/create', [UserController::class, 'create'])->name('create');
+        Route::post('/', [UserController::class, 'store'])->name('store');
+        Route::get('/archive/list', [UserController::class, 'recycle'])->name('recycle');
+        Route::get('/archive/search', [UserController::class, 'recycleSearch'])->name('recycle.search');
+        Route::get('/{id}', [UserController::class, 'show'])->name('show');
+        Route::get('/{id}/edit', [UserController::class, 'edit'])->name('edit');
+        Route::put('/{id}', [UserController::class, 'update'])->name('update');
+        Route::delete('/{id}', [UserController::class, 'destroy'])->name('destroy');
+        Route::post('/{id}/restore', [UserController::class, 'restore'])->name('restore');
+        Route::delete('/{id}/permanent', [UserController::class, 'deletePermanently'])->name('delete-permanently');
+    });
+});

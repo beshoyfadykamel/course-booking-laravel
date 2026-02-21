@@ -1,4 +1,4 @@
-@extends('layouts.master')
+﻿@extends('layouts.master')
 @section('title')
     {{ __('messages.view_course') }} | {{ __('messages.courses_management') }}
 @endsection
@@ -19,14 +19,14 @@
                 </h2>
                 <div class="flex gap-2 mt-2 sm:mt-0">
                     @if ($course->trashed())
-                        <form action="{{ roleRoute('courses.restore', $course->id) }}" method="POST" class="inline-flex">
+                        <form action="{{ route('courses.restore', $course->id) }}" method="POST" class="inline-flex">
                             @csrf
                             <button type="submit"
                                 class="inline-flex items-center px-3 py-1.5 bg-green-600 text-white rounded-lg hover:bg-green-700 transition text-sm">
                                 <i class="fas fa-undo me-1"></i> {{ __('messages.restore') }}
                             </button>
                         </form>
-                        <form action="{{ roleRoute('courses.delete-permanently', $course->id) }}" method="POST"
+                        <form action="{{ route('courses.delete-permanently', $course->id) }}" method="POST"
                             class="inline-flex" onsubmit="return confirm('{{ __('messages.confirm_delete') }}')">
                             @csrf
                             @method('DELETE')
@@ -36,11 +36,11 @@
                             </button>
                         </form>
                     @else
-                        <a href="{{ roleRoute('courses.edit', $course->id) }}"
+                        <a href="{{ route('courses.edit', $course->id) }}"
                             class="inline-flex items-center px-3 py-1.5 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition text-sm">
                             <i class="fas fa-pencil-alt me-1"></i> {{ __('messages.edit') }}
                         </a>
-                        <form action="{{ roleRoute('courses.destroy', $course->id) }}" method="POST" class="inline-flex"
+                        <form action="{{ route('courses.destroy', $course->id) }}" method="POST" class="inline-flex"
                             onsubmit="return confirm('{{ __('messages.confirm_delete') }}')">
                             @csrf
                             @method('DELETE')
@@ -90,7 +90,7 @@
                         <div>
                             <dt class="text-sm font-medium text-gray-500">{{ __('messages.owner') }}</dt>
                             <dd class="mt-1 text-sm">
-                                <a href="{{ $course->user ? route('admin.users.show', $course->user->id) : '#' }}"
+                                <a href="{{ $course->user ? route('users.show', $course->user->id) : '#' }}"
                                     class="text-gray-900 hover:underline">
                                     <span class="font-medium text-gray-900">{{ $course->user->name ?? '' }}</span>
                                     <span class="text-xs text-gray-400 block">{{ $course->user->email ?? '' }}</span>
@@ -111,7 +111,7 @@
                         <span id="course_count"
                             class="ms-2 px-2 py-1 bg-indigo-100 text-indigo-700 rounded-full text-sm">({{ $studentsCount }})</span>
                     </h2>
-                    <a href="{{ roleRoute('bookings.create') }}"
+                    <a href="{{ route('bookings.create') }}"
                         class="inline-flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition text-sm">
                         <i class="fas fa-plus me-2"></i> {{ __('messages.add_booking') }}
                     </a>
@@ -190,7 +190,7 @@
                 $('#enrollment_table tbody').css('opacity', '0.5');
 
                 ajaxRequest = $.ajax({
-                    url: "{{ roleRoute('courses.enrollment.search') }}",
+                    url: "{{ route('courses.enrollment.search') }}",
                     method: 'get',
                     dataType: 'json',
                     data: {

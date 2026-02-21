@@ -12,18 +12,18 @@
         </td>
         <td class="px-6 py-4 text-sm">
             <div class="flex items-center gap-1.5 flex-nowrap">
-                <a href="{{ route('admin.users.show', $user->id) }}"
+                <a href="{{ route('users.show', $user->id) }}"
                     class="inline-flex items-center justify-center w-8 h-8 bg-indigo-600 text-white rounded-full hover:bg-indigo-700 transition shadow-sm"
                     title="{{ __('messages.view') }}">
                     <i class="fas fa-eye text-xs"></i>
                 </a>
-                <a href="{{ route('admin.users.edit', $user->id) }}"
+                <a href="{{ route('users.edit', $user->id) }}"
                     class="inline-flex items-center justify-center w-8 h-8 bg-orange-500 text-white rounded-full hover:bg-orange-600 transition shadow-sm"
                     title="{{ __('messages.edit') }}">
                     <i class="fas fa-pencil-alt text-xs"></i>
                 </a>
                 @if($user->id !== auth()->id())
-                    <form action="{{ route('admin.users.destroy', $user->id) }}" method="POST" class="inline-flex"
+                    <form action="{{ route('users.destroy', $user->id) }}" method="POST" class="inline-flex"
                         onsubmit="return confirm('{{ __('messages.confirm_delete') }}')">
                         @csrf
                         @method('DELETE')

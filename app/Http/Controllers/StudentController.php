@@ -6,6 +6,7 @@ use App\Http\Requests\EditStudentRequest;
 use App\Http\Requests\StoreStudentRequest;
 use App\Models\Country;
 use App\Models\Student;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -13,6 +14,7 @@ use Illuminate\Support\Str;
 
 class StudentController extends Controller
 {
+    use AuthorizesRequests;
     public function index()
     {
         $this->authorize('viewAny', Student::class);
@@ -29,7 +31,7 @@ class StudentController extends Controller
             $searchTerm = $request->input('search');
             $searchBy = $request->input('search_by');
 
-            $query = Student::forCurrentUser();
+            $query = Student::forCurrentUser()->with('country', 'user');
 
             if ($searchTerm) {
                 if ($searchBy === 'name') {
@@ -80,21 +82,21 @@ class StudentController extends Controller
             $filename = Str::uuid() . '.' . strtolower($file->getClientOriginalExtension());
 
             $saveData['image'] = $file->storeAs('uploads', $filename, 'public');
-        }else {
+        } else {
             $saveData['image'] = 'uploads/default.png';
         }
         $student = Student::create($saveData);
 
-        return redirect()->to(roleRoute('students.show', $student->id))
+        return redirect()->route('students.show', $student->id)
             ->with('success', __('messages.student_created_successfully'));
     }
 
     public function show($id)
     {
-        $student = Student::withTrashed()->forCurrentUser()->with('user')->findOrFail($id);
+        $student = Student::withTrashed()->forCurrentUser()->with('user', 'country')->findOrFail($id);
         $this->authorize('view', $student);
-        $courses = $student->courses()->paginate(10);
-        $coursesCount = $student->courses()->forCurrentUser()->count();
+        $courses = $student->courses()->with('user')->paginate(10);
+        $coursesCount = $student->courses()->count();
         return view('students.view', compact('student', 'courses', 'coursesCount'));
     }
 
@@ -115,7 +117,7 @@ class StudentController extends Controller
         $student = Student::withTrashed()->forCurrentUser()->findOrFail($studentId);
         $this->authorize('view', $student);
 
-        $query = $student->courses();
+        $query = $student->courses()->with('user');
 
         if ($searchTerm !== '') {
             $query->where(function ($q) use ($searchTerm, $searchBy) {
@@ -182,7 +184,7 @@ class StudentController extends Controller
 
         $student->update($updateData);
 
-        return redirect()->to(roleRoute('students.show', $student->id))
+        return redirect()->route('students.show', $student->id)
             ->with('success', __('messages.student_updated_successfully'));
     }
 
@@ -191,7 +193,7 @@ class StudentController extends Controller
         $student = Student::forCurrentUser()->findOrFail($id);
         $this->authorize('delete', $student);
         $student->delete();
-        return redirect()->to(roleRoute('students.index'))
+        return redirect()->route('students.index')
             ->with('success', __('messages.student_deleted_successfully'));
     }
 
@@ -210,7 +212,7 @@ class StudentController extends Controller
             $searchTerm = $request->input('search');
             $searchBy = $request->input('search_by');
 
-            $query = Student::onlyTrashed()->forCurrentUser();
+            $query = Student::onlyTrashed()->forCurrentUser()->with('user', 'country');
 
             if ($searchTerm) {
                 if ($searchBy === 'name') {
@@ -248,7 +250,7 @@ class StudentController extends Controller
         $student = Student::onlyTrashed()->forCurrentUser()->findOrFail($id);
         $this->authorize('restore', $student);
         $student->restore();
-        return redirect()->to(roleRoute('students.show', $student->id))
+        return redirect()->route('students.show', $student->id)
             ->with('success', __('messages.student_restored_successfully'));
     }
 
@@ -261,7 +263,7 @@ class StudentController extends Controller
         }
         $student->forceDelete();
 
-        return redirect()->to(roleRoute('students.recycle'))
+        return redirect()->route('students.recycle')
             ->with('success', __('messages.student_permanently_deleted'));
     }
 }

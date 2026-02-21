@@ -23,12 +23,12 @@
     <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-6">
         <h1 class="text-3xl font-bold text-gray-900">{{ __('messages.users_management') }}</h1>
         <div class="flex gap-3 mt-4 md:mt-0">
-            <a href="{{ route('admin.users.create') }}"
+            <a href="{{ route('users.create') }}"
                 class="inline-flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition text-sm font-medium">
                 <i class="fas fa-plus me-2"></i>
                 {{ __('messages.add_user') }}
             </a>
-            <a href="{{ route('admin.users.recycle') }}"
+            <a href="{{ route('users.recycle') }}"
                 class="inline-flex items-center px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition text-sm font-medium">
                 <i class="fas fa-trash me-2"></i>
                 {{ __('messages.recycle_bin') }}
@@ -109,7 +109,7 @@
                 $('#data_table tbody').css('opacity', '0.5');
 
                 ajaxRequest = $.ajax({
-                    url: "{{ route('admin.users.search') }}",
+                    url: "{{ route('users.search') }}",
                     method: 'get',
                     dataType: 'json',
                     data: { search_by: search_by, search: search, page: page },

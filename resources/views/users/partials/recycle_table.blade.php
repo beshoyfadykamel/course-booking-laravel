@@ -12,12 +12,12 @@
         </td>
         <td class="px-6 py-4 text-sm">
             <div class="flex items-center gap-1.5 flex-nowrap">
-                <a href="{{ route('admin.users.show', $user->id) }}"
+                <a href="{{ route('users.show', $user->id) }}"
                     class="inline-flex items-center justify-center w-8 h-8 bg-indigo-600 text-white rounded-full hover:bg-indigo-700 transition shadow-sm"
                     title="{{ __('messages.view') }}">
                     <i class="fas fa-eye text-xs"></i>
                 </a>
-                <form action="{{ route('admin.users.restore', $user->id) }}" method="POST" class="inline-flex">
+                <form action="{{ route('users.restore', $user->id) }}" method="POST" class="inline-flex">
                     @csrf
                     <button type="submit"
                         class="inline-flex items-center justify-center w-8 h-8 bg-green-600 text-white rounded-full hover:bg-green-700 transition shadow-sm"
@@ -25,7 +25,7 @@
                         <i class="fas fa-undo text-xs"></i>
                     </button>
                 </form>
-                <form action="{{ route('admin.users.delete-permanently', $user->id) }}" method="POST" class="inline-flex"
+                <form action="{{ route('users.delete-permanently', $user->id) }}" method="POST" class="inline-flex"
                     onsubmit="return confirm('{{ __('messages.confirm_permanent_delete') }}')">
                     @csrf
                     @method('DELETE')
