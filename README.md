@@ -154,7 +154,7 @@ lang/
 
 ```bash
 # Clone & install
-git clone https://github.com/your-username/course-booking-system.git
+git clone https://github.com/beshoyfadykamel/course-booking-system.git
 cd course-booking-system
 composer install
 npm install
