@@ -66,7 +66,8 @@
                             </th>
                             <th class="px-6 py-3 text-start text-sm font-semibold text-gray-900">{{ __('messages.name') }}
                             </th>
-                            <th class="px-6 py-3 text-start text-sm font-semibold text-gray-900">{{ __('messages.status') }}
+                            <th class="px-6 py-3 text-start text-sm font-semibold text-gray-900">
+                                {{ __('messages.status') }}
                             </th>
                             @if (auth()->user()->isAdmin())
                                 <th class="px-6 py-3 text-start text-sm font-semibold text-gray-900">
