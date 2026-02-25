@@ -64,7 +64,7 @@ return [
     'image_optional' => 'صورة (اختياري)',
     'choose_file' => 'اختر ملف',
 
-        'edit_student' => 'تعديل الطالب',
+    'edit_student' => 'تعديل الطالب',
 
     // Courses Module (Arabic)
     'courses_table' => 'جدول الدورات',
@@ -81,7 +81,7 @@ return [
     'course_deleted' => 'دورة محذوفة',
     'course_description' => 'وصف الدورة',
 
-        'edit_course' => 'تعديل الدورة',
+    'edit_course' => 'تعديل الدورة',
 
     // Bookings Module (Arabic)
     'bookings_table' => 'جدول الحجوزات',
@@ -115,7 +115,7 @@ return [
     'updated_date' => 'تاريخ التحديث',
     'deleted_courses_table' => 'جدول الدورات المحذوفة',
     'student_not_found' => 'الطالب غير موجود',
-    
+
     // Success Messages (Arabic)
     'student_created_successfully' => 'تم إنشاء الطالب بنجاح.',
     'student_updated_successfully' => 'تم تحديث الطالب بنجاح.',
@@ -132,11 +132,11 @@ return [
     'booking_deleted_successfully' => 'تم حذف الحجز بنجاح.',
     'booking_restored_successfully' => 'تم استعادة الحجز بنجاح.',
     'booking_permanently_deleted' => 'تم حذف الحجز نهائياً.',
-    
+
     // Error Messages (Arabic)
     'invalid_request' => 'طلب غير صالح.',
     'course_id_missing' => 'معرف الدورة مفقود.',
-    
+
     // Modal and Form Labels
     'please_select_student' => 'اختر طالب أولاً من فضلك',
     'please_select_course' => 'اختر دورة أولاً من فضلك',
@@ -203,4 +203,8 @@ return [
     'user_deleted_successfully' => 'تم حذف المستخدم بنجاح.',
     'user_restored_successfully' => 'تم استعادة المستخدم بنجاح.',
     'user_permanently_deleted' => 'تم حذف المستخدم نهائياً.',
+
+    // Modal Labels
+    'student_modal_title' => 'تفاصيل الطالب',
+    'course_modal_title' => 'تفاصيل الدورة',
 ];

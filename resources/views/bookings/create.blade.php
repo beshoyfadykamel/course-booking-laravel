@@ -141,47 +141,49 @@
                                 id="studentCountry">-</span></div>
                     </div>
                 </div>
-                <div class="px-6 py-4 border-t border-gray-200 flex justify-end">
-                    <button @click="showStudentModal = false"
-                        class="px-4 py-2 bg-gray-300 text-gray-900 rounded-lg hover:bg-gray-400">
-                        {{ __('messages.close') }}
-                    </button>
-                </div>
             </div>
         </div>
+        <div class="px-6 py-4 border-t border-gray-200 flex justify-end">
+            <button @click="showStudentModal = false"
+                class="px-4 py-2 bg-gray-300 text-gray-900 rounded-lg hover:bg-gray-400">
+                {{ __('messages.close') }}
+            </button>
+        </div>
+    </div>
+    </div>
 
-        <!-- Course Details Modal -->
-        <div x-show="showCourseModal" x-transition
-            class="fixed inset-0 z-50 overflow-y-auto flex items-center justify-center" style="display: none;">
-            <div class="fixed inset-0 bg-gray-900 bg-opacity-50" @click="showCourseModal = false"></div>
-            <div class="relative bg-white rounded-lg shadow-xl max-w-md w-full h-auto m-4 z-10">
-                <div class="flex items-center justify-between px-6 py-4 border-b border-gray-200">
-                    <h3 class="text-lg font-semibold text-gray-900">{{ __('messages.course_details') }}</h3>
-                    <button @click="showCourseModal = false" class="text-gray-400 hover:text-gray-600">
-                        <i class="fas fa-times"></i>
-                    </button>
-                </div>
-                <div class="px-6 py-4 max-h-96 overflow-y-auto space-y-3">
-                    <div class="space-y-2 text-sm">
-                        <div class="flex justify-between"><span
-                                class="font-medium text-gray-600">{{ __('messages.id') }}:</span><span
-                                id="courseId">-</span></div>
-                        <div class="flex justify-between"><span
-                                class="font-medium text-gray-600">{{ __('messages.name') }}:</span><span
-                                id="courseName">-</span></div>
-                        <div class="flex justify-between"><span
-                                class="font-medium text-gray-600">{{ __('messages.description') }}:</span><span
-                                id="courseDescription">-</span></div>
-                    </div>
-                </div>
-                <div class="px-6 py-4 border-t border-gray-200 flex justify-end">
-                    <button @click="showCourseModal = false"
-                        class="px-4 py-2 bg-gray-300 text-gray-900 rounded-lg hover:bg-gray-400">
-                        {{ __('messages.close') }}
-                    </button>
+    <!-- Course Details Modal -->
+    <div x-show="showCourseModal" x-transition class="fixed inset-0 z-50 overflow-y-auto flex items-center justify-center"
+        style="display: none;">
+        <div class="fixed inset-0 bg-gray-900 bg-opacity-50" @click="showCourseModal = false"></div>
+        <div class="relative bg-white rounded-lg shadow-xl max-w-md w-full h-auto m-4 z-10">
+            <div class="flex items-center justify-between px-6 py-4 border-b border-gray-200">
+                <h3 class="text-lg font-semibold text-gray-900">{{ __('messages.course_details') }}</h3>
+                <button @click="showCourseModal = false" class="text-gray-400 hover:text-gray-600">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="px-6 py-4 max-h-96 overflow-y-auto space-y-3">
+                <div class="space-y-2 text-sm">
+                    <div class="flex justify-between"><span
+                            class="font-medium text-gray-600">{{ __('messages.id') }}:</span><span
+                            id="courseId">-</span></div>
+                    <div class="flex justify-between"><span
+                            class="font-medium text-gray-600">{{ __('messages.course_title') }}:</span><span
+                            id="courseName">-</span></div>
+                    <div class="flex justify-between"><span
+                            class="font-medium text-gray-600">{{ __('messages.description') }}:</span><span
+                            id="courseDescription">-</span></div>
                 </div>
             </div>
+            <div class="px-6 py-4 border-t border-gray-200 flex justify-end">
+                <button @click="showCourseModal = false"
+                    class="px-4 py-2 bg-gray-300 text-gray-900 rounded-lg hover:bg-gray-400">
+                    {{ __('messages.close') }}
+                </button>
+            </div>
         </div>
+    </div>
     </div>
 @endsection
 

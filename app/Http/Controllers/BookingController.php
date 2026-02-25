@@ -83,7 +83,8 @@ class BookingController extends Controller
     public function create()
     {
         $this->authorize('create', Booking::class);
-        $students = Student::where('user_id', Auth::id())->get();
+        // إضافة Eager Loading للعلاقات المستخدمة في العرض
+        $students = Student::where('user_id', Auth::id())->with('country')->get();
         $courses = Course::where('user_id', Auth::id())->get();
         return view('bookings.create', compact('students', 'courses'));
     }
@@ -107,11 +108,11 @@ class BookingController extends Controller
                     'status' => $data['status'],
                 ]);
 
-                return [$existing, true];  
+                return [$existing, true];
             }
 
             if (! $existing) {
-                return [Booking::create($data), false]; 
+                return [Booking::create($data), false];
             }
 
             return [$existing, false];
@@ -128,7 +129,7 @@ class BookingController extends Controller
 
 
     public function show($id)
-    {  
+    {
         $booking = Booking::with('student', 'course', 'user')->withTrashed()->forCurrentUser()->findOrFail($id);
         $this->authorize('view', $booking);
         return view('bookings.view', compact('booking'));
@@ -150,6 +151,10 @@ class BookingController extends Controller
         $booking->update($request->validated());
         $booking->updated_at = now();
         $booking->save();
+
+        // إعادة تحميل العلاقات للعرض
+        $booking->load('student', 'course', 'user');
+
         return redirect()->route('bookings.show', $booking->id)
             ->with('success', __('messages.booking_updated_successfully'));
     }

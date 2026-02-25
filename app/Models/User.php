@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -48,17 +49,17 @@ class User extends Authenticatable implements MustVerifyEmail
         ];
     }
 
-    public function students()
+    public function students(): HasMany
     {
         return $this->hasMany(Student::class);
     }
 
-    public function courses()
+    public function courses(): HasMany
     {
         return $this->hasMany(Course::class);
     }
 
-    public function bookings()
+    public function bookings(): HasMany
     {
         return $this->hasMany(Booking::class);
     }

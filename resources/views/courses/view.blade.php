@@ -151,9 +151,9 @@
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-200">
-                        @if (isset($students) && $students->count() > 0)
+                        @if (isset($bookings) && $bookings->count() > 0)
                             @include('courses.partials.enrollment_students_table', [
-                                'students' => $students,
+                                'bookings' => $bookings,
                                 'searchTerm' => '',
                             ])
                         @endif
@@ -162,7 +162,7 @@
             </div>
 
             <div id="pagination_links" class="px-6 py-4 border-t border-gray-200">
-                {{ $students->links() }}
+                {{ $bookings->links() }}
             </div>
         </div>
     @else

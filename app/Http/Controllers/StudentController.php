@@ -49,7 +49,7 @@ class StudentController extends Controller
                 }
             }
 
-            $students = $query->with('user')->paginate(10);
+            $students = $query->paginate(10);
 
             return response()->json([
                 'html' => view('students.partials.student_table', compact('students', 'searchTerm'))->render(),
@@ -95,9 +95,12 @@ class StudentController extends Controller
     {
         $student = Student::withTrashed()->forCurrentUser()->with('user', 'country')->findOrFail($id);
         $this->authorize('view', $student);
-        $courses = $student->courses()->with('user')->paginate(10);
-        $coursesCount = $student->courses()->count();
-        return view('students.view', compact('student', 'courses', 'coursesCount'));
+
+        // الحصول على الحجوزات (Bookings) الخاصة بالطالب مع الكورسات والمستخدمين
+        $bookings = $student->bookings()->with(['course.user', 'user'])->paginate(10);
+        $coursesCount = $student->bookings()->count();
+
+        return view('students.view', compact('student', 'bookings', 'coursesCount'));
     }
 
     public function enrollmentSearch(Request $request)
@@ -117,21 +120,27 @@ class StudentController extends Controller
         $student = Student::withTrashed()->forCurrentUser()->findOrFail($studentId);
         $this->authorize('view', $student);
 
-        $query = $student->courses()->with('user');
+        // الحصول على الحجوزات (Bookings) بدلاً من العلاقة المباشرة
+        $query = $student->bookings()->with(['course.user', 'user']);
 
         if ($searchTerm !== '') {
             $query->where(function ($q) use ($searchTerm, $searchBy) {
-
                 if ($searchBy === 'id') {
-                    $q->where('courses.id', 'LIKE', "%{$searchTerm}%");
+                    $q->whereHas('course', function ($courseQuery) use ($searchTerm) {
+                        $courseQuery->where('id', 'LIKE', "%{$searchTerm}%");
+                    });
                 } elseif ($searchBy === 'title') {
-                    $q->where('courses.title', 'LIKE', "%{$searchTerm}%");
+                    $q->whereHas('course', function ($courseQuery) use ($searchTerm) {
+                        $courseQuery->where('title', 'LIKE', "%{$searchTerm}%");
+                    });
                 } elseif ($searchBy === 'status') {
-                    $q->where('bookings.status', 'LIKE', "%{$searchTerm}%");
+                    $q->where('status', 'LIKE', "%{$searchTerm}%");
                 } else { // all
-                    $q->where('courses.title', 'LIKE', "%{$searchTerm}%")
-                        ->orWhere('courses.id', 'LIKE', "%{$searchTerm}%")
-                        ->orWhere('bookings.status', 'LIKE', "%{$searchTerm}%");
+                    $q->where('status', 'LIKE', "%{$searchTerm}%")
+                        ->orWhereHas('course', function ($courseQuery) use ($searchTerm) {
+                            $courseQuery->where('title', 'LIKE', "%{$searchTerm}%")
+                                ->orWhere('id', 'LIKE', "%{$searchTerm}%");
+                        });
                 }
             });
         }
@@ -140,7 +149,7 @@ class StudentController extends Controller
 
         return response()->json([
             'html' => view('students.partials.enrollment_courses_table', [
-                'courses' => $paginator,
+                'bookings' => $paginator,  // تغيير من courses إلى bookings
                 'searchTerm' => $searchTerm
             ])->render(),
             'pagination' => (string) $paginator->links(),
@@ -200,7 +209,8 @@ class StudentController extends Controller
     public function recycle()
     {
         $this->authorize('viewAny', Student::class);
-        $students = Student::onlyTrashed()->forCurrentUser()->with('user')->paginate(10);
+        // إضافة country للـ Eager Loading
+        $students = Student::onlyTrashed()->forCurrentUser()->with('user', 'country')->paginate(10);
         $studentsCount = Student::onlyTrashed()->forCurrentUser()->count();
         return view('students.recycle', compact('students', 'studentsCount'));
     }

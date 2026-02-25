@@ -3,17 +3,15 @@
 namespace App\Models;
 
 use App\Models\Traits\OwnedByUser;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\Pivot;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Booking extends Pivot
+class Booking extends Model
 {
-    use SoftDeletes, OwnedByUser;
+    use HasFactory, OwnedByUser, SoftDeletes;
 
-    protected $table = 'bookings';
-    public $timestamps = true;
-    public $incrementing = true;
 
     protected $fillable = [
         'student_id',
@@ -22,18 +20,22 @@ class Booking extends Pivot
         'status',
     ];
 
-    public function student()
+    protected $casts = [
+        'status' => 'string',
+    ];
+
+    public function student(): BelongsTo
     {
-        return $this->belongsTo(Student::class, 'student_id');
+        return $this->belongsTo(Student::class);
     }
 
-    public function course()
+    public function course(): BelongsTo
     {
-        return $this->belongsTo(Course::class, 'course_id');
+        return $this->belongsTo(Course::class);
     }
 
-    public function user()
+    public function user(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'user_id');
+        return $this->belongsTo(User::class);
     }
 }

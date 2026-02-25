@@ -64,7 +64,7 @@ return [
     'image_optional' => 'Image (Optional)',
     'choose_file' => 'Choose file',
 
-        'edit_student' => 'Edit Student',
+    'edit_student' => 'Edit Student',
 
     // Courses Module
     'courses_table' => 'Courses Table',
@@ -115,7 +115,7 @@ return [
     'updated_date' => 'Updated Date',
     'deleted_courses_table' => 'Deleted Courses Table',
     'student_not_found' => 'Student not found',
-    
+
     // Success Messages
     'student_created_successfully' => 'Student created successfully.',
     'student_updated_successfully' => 'Student updated successfully.',
@@ -132,11 +132,11 @@ return [
     'booking_deleted_successfully' => 'Booking deleted successfully.',
     'booking_restored_successfully' => 'Booking restored successfully.',
     'booking_permanently_deleted' => 'Booking permanently deleted.',
-    
+
     // Error Messages
     'invalid_request' => 'Invalid request.',
     'course_id_missing' => 'Course ID is missing.',
-    
+
     // Modal and Form Labels
     'please_select_student' => 'Please select a student first',
     'please_select_course' => 'Please select a course first',
@@ -197,10 +197,14 @@ return [
     'cannot_delete_self' => 'You cannot delete your own account.',
     'owner' => 'Owner',
 
-    // Users success messages
+    // رسائل نجاح المستخدمين
     'user_created_successfully' => 'User created successfully.',
     'user_updated_successfully' => 'User updated successfully.',
     'user_deleted_successfully' => 'User deleted successfully.',
     'user_restored_successfully' => 'User restored successfully.',
     'user_permanently_deleted' => 'User permanently deleted.',
+
+    // Modal Labels
+    'student_modal_title' => 'Student Details',
+    'course_modal_title' => 'Course Details',
 ];
