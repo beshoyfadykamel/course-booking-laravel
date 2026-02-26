@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Traits\OwnedByUser;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -23,6 +24,15 @@ class Booking extends Model
     protected $casts = [
         'status' => 'string',
     ];
+
+    public function scopeForCourseShow(Builder $query): Builder
+    {
+        return $query->select(['id', 'course_id', 'student_id', 'user_id', 'status', 'created_at'])
+            ->with([
+                'student:id,name',
+                'user:id,name,email',
+            ]);
+    }
 
     public function student(): BelongsTo
     {

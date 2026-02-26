@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Traits\OwnedByUser;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -24,6 +25,12 @@ class Course extends Model
     protected $casts = [
         'status' => 'string',
     ];
+
+    public function scopeForApiIndex(Builder $query): Builder
+    {
+        return $query->select(['id', 'title', 'description', 'status', 'user_id', 'created_at', 'updated_at'])
+            ->with('user:id,name,email');
+    }
 
     public function bookings(): HasMany
     {

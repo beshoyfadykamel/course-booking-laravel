@@ -22,7 +22,7 @@ class EditCourseRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => 'required|string|max:255|min:3|unique:courses,title,' . $this->route('id'),
+            'title' => 'required|string|max:255|min:3|unique:courses,title,' . $this->route('course')->id,
             'description' => 'required|string|max:1000|min:10',
             'status' => 'required|in:active,inactive',
         ];

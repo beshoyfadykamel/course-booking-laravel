@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Country;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -19,8 +20,10 @@ class StudentFactory extends Factory
     {
         return [
             'name' => fake()->name(),
-            'image' => 'students/default.png', // Assuming a default image exists or just a placeholder
-            'country_id' => Country::inRandomOrder()->first()->id ?? 1, // Get random country or default to 1
+            'email' => fake()->unique()->safeEmail(),
+            'image' => 'students/default.png',
+            'country_id' => Country::inRandomOrder()->value('id'),
+            'user_id' => User::factory(),
             'status' => fake()->randomElement(['active', 'inactive']),
         ];
     }
