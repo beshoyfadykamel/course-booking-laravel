@@ -5,94 +5,94 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\EditCourseRequest;
 use App\Http\Requests\StoreCourseRequest;
-use App\Http\Resources\Courses\CourseCollection;
-use App\Http\Resources\Courses\CourseShowResource;
+use App\Http\Resources\Courses\CourseCollectionResource;
+use App\Http\Resources\Courses\CourseResource;
 use App\Models\Course;
+use App\Traits\Api\ApiResponse;
+use Illuminate\Support\Facades\Auth;
 
 class CourseController extends Controller
 {
+    use ApiResponse;
+
+    // ──────────────────────────────────────────────
+    //  Collection endpoints
+    // ──────────────────────────────────────────────
+
     public function index()
     {
         $courses = Course::forApiIndex()->paginate(10);
-
-        $coursesCount = $courses->total();
-        $recycleCount = Course::onlyTrashed()->count();
-
-        return (new CourseCollection($courses))
-            ->additional([
-                'meta' => [
-                    'courses_count' => $coursesCount,
-                    'recycle_count' => $recycleCount,
-                ],
-            ]);
+        
+        return $this->success(['courses' => CourseCollectionResource::collection($courses)], __('messages.courses_retrieved'), 200);
     }
+
+    public function recycle()
+    {
+        $courses = Course::onlyTrashed()
+            ->forApiIndex(['deleted_at'])
+            ->paginate(10);
+        return $this->success(['courses' => CourseCollectionResource::collection($courses)], __('messages.recycled_courses_retrieved'), 200);
+    }
+
+    // ──────────────────────────────────────────────
+    //  Single-resource endpoints
+    // ──────────────────────────────────────────────
 
     public function show(Course $course)
     {
-        $course->load(['user:id,name,email'])
-            ->loadCount('bookings');
-
-        $bookings = $course->bookings()
-            ->forCourseShow()
-            ->paginate(1);
-
-        return (new CourseShowResource([
-            'course' => $course,
-            'bookings' => $bookings,
-        ]))->response()->setStatusCode(200);
+        return $this->courseResponse($course, __('messages.course_retrieved'));
     }
 
     public function store(StoreCourseRequest $request)
     {
-        $saveData = $request->validated();
-        $saveData['user_id'] = 1;
-        $course = Course::create($saveData);
+        $course = Course::create([
+            ...$request->validated(),
+            'user_id' => 1,
+        ]);
 
-        $course->load(['user:id,name,email'])
-            ->loadCount('bookings');
-
-        $bookings = $course->bookings()
-            ->forCourseShow()
-            ->paginate(1);
-
-        return (new CourseShowResource([
-            'course' => $course,
-            'bookings' => $bookings,
-        ]))->response()->setStatusCode(201);
+        return $this->courseResponse($course, __('messages.course_created'), 201);
     }
 
     public function update(EditCourseRequest $request, Course $course)
     {
-        $updateData = $request->validated();
-        $course->update($updateData);
+        $course->update($request->validated());
 
-        $course->load(['user:id,name,email'])
-            ->loadCount('bookings');
-
-        $bookings = $course->bookings()
-            ->forCourseShow()
-            ->paginate(1);
-
-        return (new CourseShowResource([
-            'course' => $course,
-            'bookings' => $bookings,
-        ]))->response()->setStatusCode(200);
+        return $this->courseResponse($course, __('messages.course_updated'));
     }
 
     public function destroy(Course $course)
     {
         $course->delete();
-        return response()->json([
-            'message' => __('messages.course_deleted_successfully'),
-        ], 200);
+
+        return $this->success(null, __('messages.course_deleted'), 200);
     }
 
-    public function deletePermanently($id)
+    public function restore(Course $course)
     {
-        $course = Course::onlyTrashed()->findOrFail($id);
+        abort_unless($course->trashed(), 404);
+
+        $course->restore();
+
+        return $this->courseResponse($course, __('messages.course_restored'));
+    }
+
+    public function deletePermanently(Course $course)
+    {
+        abort_unless($course->trashed(), 404);
+
         $course->forceDelete();
-        return response()->json([
-            'message' => __('messages.course_permanently_deleted'),
-        ], 200);
+
+        return $this->success(null, __('messages.course_permanently_deleted'), 200);
+    }
+
+    // ──────────────────────────────────────────────
+    //  Private helpers
+    // ──────────────────────────────────────────────
+
+    private function courseResponse(Course $course, ?string $message = null, int $code = 200)
+    {
+        $course->load('user:id,name,email')
+            ->loadCount('bookings');
+        return $this->success(['course' => new CourseResource($course)], $message, $code);
     }
 }

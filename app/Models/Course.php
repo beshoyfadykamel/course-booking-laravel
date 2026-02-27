@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Models\Traits\OwnedByUser;
+use App\Traits\OwnedByUser;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -26,9 +26,17 @@ class Course extends Model
         'status' => 'string',
     ];
 
-    public function scopeForApiIndex(Builder $query): Builder
+    public function scopeForApiIndex(Builder $query, array $extraColumns = []): Builder
     {
-        return $query->select(['id', 'title', 'description', 'status', 'user_id', 'created_at', 'updated_at'])
+        return $query->select(array_merge([
+            'id',
+            'title',
+            'description',
+            'status',
+            'user_id',
+            'created_at',
+            'updated_at'
+        ], $extraColumns))
             ->with('user:id,name,email');
     }
 
