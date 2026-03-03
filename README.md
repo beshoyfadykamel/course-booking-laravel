@@ -2,173 +2,274 @@
 
 # 🎓 Course Booking System
 
-A full-featured **Learning Management Platform** built with Laravel 12 — manage courses, students, enrollments, and users through an intuitive admin dashboard with bilingual support.
+A full-featured **Learning Management Platform** built with Laravel 12 — manage courses, students, enrollments, and users with an intuitive dashboard, bilingual support (English & Arabic), and a complete RESTful API.
 
 ![Laravel](https://img.shields.io/badge/Laravel-12-FF2D20?style=for-the-badge&logo=laravel&logoColor=white)
 ![PHP](https://img.shields.io/badge/PHP-8.2+-777BB4?style=for-the-badge&logo=php&logoColor=white)
-![TailwindCSS](https://img.shields.io/badge/Tailwind_CSS-3-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white)
-![Alpine.js](https://img.shields.io/badge/Alpine.js-3-8BC0D0?style=for-the-badge&logo=alpine.js&logoColor=white)
+![TailwindCSS](https://img.shields.io/badge/TailwindCSS-3-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white)
 ![MySQL](https://img.shields.io/badge/MySQL-8-4479A1?style=for-the-badge&logo=mysql&logoColor=white)
+![Sanctum](https://img.shields.io/badge/Sanctum-4-FF2D20?style=for-the-badge&logo=laravel&logoColor=white)
 
 </div>
 
 ---
 
-## Features
+## 🚀 Features
 
-- **Full CRUD** for Courses, Students, Bookings, and Users (admin)
-- **Soft Deletes & Recycle Bin** — recover deleted records across all modules
-- **Real-time AJAX Search** with keyword highlighting across every listing
-- **Role-based Access** — Admins see everything; regular users see only their own data (`OwnedByUser` trait)
-- **Bilingual UI** — English (LTR) & Arabic (RTL) with session-based language switching
-- **Auth System** — Registration, login, email verification, password reset (Laravel Breeze)
-- **Image Uploads** — Student profile pictures with UUID naming
-- **Dashboard Analytics** — Counts for courses, students, bookings (+ users for admins)
-- **Responsive Dark Theme** — Mobile-friendly design with TailwindCSS
-- **Policy Authorization** — Every controller action is policy-protected
+- ✅ Full CRUD for Courses, Students, Bookings, and Users (admin-only)
+- ✅ Soft Deletes & Recycle Bin for all modules
+- ✅ Real-time AJAX Search with keyword highlighting
+- ✅ Role-based Access Control (Admin sees all, Users see their own)
+- ✅ Bilingual UI — English & Arabic with RTL support
+- ✅ Authentication System — Registration, login, email verification, password reset
+- ✅ Student Profile Images with UUID naming
+- ✅ Dashboard Analytics — Statistics for all modules
+- ✅ REST API with Laravel Sanctum (30-day token expiry)
+- ✅ Unified JSON Response Format for all API endpoints
+- ✅ Policy-based Authorization for all actions
+- ✅ Responsive Dark Theme — Mobile-friendly TailwindCSS design
 
 ---
 
-## Screenshots
+## 📸 Screenshots
 
-### Landing & Auth
+### Landing & Authentication
 
 |                Landing Page                 |                  Login                  |                   Register                    |
 | :-----------------------------------------: | :-------------------------------------: | :-------------------------------------------: |
 | ![Landing](screenshots/01-landing-page.png) | ![Login](screenshots/02-login-page.png) | ![Register](screenshots/03-register-page.png) |
 
-### Dashboard
+### Dashboard & Main Modules
 
-![Dashboard](screenshots/04-dashboard.png)
+|                 Dashboard                  |                   Courses                   |                   Students                    |
+| :----------------------------------------: | :-----------------------------------------: | :-------------------------------------------: |
+| ![Dashboard](screenshots/04-dashboard.png) | ![Courses](screenshots/05-courses-list.png) | ![Students](screenshots/08-students-list.png) |
 
-### Courses
+### CRUD Operations
 
-|                   List                   |                   Create                    |                   Details                    |
-| :--------------------------------------: | :-----------------------------------------: | :------------------------------------------: |
-| ![List](screenshots/05-courses-list.png) | ![Create](screenshots/06-create-course.png) | ![Details](screenshots/07-course-detail.png) |
+|                Create Course                |                 View Course                  |                Create Booking                 |
+| :-----------------------------------------: | :------------------------------------------: | :-------------------------------------------: |
+| ![Create](screenshots/06-create-course.png) | ![Details](screenshots/07-course-detail.png) | ![Booking](screenshots/12-create-booking.png) |
 
-### Students
+### Admin & User Management
 
-|                   List                    |                    Create                    |                    Profile                    |
-| :---------------------------------------: | :------------------------------------------: | :-------------------------------------------: |
-| ![List](screenshots/08-students-list.png) | ![Create](screenshots/09-create-student.png) | ![Profile](screenshots/10-student-detail.png) |
-
-### Bookings
-
-|                   List                    |                    Create                    |                    Details                    |
-| :---------------------------------------: | :------------------------------------------: | :-------------------------------------------: |
-| ![List](screenshots/11-bookings-list.png) | ![Create](screenshots/12-create-booking.png) | ![Details](screenshots/13-booking-detail.png) |
-
-### Users & Profile (Admin)
-
-|               Users List                |                Profile                 |                Course Archive                 |                Student Archive                 |
-| :-------------------------------------: | :------------------------------------: | :-------------------------------------------: | :--------------------------------------------: |
-| ![Users](screenshots/14-users-list.png) | ![Profile](screenshots/15-profile.png) | ![Archive](screenshots/16-course-archive.png) | ![Archive](screenshots/17-student-archive.png) |
+|            Admin Users List             |              User Profile              |                  Recycle Bin                  |
+| :-------------------------------------: | :------------------------------------: | :-------------------------------------------: |
+| ![Users](screenshots/14-users-list.png) | ![Profile](screenshots/15-profile.png) | ![Archive](screenshots/16-course-archive.png) |
 
 ---
 
-## Tech Stack
+## 🛠 Tech Stack
 
-| Layer    | Technology                                          |
-| :------- | :-------------------------------------------------- |
-| Backend  | Laravel 12, PHP 8.2+                                |
-| Database | MySQL 8, Eloquent ORM                               |
-| Frontend | TailwindCSS 3, Alpine.js 3, Axios                   |
-| Auth     | Laravel Breeze (email verification, password reset) |
-| Build    | Vite                                                |
-| Testing  | PHPUnit                                             |
+| Component    | Technology                          |
+| :----------- | :---------------------------------- |
+| **Backend**  | Laravel 12, PHP 8.2+                |
+| **Database** | MySQL 8, Eloquent ORM               |
+| **Frontend** | TailwindCSS 3, Alpine.js 3, Axios   |
+| **Auth**     | Laravel Breeze (Web), Sanctum (API) |
+| **Build**    | Vite 7, PostCSS                     |
+| **Testing**  | PHPUnit 11                          |
 
 ---
 
-## Database Schema
+## 📊 Database Schema
 
 ```
-users ──────< courses
-  │              │
-  │              │ (via bookings pivot)
-  │              │
-  ├────────< students >────── countries
-  │              │
-  │         bookings
-  │    (student_id + course_id UNIQUE)
-  └──────────< bookings
+users ──────────< courses
+  │                  │
+  ├──────────< students >────── countries
+  │                  │
+  └──────────< bookings >
+                  (student_id + course_id UNIQUE)
 ```
 
-| Table         | Key Columns                                     | Notes                                                  |
-| :------------ | :---------------------------------------------- | :----------------------------------------------------- |
-| **users**     | name, email, password, role                     | Soft deletes, `admin` / `user` roles                   |
-| **courses**   | user_id, title, description, status             | Belongs to creator, soft deletes                       |
-| **students**  | user_id, name, email, image, country_id, status | Image upload, soft deletes                             |
-| **bookings**  | user_id, student_id, course_id, status          | Pivot model, composite unique constraint, soft deletes |
-| **countries** | name                                            | Reference table for students                           |
-
-All foreign keys cascade on delete. All core tables support soft delete recovery.
+| Table         | Purpose                                 |
+| :------------ | :-------------------------------------- |
+| **users**     | Admin & user accounts (soft deletes)    |
+| **courses**   | Course data owned by users              |
+| **students**  | Student records with images & countries |
+| **bookings**  | Enrollment records (pivot model)        |
+| **countries** | Reference data for student countries    |
 
 ---
 
-## Project Structure
+## 📁 Project Structure
 
 ```
 app/
-├── Models/          # User, Course, Student, Booking, Country + OwnedByUser trait
-├── Http/
-│   ├── Controllers/ # HomeController, CourseController, StudentController,
-│   │                # BookingController, ProfileController, Admin/UserController
-│   ├── Middleware/   # RoleMiddleware, SetLocale
-│   └── Requests/    # Form request validation classes
-├── Policies/        # CoursePolicy, StudentPolicy, BookingPolicy, UserPolicy
-└── Helpers/         # highlight() search-term helper
+  ├── Http/Controllers/      # Web & API controllers
+  ├── Http/Requests/         # Form validation classes
+  ├── Http/Resources/        # API response transformers
+  ├── Http/Middleware/       # RoleMiddleware, SetLocale
+  ├── Models/                # User, Course, Student, Booking, Country
+  ├── Policies/              # Authorization policies
+  ├── Traits/                # OwnedByUser, ApiResponse
+  └── Helpers/               # highlight() for search
+
+routes/
+  ├── web.php               # Web application routes
+  ├── api.php               # REST API routes
+  └── auth.php              # Authentication routes
 
 resources/views/
-├── layouts/         # master.blade.php (sidebar), guest.blade.php (auth)
-├── courses/         # index, create, edit, view, recycle + partials
-├── students/        # index, create, edit, view, recycle + partials
-├── bookings/        # index, create, edit, view, recycle + partials
-├── users/           # index, create, edit, view, recycle + partials (admin)
-├── profile/         # edit + partials (info, password, delete account)
-└── auth/            # login, register, forgot/reset password, verify email
+  ├── layouts/              # Master layout & auth layout
+  ├── courses/              # Course pages (CRUD + recycle)
+  ├── students/             # Student pages (CRUD + recycle)
+  ├── bookings/             # Booking pages (CRUD + recycle)
+  ├── users/                # User management (admin-only)
+  └── profile/              # User profile pages
 
-lang/
-├── en/              # English translations
-└── ar/              # Arabic translations (full RTL support)
+database/
+  ├── migrations/           # Database schema
+  ├── factories/            # Model factories for seeding
+  └── seeders/              # DatabaseSeeder, CourseSeeder
 ```
 
 ---
 
-## Routes
+## 🌐 Web Routes
 
-| Group     | Prefix                | Middleware       | Description                                           |
-| :-------- | :-------------------- | :--------------- | :---------------------------------------------------- |
-| Public    | `/`                   | —                | Landing page, language switch                         |
-| Auth      | `/login`, `/register` | guest            | Authentication flows                                  |
-| Dashboard | `/home`               | auth             | Statistics dashboard                                  |
-| Courses   | `/courses`            | auth             | Full CRUD + archive + AJAX search + enrollment search |
-| Students  | `/students`           | auth             | Full CRUD + archive + AJAX search + enrollment search |
-| Bookings  | `/bookings`           | auth             | Full CRUD + archive + AJAX search                     |
-| Users     | `/users`              | auth, role:admin | Full CRUD + archive + AJAX search                     |
-| Profile   | `/profile`            | auth             | Edit profile, change password, delete account         |
+| Module    | Prefix              | Middleware  | Features                      |
+| :-------- | :------------------ | :---------- | :---------------------------- |
+| Public    | `/`                 | —           | Landing page, language switch |
+| Auth      | `/register, /login` | guest       | Breeze authentication         |
+| Dashboard | `/home`             | auth        | Statistics & quick links      |
+| Courses   | `/courses`          | auth        | Full CRUD + search + archive  |
+| Students  | `/students`         | auth        | Full CRUD + search + archive  |
+| Bookings  | `/bookings`         | auth        | Full CRUD + search + archive  |
+| Users     | `/users`            | auth, admin | Admin-only user management    |
+| Profile   | `/profile`          | auth        | Settings & password change    |
 
 ---
 
-## Installation
+## 🔌 REST API Endpoints
+
+**Base URL:** `/api` | **Auth:** Bearer token (30-day expiry)
+
+### Authentication
+
+| Method | Endpoint       | Description       |
+| :----- | :------------- | :---------------- |
+| POST   | `/register`    | Register new user |
+| POST   | `/login`       | Login & get token |
+| POST   | `/auth/logout` | Revoke token      |
+
+### Courses API
+
+| Method | Endpoint                | Description              |
+| :----- | :---------------------- | :----------------------- |
+| GET    | `/courses`              | List courses (paginated) |
+| GET    | `/courses/recycle`      | List soft-deleted        |
+| POST   | `/courses/store`        | Create course            |
+| GET    | `/courses/{id}`         | View course              |
+| PUT    | `/courses/{id}/update`  | Update course            |
+| DELETE | `/courses/{id}/delete`  | Soft delete              |
+| PATCH  | `/courses/{id}/restore` | Restore from trash       |
+| DELETE | `/courses/{id}/force`   | Permanently delete       |
+
+### Response Format
+
+Every API response follows this structure:
+
+```json
+{
+    "success": true,
+    "code": 200,
+    "message": "Human-readable message",
+    "data": {
+        /* resource data */
+    },
+    "errors": null
+}
+```
+
+**Paginated Responses** include pagination metadata with `current_page`, `last_page`, `total`, and navigation `links`.
+
+### Example: List Courses
 
 ```bash
-# Clone & install
+curl -H "Authorization: Bearer {token}" \
+  http://localhost:8000/api/courses
+```
+
+Response:
+
+```json
+{
+    "success": true,
+    "code": 200,
+    "message": "Courses retrieved successfully",
+    "data": {
+        "courses": [
+            {
+                "id": 1,
+                "title": "Laravel Fundamentals",
+                "status": "active",
+                "bookings_count": 5,
+                "owner": {
+                    "id": 1,
+                    "name": "Admin",
+                    "email": "admin@example.com"
+                }
+            }
+        ],
+        "pagination": {
+            "current_page": 1,
+            "last_page": 2,
+            "per_page": 10,
+            "total": 15,
+            "links": {
+                /* ... */
+            }
+        }
+    },
+    "errors": null
+}
+```
+
+---
+
+## 🔐 Authorization & Policies
+
+| Policy          | Model   | Rules                                     |
+| :-------------- | :------ | :---------------------------------------- |
+| `CoursePolicy`  | Course  | Admin → all; User → own records only      |
+| `StudentPolicy` | Student | Admin → all; User → own records only      |
+| `BookingPolicy` | Booking | Admin → all; User → own records only      |
+| `UserPolicy`    | User    | Admin-only (users can edit their profile) |
+
+The **`OwnedByUser`** trait filters queries per role:
+
+- **Admin:** Sees all records
+- **User:** Sees only their own records
+
+---
+
+## 🔧 Installation
+
+```bash
+# Clone repository
 git clone https://github.com/beshoyfadykamel/course-booking-system.git
 cd course-booking-system
+
+# Install dependencies
 composer install
 npm install
 
-# Environment
+# Setup environment
 cp .env.example .env
 php artisan key:generate
-# Configure DB_DATABASE, DB_USERNAME, DB_PASSWORD in .env
 
-# Database
+# Configure database in .env
+# DB_DATABASE=course_booking
+# DB_USERNAME=root
+# DB_PASSWORD=
+
+# Run migrations & seeders
 php artisan migrate
 php artisan db:seed
 
-# Run
+# Start development servers
 npm run dev          # Vite dev server
 php artisan serve    # Laravel server → http://127.0.0.1:8000
 ```
@@ -182,19 +283,25 @@ php artisan tinker
 
 ---
 
-## Commands
+## 📝 Commands
 
 ```bash
-php artisan serve                 # Start dev server
-npm run dev                       # Vite dev server
-npm run build                     # Production build
+php artisan serve              # Start web server
+npm run dev                    # Start Vite dev server
+npm run build                  # Production build
+php artisan migrate            # Run migrations
+php artisan db:seed            # Run seeders
 php artisan migrate:fresh --seed  # Reset & seed database
-php artisan test                  # Run tests
-./vendor/bin/pint                 # Code formatting (PSR-12)
+php artisan test               # Run tests
+./vendor/bin/pint              # Code formatting (PSR-12)
 ```
 
 ---
 
-## License
+## 📄 License
 
 Open-sourced under the [MIT License](LICENSE).
+
+---
+
+**Made with ❤️ using Laravel 12**
