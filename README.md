@@ -24,7 +24,7 @@ A full-featured **Learning Management Platform** built with Laravel 12 — manag
 - ✅ Authentication System — Registration, login, email verification, password reset
 - ✅ Student Profile Images with UUID naming
 - ✅ Dashboard Analytics — Statistics for all modules
-- ✅ REST API with Laravel Sanctum (30-day token expiry)
+- ✅ **RESTful API** with Laravel Sanctum (30-day token expiry)
 - ✅ Unified JSON Response Format for all API endpoints
 - ✅ Policy-based Authorization for all actions
 - ✅ Responsive Dark Theme — Mobile-friendly TailwindCSS design
@@ -298,10 +298,136 @@ php artisan test               # Run tests
 
 ---
 
+## � Postman Collection
+
+A complete **Postman Collection** is included for easy API testing:
+
+📁 **Location:** `Postman/course-booking.postman_collection.json`
+
+### Import Instructions
+
+1. Open Postman
+2. Click **Import** → **File** → Select `course-booking.postman_collection.json`
+3. Set your environment variables:
+    - `base_url`: `http://localhost:8000/api`
+    - `token`: Your Bearer token from login
+
+### Included Requests
+
+- ✅ Auth endpoints (register, login, logout)
+- ✅ All Courses CRUD operations
+- ✅ Recycle bin operations (restore, force delete)
+- ✅ Pre-configured headers & authorization
+
+---
+
+## 🏆 Best Practices & Architecture
+
+This project follows Laravel & software engineering best practices:
+
+### 🌐 RESTful API Architecture
+
+This is a **true RESTful API**, not just a REST API, following all REST architectural principles:
+
+- **Stateless Communication** — Every request contains authentication token; no server-side sessions
+- **Resource-Based URLs** — `/courses`, `/courses/{id}` (not `/getCourse?id=1`)
+- **Proper HTTP Methods** — GET (read), POST (create), PUT (update), DELETE (soft delete), PATCH (restore)
+- **Standard HTTP Status Codes** — 200 (OK), 201 (Created), 401 (Unauthorized), 403 (Forbidden), 404 (Not Found), 422 (Validation Error), 500 (Server Error)
+- **Uniform Interface** — Consistent JSON structure across all endpoints using `ApiResponse` trait
+- **Resource Representations** — API Resources transform Eloquent models to JSON (`CourseResource`, `UserResource`)
+- **HATEOAS-Ready** — Paginated responses include navigation links (`prev`, `next`, `first`, `last`)
+- **Client-Server Separation** — Frontend (Blade/Alpine) and API are decoupled
+- **Cacheable Responses** — Proper use of HTTP methods enables caching strategies
+
+### 🔒 Security & Authorization
+
+- **Policy-Based Authorization** — Every controller action protected by Laravel Policies
+- **Form Request Validation** — Centralized validation with custom error messages
+- **CSRF Protection** — Built-in Laravel CSRF for web routes
+- **SQL Injection Prevention** — Eloquent ORM with parameter binding
+- **XSS Protection** — Blade template escaping by default
+- **Password Hashing** — Bcrypt hashing via Laravel
+- **API Token Authentication** — Sanctum with 30-day token expiry
+- **Rate Limiting** — Login throttling (5 attempts with lockout)
+
+### 🏗 Code Architecture
+
+- **OwnedByUser Trait** — Multi-tenancy pattern for user-owned resources (admin sees all, users see own)
+- **API Resources** — Clean JSON transformations (separation of concerns)
+- **ApiResponse Trait** — Consistent API response envelope across all endpoints
+- **Unified Exception Handling** — Global exception renderer for API routes returns structured JSON
+- **Service Layer Pattern** — Logic encapsulated in dedicated methods (`forCurrentUser`, `forApiIndex` scopes)
+- **DRY Principle** — Reusable traits, middleware, and helper functions
+- **Separation of Concerns** — Controllers, Requests, Resources, Policies, Models properly separated
+
+### 🎯 Laravel Best Practices
+
+- **Eloquent Relationships** — Proper use of `hasMany`, `belongsTo`, eager loading
+- **Query Scopes** — Reusable query logic (`scopeForCurrentUser`, `scopeForApiIndex`)
+- **Soft Deletes** — All core models support soft deletion & restoration
+- **Database Migrations** — Version-controlled schema with proper rollback support
+- **Model Factories** — Faker-based test data generation
+- **Seeders** — Consistent database seeding for development
+- **Route Model Binding** — Automatic model injection in controllers
+- **Mass Assignment Protection** — `$fillable` properties on all models
+- **Eloquent Casts** — Type casting for model attributes
+- **PSR-12 Code Style** — Consistent formatting with Laravel Pint
+
+### 🌍 Frontend & UX
+
+- **Responsive Design** — Mobile-first TailwindCSS approach
+- **Dark Theme** — Modern UI with Tailwind dark utilities
+- **RTL Support** — Full Arabic language support with proper text direction
+- **Session-Based i18n** — Language switching without page reload
+- **AJAX Search** — Real-time search with keyword highlighting
+- **Alpine.js** — Reactive components without heavy JS framework
+- **Vite** — Fast HMR for development, optimized production builds
+
+### 🧪 Testing & Quality
+
+- **PHPUnit Tests** — Authentication & profile test suites included
+- **Feature Tests** — Test user registration, login, password reset
+- **Code Formatting** — Automated PSR-12 compliance with Pint
+- **Type Safety** — Return type declarations on all methods
+- **Validation Messages** — Localized error messages for both languages
+
+### 📊 Database Design
+
+- **Foreign Key Constraints** — Referential integrity with cascade deletes
+- **Unique Constraints** — Prevent duplicate enrollments (`student_id + course_id`)
+- **Indexes** — Optimized queries with proper indexing
+- **Timestamps** — Automatic `created_at` & `updated_at` tracking
+- **Soft Deletes Timestamps** — `deleted_at` for recovery
+- **Normalized Schema** — 3NF compliance for data integrity
+
+### 🚀 Performance
+
+- **Eager Loading** — N+1 query prevention with `with()`, `load()`
+- **Pagination** — All listing endpoints paginated (10 items/page)
+- **Conditional Loading** — API resources use `whenLoaded()`, `whenCounted()`
+- **Query Optimization** — Selective column loading (`select()`, `:id,name,email`)
+- **Vite Asset Bundling** — Code splitting & tree shaking
+
+### 📦 Code Organization
+
+- **Modular Structure** — Clear separation: Controllers, Models, Policies, Resources, Requests
+- **Middleware** — Reusable logic for roles & localization
+- **Helpers** — Global functions auto-loaded via `composer.json`
+- **Traits** — Shared behavior (`OwnedByUser`, `ApiResponse`)
+- **Namespacing** — PSR-4 autoloading standards
+
+---
+
 ## 📄 License
 
 Open-sourced under the [MIT License](LICENSE).
 
 ---
 
+<div align="center">
+
 **Made with ❤️ using Laravel 12**
+
+_A fully RESTful API following industry best practices_
+
+</div>
