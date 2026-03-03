@@ -14,7 +14,7 @@ class BookingPolicy
 
     public function view(User $user, Booking $booking): bool
     {
-        return $user->role === 'admin' || $booking->user_id === $user->id;
+        return $user->isAdmin() || $booking->user_id === $user->id;
     }
 
     public function create(User $user): bool
@@ -24,21 +24,21 @@ class BookingPolicy
 
     public function update(User $user, Booking $booking): bool
     {
-        return $user->role === 'admin' || $booking->user_id === $user->id;
+        return $user->isAdmin() || $booking->user_id === $user->id;
     }
 
     public function delete(User $user, Booking $booking): bool
     {
-        return $user->role === 'admin' || $booking->user_id === $user->id;
+        return $user->isAdmin() || $booking->user_id === $user->id;
     }
 
     public function restore(User $user, Booking $booking): bool
     {
-        return $user->role === 'admin' || $booking->user_id === $user->id;
+        return $user->isAdmin() || $booking->user_id === $user->id;
     }
 
     public function forceDelete(User $user, Booking $booking): bool
     {
-        return $user->role === 'admin' || $booking->user_id === $user->id;
+        return $user->isAdmin() || $booking->user_id === $user->id;
     }
 }

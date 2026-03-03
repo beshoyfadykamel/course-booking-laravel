@@ -2,6 +2,9 @@
 
 namespace App\Traits\Api;
 
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Pagination\LengthAwarePaginator;
+
 trait ApiResponse
 {
     protected function success($data = null, $message = null, $code = 200)
@@ -24,5 +27,31 @@ trait ApiResponse
             'data'    => null,
             'errors'  => $errors,
         ], $code);
+    }
+
+    protected function successPaginated(
+        LengthAwarePaginator $paginator,
+        AnonymousResourceCollection $collection,
+        string $resourceKey,
+        ?string $message = null,
+        int $code = 200
+    ) {
+        return $this->success([
+            $resourceKey => $collection,
+            'pagination' => [
+                'current_page' => $paginator->currentPage(),
+                'last_page' => $paginator->lastPage(),
+                'per_page' => $paginator->perPage(),
+                'total' => $paginator->total(),
+                'from' => $paginator->firstItem(),
+                'to' => $paginator->lastItem(),
+                'links' => [
+                    'first' => $paginator->url(1),
+                    'last' => $paginator->url($paginator->lastPage()),
+                    'prev' => $paginator->previousPageUrl(),
+                    'next' => $paginator->nextPageUrl(),
+                ],
+            ],
+        ], $message, $code);
     }
 }

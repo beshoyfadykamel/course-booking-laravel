@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Course extends Model
 {
-    use HasFactory, OwnedByUser, SoftDeletes;
+    use HasFactory, OwnedByUser, SoftDeletes ;
 
     protected $fillable = [
         'title',
@@ -36,8 +36,7 @@ class Course extends Model
             'user_id',
             'created_at',
             'updated_at'
-        ], $extraColumns))
-            ->with('user:id,name,email');
+        ], $extraColumns))->ForCurrentUser();
     }
 
     public function bookings(): HasMany

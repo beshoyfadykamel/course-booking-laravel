@@ -14,7 +14,7 @@ class StudentPolicy
 
     public function view(User $user, Student $student): bool
     {
-        return $user->role === 'admin' || $student->user_id === $user->id;
+        return $user->isAdmin() || $student->user_id === $user->id;
     }
 
     public function create(User $user): bool
@@ -24,21 +24,21 @@ class StudentPolicy
 
     public function update(User $user, Student $student): bool
     {
-        return $user->role === 'admin' || $student->user_id === $user->id;
+        return $user->isAdmin() || $student->user_id === $user->id;
     }
 
     public function delete(User $user, Student $student): bool
     {
-        return $user->role === 'admin' || $student->user_id === $user->id;
+        return $user->isAdmin() || $student->user_id === $user->id;
     }
 
     public function restore(User $user, Student $student): bool
     {
-        return $user->role === 'admin' || $student->user_id === $user->id;
+        return $user->isAdmin() || $student->user_id === $user->id;
     }
 
     public function forceDelete(User $user, Student $student): bool
     {
-        return $user->role === 'admin' || $student->user_id === $user->id;
+        return $user->isAdmin() || $student->user_id === $user->id;
     }
 }

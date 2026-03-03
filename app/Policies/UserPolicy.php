@@ -33,7 +33,7 @@ class UserPolicy
     public function delete(User $user, User $model): bool
     {
         // Users can delete their own account, admins can delete others (not themselves)
-        return $user->id === $model->id || ($user->isAdmin() && $user->id !== $model->id);
+        return ($user->id === $model->id && !$user->isAdmin()) || ($user->isAdmin() && $user->id !== $model->id);
     }
 
     public function restore(User $user, User $model): bool

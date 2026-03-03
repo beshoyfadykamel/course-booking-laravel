@@ -17,7 +17,7 @@ class CourseController extends Controller
     public function index()
     {
         $this->authorize('viewAny', Course::class);
-        $courses = Course::forCurrentUser()->with('user')->paginate(10);
+        $courses = Course::forCurrentUser()->paginate(10);
         $coursesCount = Course::forCurrentUser()->count();
         $recycleCount = Course::onlyTrashed()->forCurrentUser()->count();
         return view('courses.index', compact('courses', 'coursesCount', 'recycleCount'));
@@ -62,7 +62,7 @@ class CourseController extends Controller
 
     public function show($id)
     {
-        $course = Course::withTrashed()->forCurrentUser()->with('user')->findOrFail($id);
+        $course = Course::withTrashed()->forCurrentUser()->findOrFail($id);
         $this->authorize('view', $course);
 
         // الحصول على الحجوزات (Bookings) الخاصة بالكورس مع الطلاب والمستخدمين
@@ -176,7 +176,7 @@ class CourseController extends Controller
     public function recycle()
     {
         $this->authorize('viewAny', Course::class);
-        $courses = Course::onlyTrashed()->forCurrentUser()->with('user')->paginate(10);
+        $courses = Course::onlyTrashed()->forCurrentUser()->paginate(10);
         $coursesCount = Course::onlyTrashed()->forCurrentUser()->count();
         return view('courses.recycle', compact('courses', 'coursesCount'));
     }
@@ -189,7 +189,7 @@ class CourseController extends Controller
             $searchTerm = $request->input('search');
             $searchBy = $request->input('search_by');
 
-            $query = Course::onlyTrashed()->forCurrentUser()->with('user');
+            $query = Course::onlyTrashed()->forCurrentUser();
 
             if ($searchTerm) {
                 if ($searchBy === 'title') {
