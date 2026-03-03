@@ -1,0 +1,460 @@
+{
+  "info": {
+    "_postman_id": "b2b4e1c9-00e2-4c64-b267-cb7de5098e7f",
+    "name": "course-booking",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "52662449",
+    "_collection_link": "https://go.postman.co/collection/52662449-b2b4e1c9-00e2-4c64-b267-cb7de5098e7f?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "courses",
+      "item": [
+        {
+          "name": "courses",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "omVlC0E5x1s9FcOQlxs0aDDQjYGZbVONNSaeIgQ4c5e5c3b7",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{URL}}/api/courses",
+              "host": [
+                "{{URL}}"
+              ],
+              "path": [
+                "api",
+                "courses"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "view",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "1XRfmTndIRQIPzy8tYC5r8OHAOEdIafUNsRfDAFQ95e01155",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{URL}}/api/courses/23",
+              "host": [
+                "{{URL}}"
+              ],
+              "path": [
+                "api",
+                "courses",
+                "23"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "store",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "omVlC0E5x1s9FcOQlxs0aDDQjYGZbVONNSaeIgQ4c5e5c3b7",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{URL}}/api/courses/store?title=Laravel&description=Backend course&status=active",
+              "host": [
+                "{{URL}}"
+              ],
+              "path": [
+                "api",
+                "courses",
+                "store"
+              ],
+              "query": [
+                {
+                  "key": "title",
+                  "value": "Laravel"
+                },
+                {
+                  "key": "description",
+                  "value": "Backend course"
+                },
+                {
+                  "key": "status",
+                  "value": "active"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "update",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "omVlC0E5x1s9FcOQlxs0aDDQjYGZbVONNSaeIgQ4c5e5c3b7",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{URL}}/api/courses/7/update?title=PHP 8&description=Backend course&status=active",
+              "host": [
+                "{{URL}}"
+              ],
+              "path": [
+                "api",
+                "courses",
+                "7",
+                "update"
+              ],
+              "query": [
+                {
+                  "key": "title",
+                  "value": "PHP 8"
+                },
+                {
+                  "key": "description",
+                  "value": "Backend course"
+                },
+                {
+                  "key": "status",
+                  "value": "active"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "delete",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "omVlC0E5x1s9FcOQlxs0aDDQjYGZbVONNSaeIgQ4c5e5c3b7",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{URL}}/api/courses/7/delete",
+              "host": [
+                "{{URL}}"
+              ],
+              "path": [
+                "api",
+                "courses",
+                "7",
+                "delete"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "deletePermanently",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "omVlC0E5x1s9FcOQlxs0aDDQjYGZbVONNSaeIgQ4c5e5c3b7",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{URL}}/api/courses/6/force",
+              "host": [
+                "{{URL}}"
+              ],
+              "path": [
+                "api",
+                "courses",
+                "6",
+                "force"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "recycleBin",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "omVlC0E5x1s9FcOQlxs0aDDQjYGZbVONNSaeIgQ4c5e5c3b7",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{URL}}/api/courses/recycle",
+              "host": [
+                "{{URL}}"
+              ],
+              "path": [
+                "api",
+                "courses",
+                "recycle"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "restore",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "omVlC0E5x1s9FcOQlxs0aDDQjYGZbVONNSaeIgQ4c5e5c3b7",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{URL}}/api/courses/7/restore",
+              "host": [
+                "{{URL}}"
+              ],
+              "path": [
+                "api",
+                "courses",
+                "7",
+                "restore"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "register",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "omVlC0E5x1s9FcOQlxs0aDDQjYGZbVONNSaeIgQ4c5e5c3b7",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{URL}}/api/register?name=hady&email=h2@gmail.comتfjcj&password=12345678&password_confirmation=12345678",
+              "host": [
+                "{{URL}}"
+              ],
+              "path": [
+                "api",
+                "register"
+              ],
+              "query": [
+                {
+                  "key": "name",
+                  "value": "hady"
+                },
+                {
+                  "key": "email",
+                  "value": "h2@gmail.comتfjcj"
+                },
+                {
+                  "key": "password",
+                  "value": "12345678"
+                },
+                {
+                  "key": "password_confirmation",
+                  "value": "12345678"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "login",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{URL}}/api/login?email=beshoyfadykamel1@gmail.com&password=12345678",
+              "host": [
+                "{{URL}}"
+              ],
+              "path": [
+                "api",
+                "login"
+              ],
+              "query": [
+                {
+                  "key": "email",
+                  "value": "beshoyfadykamel1@gmail.com"
+                },
+                {
+                  "key": "password",
+                  "value": "12345678"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "logout",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "Dw91zkGH8ttbMV3z93h40MA3S0OZtBDexB13fYbmc1908b20",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{URL}}/api/auth/logout",
+              "host": [
+                "{{URL}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "logout"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "URL",
+      "value": "",
+      "type": "default"
+    }
+  ]
+}

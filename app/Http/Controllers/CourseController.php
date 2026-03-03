@@ -17,7 +17,7 @@ class CourseController extends Controller
     public function index()
     {
         $this->authorize('viewAny', Course::class);
-        $courses = Course::forCurrentUser()->with('user')->paginate(10);
+        $courses = Course::forCurrentUser()->paginate(10);
         $coursesCount = Course::forCurrentUser()->count();
         $recycleCount = Course::onlyTrashed()->forCurrentUser()->count();
         return view('courses.index', compact('courses', 'coursesCount', 'recycleCount'));
@@ -62,11 +62,14 @@ class CourseController extends Controller
 
     public function show($id)
     {
-        $course = Course::withTrashed()->forCurrentUser()->with('user')->findOrFail($id);
+        $course = Course::withTrashed()->forCurrentUser()->findOrFail($id);
         $this->authorize('view', $course);
-        $students = $course->students()->with('country')->paginate(10);
-        $studentsCount = $course->students()->count();
-        return view('courses.view', compact('course', 'students', 'studentsCount'));
+
+        // الحصول على الحجوزات (Bookings) الخاصة بالكورس مع الطلاب والمستخدمين
+        $bookings = $course->bookings()->with(['student.country', 'user'])->paginate(10);
+        $studentsCount = $course->bookings()->count();
+
+        return view('courses.view', compact('course', 'bookings', 'studentsCount'));
     }
 
     public function enrollmentSearch(Request $request)
@@ -86,34 +89,40 @@ class CourseController extends Controller
         $course = Course::withTrashed()->findOrFail($courseId);
         $this->authorize('view', $course);
 
-        $query = $course->students()->with('country'); // علاقة many-to-many
+        // الحصول على الحجوزات (Bookings) بدلاً من العلاقة المباشرة
+        $query = $course->bookings()->with(['student.country', 'user']);
 
         if ($searchTerm !== '') {
             $query->where(function ($q) use ($searchTerm, $searchBy) {
-
                 if ($searchBy === 'id') {
-                    $q->where('students.id', 'LIKE', "%{$searchTerm}%");
+                    $q->whereHas('student', function ($studentQuery) use ($searchTerm) {
+                        $studentQuery->where('id', 'LIKE', "%{$searchTerm}%");
+                    });
                 } elseif ($searchBy === 'name') {
-                    $q->where('students.name', 'LIKE', "%{$searchTerm}%");
+                    $q->whereHas('student', function ($studentQuery) use ($searchTerm) {
+                        $studentQuery->where('name', 'LIKE', "%{$searchTerm}%");
+                    });
                 } elseif ($searchBy === 'status') {
-                    $q->where('bookings.status', 'LIKE', "%{$searchTerm}%");
+                    $q->where('status', 'LIKE', "%{$searchTerm}%");
                 } else { // all
-                    $q->where('students.name', 'LIKE', "%{$searchTerm}%")
-                        ->orWhere('students.id', 'LIKE', "%{$searchTerm}%")
-                        ->orWhere('bookings.status', 'LIKE', "%{$searchTerm}%");
+                    $q->where('status', 'LIKE', "%{$searchTerm}%")
+                        ->orWhereHas('student', function ($studentQuery) use ($searchTerm) {
+                            $studentQuery->where('name', 'LIKE', "%{$searchTerm}%")
+                                ->orWhere('id', 'LIKE', "%{$searchTerm}%");
+                        });
                 }
             });
         }
 
-        $students = $query->paginate(10);
+        $bookings = $query->paginate(10);
 
         return response()->json([
             'html' => view('courses.partials.enrollment_students_table', [
-                'students' => $students,
+                'bookings' => $bookings,  // تغيير من students إلى bookings
                 'searchTerm' => $searchTerm
             ])->render(),
-            'pagination' => (string) $students->links(),
-            'count' => $students->total(),
+            'pagination' => (string) $bookings->links(),
+            'count' => $bookings->total(),
         ]);
     }
 
@@ -167,7 +176,7 @@ class CourseController extends Controller
     public function recycle()
     {
         $this->authorize('viewAny', Course::class);
-        $courses = Course::onlyTrashed()->forCurrentUser()->with('user')->paginate(10);
+        $courses = Course::onlyTrashed()->forCurrentUser()->paginate(10);
         $coursesCount = Course::onlyTrashed()->forCurrentUser()->count();
         return view('courses.recycle', compact('courses', 'coursesCount'));
     }
@@ -180,7 +189,7 @@ class CourseController extends Controller
             $searchTerm = $request->input('search');
             $searchBy = $request->input('search_by');
 
-            $query = Course::onlyTrashed()->forCurrentUser()->with('user');
+            $query = Course::onlyTrashed()->forCurrentUser();
 
             if ($searchTerm) {
                 if ($searchBy === 'title') {

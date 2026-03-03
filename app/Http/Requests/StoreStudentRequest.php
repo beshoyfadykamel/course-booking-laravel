@@ -26,7 +26,7 @@ class StoreStudentRequest extends FormRequest
             'email' => 'required|email|unique:students,email',
             'country_id' => 'required|exists:countries,id',
             'status' => 'required|in:active,inactive',
-            'image' => ['image','mimes:jpg,jpeg,png,webp','max:2048'],
+            'image' => ['image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
         ];
     }
 

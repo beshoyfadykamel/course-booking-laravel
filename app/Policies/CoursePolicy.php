@@ -20,7 +20,7 @@ class CoursePolicy
      */
     public function view(User $user, Course $course): bool
     {
-        return $user->role === 'admin' || $course->user_id === $user->id;
+        return $user->isAdmin() || $course->user_id === $user->id;
     }
 
     /**
@@ -36,7 +36,7 @@ class CoursePolicy
      */
     public function update(User $user, Course $course): bool
     {
-        return $user->role === 'admin' || $course->user_id === $user->id;
+        return $user->isAdmin() || $course->user_id === $user->id;
     }
 
     /**
@@ -44,7 +44,7 @@ class CoursePolicy
      */
     public function delete(User $user, Course $course): bool
     {
-        return $user->role === 'admin' || $course->user_id === $user->id;
+        return $user->isAdmin() || $course->user_id === $user->id;
     }
 
     /**
@@ -52,7 +52,7 @@ class CoursePolicy
      */
     public function restore(User $user, Course $course): bool
     {
-        return $user->role === 'admin' || $course->user_id === $user->id;
+        return $user->isAdmin() || $course->user_id === $user->id;
     }
 
     /**
@@ -60,6 +60,6 @@ class CoursePolicy
      */
     public function forceDelete(User $user, Course $course): bool
     {
-        return $user->role === 'admin' || $course->user_id === $user->id;
+        return $user->isAdmin() || $course->user_id === $user->id;
     }
 }

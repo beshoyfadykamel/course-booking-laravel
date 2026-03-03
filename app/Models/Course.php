@@ -2,14 +2,18 @@
 
 namespace App\Models;
 
-use App\Models\Traits\OwnedByUser;
+use App\Traits\OwnedByUser;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Course extends Model
 {
-    use SoftDeletes, HasFactory, OwnedByUser;
+    use HasFactory, OwnedByUser, SoftDeletes ;
 
     protected $fillable = [
         'title',
@@ -18,21 +22,30 @@ class Course extends Model
         'status',
     ];
 
-    public function students()
+    protected $casts = [
+        'status' => 'string',
+    ];
+
+    public function scopeForApiIndex(Builder $query, array $extraColumns = []): Builder
     {
-        return $this->belongsToMany(Student::class, 'bookings')
-            ->using(Booking::class)
-            ->withPivot('status', 'id')
-            ->withTimestamps();
+        return $query->select(array_merge([
+            'id',
+            'title',
+            'description',
+            'status',
+            'user_id',
+            'created_at',
+            'updated_at'
+        ], $extraColumns))->ForCurrentUser();
     }
 
-    public function bookings()
+    public function bookings(): HasMany
     {
         return $this->hasMany(Booking::class);
     }
 
-    public function user()
+    public function user(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'user_id');
+        return $this->belongsTo(User::class);
     }
 }

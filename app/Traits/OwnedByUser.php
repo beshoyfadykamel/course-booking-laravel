@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models\Traits;
+namespace App\Traits;
 
 trait OwnedByUser
 {
@@ -12,6 +12,8 @@ trait OwnedByUser
     {
         if (auth()->user()->role !== 'admin') {
             return $query->where($this->getTable() . '.user_id', auth()->id());
+        }else if (auth()->user()->role === 'admin') {
+            return $query->with('user:id,name,email');
         }
 
         return $query;
